@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="MealManaged" representedClassName="MealManaged" syncable="YES">
+        <attribute name="comboMealTag" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="comboType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="detail" attributeType="String"/>
+        <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="price" attributeType="Decimal" defaultValueString="0.0"/>
+        <attribute name="uid" attributeType="String"/>
+        <relationship name="preferences" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceManaged" inverseName="meal" inverseEntity="PreferenceManaged"/>
+    </entity>
+    <entity name="MenuManaged" representedClassName="MenuManaged" syncable="YES">
+        <attribute name="imageURL" attributeType="String"/>
+        <attribute name="mealsInUID" optional="YES" attributeType="String" customClassName="MealInUIDs"/>
+        <attribute name="menuDetail" optional="YES" attributeType="String"/>
+        <attribute name="menuTitle" attributeType="String"/>
+        <attribute name="menuType" optional="YES" attributeType="String"/>
+        <attribute name="uid" attributeType="String"/>
+    </entity>
+    <entity name="PreferenceItemManaged" representedClassName="PreferenceItemManaged" syncable="YES">
+        <attribute name="comboTag" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Decimal"/>
+        <attribute name="uid" attributeType="String"/>
+        <relationship name="preference" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceManaged" inverseName="preferenceItems" inverseEntity="PreferenceManaged"/>
+    </entity>
+    <entity name="PreferenceManaged" representedClassName="PreferenceManaged" syncable="YES">
+        <attribute name="isRequired" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="maxItemQuantity" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="maxPick" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="uid" optional="YES" attributeType="String"/>
+        <relationship name="meal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealManaged" inverseName="preferences" inverseEntity="MealManaged"/>
+        <relationship name="preferenceItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceItemManaged" inverseName="preference" inverseEntity="PreferenceItemManaged"/>
+    </entity>
+    <elements>
+        <element name="MealManaged" positionX="-537.296875" positionY="-402.609375" width="128" height="163"/>
+        <element name="MenuManaged" positionX="-333" positionY="-333" width="128" height="133"/>
+        <element name="PreferenceItemManaged" positionX="121.55859375" positionY="-365.27734375" width="139.03125" height="118"/>
+        <element name="PreferenceManaged" positionX="-227.83984375" positionY="-395.9921875" width="128" height="148"/>
+    </elements>
+</model>

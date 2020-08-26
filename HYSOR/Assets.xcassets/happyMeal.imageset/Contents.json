@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "dinnernew-osx8g5dzozkse9oi2o9o0d8rzqw8mi2k6tah6gyzzshm.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
