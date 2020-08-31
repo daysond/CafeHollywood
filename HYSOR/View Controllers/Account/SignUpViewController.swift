@@ -300,16 +300,14 @@ class SignUpViewController: UIViewController {
             // 2. Stripe account created: set data on dataBase , if fail present view controller anyways
             // 3. after setting data, push view controller.
             
-            let res = NetworkManager.shared.signUpWith(email, password, name).flatMap { StripeAPIClient.shared.createCustomerWithAuthDateResult($0) }
-                .flatMap { NetworkManager.shared.setStripeCustomerInfoToDataBase($0) }
+            let res = NetworkManager.shared.signUpWith(email, password, name)
             
             switch res {
                 
-            case .success(let stripeID):
+            case .success:
                 
                 DispatchQueue.main.async {
                     
-                    UserDefaults.standard.set(stripeID, forKey: "stripeID")
                     self.presentMainViewController()
 
                 }

@@ -100,57 +100,21 @@ struct Menu {
     
 }
 
-//class MealInUIDs: NSObject, NSCoding {
-//
-//    var uids: [String] = []
-//
-//    init(uids: [String]) {
-//        self.uids = uids
-//    }
-//
-//    enum Key: String {
-//        case uids = "uids"
-//    }
-//
-//    func encode(with coder: NSCoder) {
-//        coder.encode(uids, forKey: Key.uids.rawValue)
-//    }
-//
-//    required convenience init?(coder: NSCoder) {
-//
-//        let muids = coder.decodeObject(forKey: Key.uids.rawValue) as! [String]
-//
-//        self.init(uids: muids)
-//
-//    }
-//
-//
-//}
-//
-
-//class MealInUID: NSSecureUnarchiveFromDataTransformer {
-//
-//    var uids: [String] = []
-//
-//    init(uids: [String]) {
-//        self.uids = uids
-//    }
-//
-//    enum Key: String {
-//        case uids = "uids"
-//    }
-//
-//    func encode(with coder: NSCoder) {
-//        coder.encode(uids, forKey: Key.uids.rawValue)
-//    }
-//
-//    required convenience init?(coder: NSCoder) {
-//
-//        let muids = coder.decodeObject(forKey: Key.uids.rawValue) as! [String]
-//
-//        self.init(uids: muids)
-//
-//    }
-//
-//
-//}
+class Reservation {
+    
+    var pax: Int
+    var date: String
+    var note: String?
+    var isConfirmed: Bool
+    
+    init(pax: Int, date: String) {
+        
+        self.pax = pax
+        self.date = date
+        self.isConfirmed = true
+        
+    }
+    
+    
+    
+}

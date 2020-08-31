@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Stripe
 
 class CartViewController: UIViewController {
     
@@ -165,55 +164,12 @@ class CartViewController: UIViewController {
     
     private func prepareForCheckout() {
         
-//        if APPSetting.shared.user.stripeID == nil {
-//
-//            DispatchQueue.global(qos: .background).async {
-//                let result = StripeAPIClient.shared.createCustomer()
-//
-//                switch result {
-//
-//                case .success(let stripeID):
-//
-//                    DispatchQueue.main.async {
-//                        print("did create id \(stripeID)")
-//                        UserDefaults.standard.set(stripeID, forKey: "stripeID")
-//                        NetworkManager.shared.updateCurrentUserStripeID(stripeID: stripeID)
-//                        self.pushCheckoutViewController()
-//
-//                    }
-//
-//                case .failure(let error):
-//
-//                    print(error.localizedDescription)
-//
-//                    DispatchQueue.main.async {
-//                         self.dismissLoadingView()
-//                    }
-//
-//
-//                }
-//            }
-//        } else {
-//
-//            pushCheckoutViewController()
-//
-//
-//        }
-        
-        pushCheckoutViewController()
-        
-        
-    }
-    
-    private func pushCheckoutViewController() {
-        
-//        let customerContext = STPCustomerContext(keyProvider: StripeAPIClient())
         let checkoutVC = CheckoutViewController()
-//        checkoutVC.customerContext = customerContext
         dismissLoadingView()
         self.navigationController?.pushViewController(checkoutVC, animated: true)
         
     }
+
     
     private func createLoadingView() {
         
@@ -222,13 +178,6 @@ class CartViewController: UIViewController {
         view.addSubview(loadingView.view)
         loadingView.didMove(toParent: self)
 
-        // wait two seconds to simulate some work happening
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//            // then remove the spinner view controller
-//            child.willMove(toParent: nil)
-//            child.view.removeFromSuperview()
-//            child.removeFromParent()
-//        }
     }
     
     private func dismissLoadingView() {
@@ -244,7 +193,6 @@ class CartViewController: UIViewController {
     // MARK: - ACTIONS
     
     @objc func orderButtonTapped() {
-        
         
         NetworkManager.shared.sendOrder { (err) in
             print("error \(err)")

@@ -15,7 +15,7 @@ class ManageFavouriteViewController: UIViewController {
         tb.separatorStyle = .singleLine
         tb.translatesAutoresizingMaskIntoConstraints = false
         tb.backgroundColor = .white
-        tb.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tb.register(ManageFavouriteListTableViewCell.self, forCellReuseIdentifier: ManageFavouriteListTableViewCell.identifier)
         return tb
     }()
     
@@ -123,9 +123,13 @@ extension ManageFavouriteViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = APPSetting.shared.favouriteMeals[indexPath.row].name
+        let cell = tableView.dequeueReusableCell(withIdentifier: ManageFavouriteListTableViewCell.identifier, for: indexPath) as! ManageFavouriteListTableViewCell
+        cell.configureCellWith(meal: APPSetting.shared.favouriteMeals[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        120
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

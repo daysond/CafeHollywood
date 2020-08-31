@@ -20,6 +20,7 @@
 		ED1946AA241A0AC300F75CE7 /* SubMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */; };
 		ED1946AC241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946AB241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift */; };
 		ED1946B0241A15B600F75CE7 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946AF241A15B600F75CE7 /* ScannerViewController.swift */; };
+		ED1989C724F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */; };
 		ED1FD80624B515C00016EBD2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80524B515C00016EBD2 /* MenuViewController.swift */; };
 		ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */; };
 		ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */; };
@@ -30,7 +31,6 @@
 		ED3983BE24EA5AE300DAC1C4 /* DBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3983BD24EA5AE300DAC1C4 /* DBManager.swift */; };
 		ED3DD9962418B6B300A4A28E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3DD9952418B6B300A4A28E /* AppDelegate.swift */; };
 		ED3DD9982418B6B300A4A28E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3DD9972418B6B300A4A28E /* SceneDelegate.swift */; };
-		ED3DD99A2418B6B300A4A28E /* ResturantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3DD9992418B6B300A4A28E /* ResturantViewController.swift */; };
 		ED3DD99F2418B6B400A4A28E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD99E2418B6B400A4A28E /* Assets.xcassets */; };
 		ED3DD9A22418B6B400A4A28E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD9A02418B6B400A4A28E /* LaunchScreen.storyboard */; };
 		ED3DD9AA2418B72600A4A28E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD9A92418B72600A4A28E /* GoogleService-Info.plist */; };
@@ -51,8 +51,6 @@
 		ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */; };
 		ED4A8B2724BD3D27008FAB28 /* CheckoutViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */; };
 		ED4A8B2924BD4972008FAB28 /* SlideInMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2824BD4972008FAB28 /* SlideInMenuLauncher.swift */; };
-		ED4BFE2E24B8436D00AA8FB6 /* StripeViewComtroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4BFE2D24B8436D00AA8FB6 /* StripeViewComtroller.swift */; };
-		ED571C1824E86924008287BD /* RealmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED571C1724E86924008287BD /* RealmViewController.swift */; };
 		ED58384524E5C71B00E007CD /* FavouriteMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED58384424E5C71B00E007CD /* FavouriteMealViewController.swift */; };
 		ED5AA84324E3691D007387A5 /* FavouriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5AA84224E3691D007387A5 /* FavouriteView.swift */; };
 		ED5AA84524E36C89007387A5 /* FavouriteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5AA84424E36C89007387A5 /* FavouriteTableViewCell.swift */; };
@@ -62,7 +60,6 @@
 		ED7D6CAF24C00AB200D3583D /* ReceiptTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CAE24C00AB200D3583D /* ReceiptTableViewFooter.swift */; };
 		ED7D6CB124C00F8200D3583D /* ReceiptCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CB024C00F8200D3583D /* ReceiptCollectionViewCell.swift */; };
 		ED86F6E424B7ACFB00895262 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */; };
-		ED86F6E624B7BB8400895262 /* StripeAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED86F6E524B7BB8400895262 /* StripeAPIClient.swift */; };
 		ED8E8B2824A9D7D200C00FCA /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */; };
 		EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */; };
 		EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416EF24BD8F9600501F0E /* AccountViewController.swift */; };
@@ -109,6 +106,7 @@
 		ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuViewController.swift; sourceTree = "<group>"; };
 		ED1946AB241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED1946AF241A15B600F75CE7 /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
+		ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavouriteListTableViewCell.swift; sourceTree = "<group>"; };
 		ED1FD80524B515C00016EBD2 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
@@ -120,7 +118,6 @@
 		ED3DD9922418B6B300A4A28E /* HYSOR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYSOR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED3DD9952418B6B300A4A28E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ED3DD9972418B6B300A4A28E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		ED3DD9992418B6B300A4A28E /* ResturantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResturantViewController.swift; sourceTree = "<group>"; };
 		ED3DD99E2418B6B400A4A28E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED3DD9A12418B6B400A4A28E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED3DD9A32418B6B400A4A28E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -142,8 +139,6 @@
 		ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewControllerExt.swift; sourceTree = "<group>"; };
 		ED4A8B2824BD4972008FAB28 /* SlideInMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideInMenuLauncher.swift; sourceTree = "<group>"; };
-		ED4BFE2D24B8436D00AA8FB6 /* StripeViewComtroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripeViewComtroller.swift; sourceTree = "<group>"; };
-		ED571C1724E86924008287BD /* RealmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmViewController.swift; sourceTree = "<group>"; };
 		ED58384424E5C71B00E007CD /* FavouriteMealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteMealViewController.swift; sourceTree = "<group>"; };
 		ED5AA84224E3691D007387A5 /* FavouriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteView.swift; sourceTree = "<group>"; };
 		ED5AA84424E36C89007387A5 /* FavouriteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteTableViewCell.swift; sourceTree = "<group>"; };
@@ -153,7 +148,6 @@
 		ED7D6CAE24C00AB200D3583D /* ReceiptTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptTableViewFooter.swift; sourceTree = "<group>"; };
 		ED7D6CB024C00F8200D3583D /* ReceiptCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
-		ED86F6E524B7BB8400895262 /* StripeAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripeAPIClient.swift; sourceTree = "<group>"; };
 		ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		EDA416EF24BD8F9600501F0E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -299,7 +293,6 @@
 			isa = PBXGroup;
 			children = (
 				ED3DD9CD2418BB4E00A4A28E /* NetworkManager.swift */,
-				ED86F6E524B7BB8400895262 /* StripeAPIClient.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -378,9 +371,6 @@
 		EDB3944F24B104A300DDC725 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				ED571C1724E86924008287BD /* RealmViewController.swift */,
-				ED3DD9992418B6B300A4A28E /* ResturantViewController.swift */,
-				ED4BFE2D24B8436D00AA8FB6 /* StripeViewComtroller.swift */,
 				EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */,
 				EDE038EB24E2693000189264 /* Home */,
 				ED46C74424BFEC1F0089CF43 /* Menu */,
@@ -416,6 +406,7 @@
 				ED5AA84424E36C89007387A5 /* FavouriteTableViewCell.swift */,
 				ED41FA4124F4D2650068E316 /* AccountTableViewCell.swift */,
 				ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */,
+				ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */,
 			);
 			path = "Custom Cell";
 			sourceTree = "<group>";
@@ -567,6 +558,7 @@
 				ED41FA4224F4D2650068E316 /* AccountTableViewCell.swift in Sources */,
 				EDB9C36B24EB97D500A328EA /* MealManaged+CoreDataProperties.swift in Sources */,
 				ED412E0F24208CB000EBBA4C /* BlackButton.swift in Sources */,
+				ED1989C724F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift in Sources */,
 				ED7D6CAF24C00AB200D3583D /* ReceiptTableViewFooter.swift in Sources */,
 				ED7D6CAB24C00A7300D3583D /* ReceiptTableViewCell.swift in Sources */,
 				EDB9C36C24EB97D500A328EA /* PreferenceManaged+CoreDataProperties.swift in Sources */,
@@ -584,7 +576,6 @@
 				ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */,
 				EDEA350324B6D9FD00F3AB21 /* CustomBarButtonItem.swift in Sources */,
 				ED5AA84324E3691D007387A5 /* FavouriteView.swift in Sources */,
-				ED3DD99A2418B6B300A4A28E /* ResturantViewController.swift in Sources */,
 				ED1946A4241A00AB00F75CE7 /* Resturant.swift in Sources */,
 				EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */,
 				ED117C0D24B4439600994068 /* Preference.swift in Sources */,
@@ -600,8 +591,6 @@
 				ED8E8B2824A9D7D200C00FCA /* CartViewController.swift in Sources */,
 				ED7D6CA924C00A5D00D3583D /* ReceiptTableView.swift in Sources */,
 				ED3983BE24EA5AE300DAC1C4 /* DBManager.swift in Sources */,
-				ED571C1824E86924008287BD /* RealmViewController.swift in Sources */,
-				ED86F6E624B7BB8400895262 /* StripeAPIClient.swift in Sources */,
 				EDB1751D24C0347B0054618C /* Receipt.swift in Sources */,
 				EDB8B718242491220049A14E /* MealViewController.swift in Sources */,
 				ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */,
@@ -634,7 +623,6 @@
 				ED1946B0241A15B600F75CE7 /* ScannerViewController.swift in Sources */,
 				ED412E0A2420842C00EBBA4C /* Extensions.swift in Sources */,
 				EDD31BD024F599CA00010DC2 /* MenuManaged+CoreDataClass.swift in Sources */,
-				ED4BFE2E24B8436D00AA8FB6 /* StripeViewComtroller.swift in Sources */,
 				ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */,
 				EDF8983F24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift in Sources */,
 			);
@@ -775,17 +763,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9VMTCAGAQS;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cafehollywood.HYSOR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dsn.HYSOR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -796,17 +785,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9VMTCAGAQS;
+				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cafehollywood.HYSOR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dsn.HYSOR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

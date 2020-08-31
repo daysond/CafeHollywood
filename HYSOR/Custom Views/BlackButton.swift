@@ -46,6 +46,10 @@ class BlackButton: UIButton {
         return l
     }()
     
+    var intrinsicWidth: CGFloat {
+        return headTitleLabel.intrinsicContentSize.width
+    }
+    
 //    var titleText: String = "" {
 //        didSet{
 //             headTitleLabel.text = titleText

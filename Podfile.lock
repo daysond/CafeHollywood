@@ -295,7 +295,6 @@ PODS:
   - RxRelay (5.0.0):
     - RxSwift (~> 5)
   - RxSwift (5.0.0)
-  - Stripe (19.3.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
@@ -309,7 +308,6 @@ DEPENDENCIES:
   - lottie-ios
   - RxCocoa (~> 5)
   - RxSwift (~> 5)
-  - Stripe
 
 SPEC REPOS:
   trunk:
@@ -342,7 +340,6 @@ SPEC REPOS:
     - RxCocoa
     - RxRelay
     - RxSwift
-    - Stripe
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
@@ -374,8 +371,7 @@ SPEC CHECKSUMS:
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
-  Stripe: dd5bfdd5f1daed4f9ddbfb47e9449ec302f9f708
 
-PODFILE CHECKSUM: 00fd5c78eec695097b9f6271f0b39e6c7d400d72
+PODFILE CHECKSUM: f9cc0be44aec376e99c9e0e296a5fcb7d0272ece
 
 COCOAPODS: 1.9.3

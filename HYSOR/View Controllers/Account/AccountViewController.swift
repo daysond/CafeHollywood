@@ -113,15 +113,25 @@ class AccountViewController: UIViewController {
         switch field {
         case .favourite:
             
-            let nvc = UINavigationController(rootViewController: ManageFavouriteViewController())
-            nvc.modalPresentationStyle = .popover
-            self.present(nvc, animated: true, completion: nil)
+            presentController(ManageFavouriteViewController(), style: .popover)
+            
+        case .reservation:
+            let res = Reservation(pax: 2, date: "today")
+            presentController(ReservationViewController(reservation: res), style: .fullScreen)
             
         default:
             print(field.rawValue)
         }
         
         
+        
+    }
+    
+    private func presentController(_ vc: UIViewController, style: UIModalPresentationStyle) {
+        
+        let nvc = UINavigationController(rootViewController: vc)
+        nvc.modalPresentationStyle = style
+        self.present(nvc, animated: true, completion: nil)
         
     }
     

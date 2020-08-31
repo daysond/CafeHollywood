@@ -10,214 +10,256 @@ import UIKit
 
 class ReservationViewController: UIViewController {
     
-    internal let optionsTableView: UITableView = {
-        let tb = UITableView()
-        tb.separatorStyle = .singleLine
-        tb.translatesAutoresizingMaskIntoConstraints = false
-        tb.backgroundColor = .white
-        tb.allowsSelection = false
-        tb.register(CheckoutOptionsTableViewCell.self, forCellReuseIdentifier: CheckoutOptionsTableViewCell.identifier)
-        return tb
-    }()
-
-    internal var menuLauncher: SlideInMenuLauncher?
+    private let scrollView = UIScrollView()
     
-    internal var options: [CustomOption] = []
+    private var viewWidth: CGFloat = 0
     
-    internal weak var scheduelerView: SchedulerView?
+    let reservation: Reservation
     
-     internal let confirmButton = BlackButton()
+    private let specialRequestLabel =  UILabel()
+    private let noteLabel =  UILabel()
     
-    internal let kCellHeightConstant: CGFloat = 80.0
-    internal let kChangeButtonWidth: CGFloat = 88.0
+    init(reservation: Reservation) {
+        self.reservation = reservation
+        super.init(nibName: nil, bundle: nil)
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        setupOptions()
+        
+        viewWidth = view.frame.width - 32
+        view.backgroundColor = .white
+//        reservation.note = "I dont want any thing thingthing scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)"
+        setupNavigationBar()
+        setupView()
+        
     }
     
 
-     private func setupOptions() {
-         
-         let pax = CustomOption(mainImageNmae: "pax", mainTitle: "PARTY SIZE", subTitle: "2", subImageName: nil, optionType: .pax)
-         let reservationTime = CustomOption(mainImageNmae: "clock", mainTitle: "BOOKING TIME", subTitle: "Now", subImageName: nil, optionType: .scheduler)
-         let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: "", subImageName: nil, optionType: .note)
-         
-         options = [pax, reservationTime, note]
-    
-     }
+
     
     private func setupView() {
         
-        setupTableView()
-        setupNavigationBar()
-        view.backgroundColor = .white
-        view.addSubview(confirmButton)
-        confirmButton.configureTitle(title: "Confirm Reservation")
-        confirmButton.addTarget(self, action: #selector(confirmReservation), for: .touchUpInside)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = .whiteSmoke
         
+        view.addSubview(scrollView)
+
         NSLayoutConstraint.activate([
             
-            optionsTableView.topAnchor.constraint(equalTo: view.topAnchor),
-            optionsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            optionsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            optionsTableView.bottomAnchor.constraint(equalTo: confirmButton.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
-            confirmButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-            confirmButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            confirmButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            confirmButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -0),
+
         ])
+
+        
+        setupScrollViewSubviews()
+    }
+    
+    private func setupScrollViewSubviews() {
+        
+        
+        
+        let restaurantNameLabel = UILabel()
+        restaurantNameLabel.text = "Cafe Hollywood"
+        restaurantNameLabel.numberOfLines = 0
+        restaurantNameLabel.font = .systemFont(ofSize: 28, weight: .bold)
+        restaurantNameLabel.frame = CGRect(x: 16, y: 8, width: viewWidth, height: restaurantNameLabel.intrinsicHeight(width: viewWidth))
+        
+        // ------------------------------------------------------------------------------------------
+        
+        let statusIndicator = UIImageView()
+        statusIndicator.image = UIImage(named: reservation.isConfirmed ? "completed" : "cancel")
+        
+        let statusLabel = UILabel()
+        statusLabel.text = reservation.isConfirmed ? "Reservation Confirmed!" : "Reservation Canceled."
+        statusLabel.numberOfLines = 0
+        statusLabel.font = .systemFont(ofSize: 16, weight: .regular)
+        let statusLabelHeight = statusLabel.intrinsicHeight(width: viewWidth - 36)
+        
+        statusIndicator.frame = CGRect(x: 16, y: restaurantNameLabel.frame.maxY + 16, width: statusLabelHeight - 4, height: statusLabelHeight - 4)
+        statusLabel.frame = CGRect(x: statusIndicator.frame.maxX + 8, y: statusIndicator.frame.minY, width:  statusLabel.intrinsicContentSize.width, height: statusLabelHeight)
+        
+        
+        // ------------------------------------------------------------------------------------------
+        
+        let paxImage = UIImageView(image: UIImage(named: "pax2"))
+        let paxLabel = UILabel()
+        paxLabel.text = "\(reservation.pax)"
+        paxLabel.font = .systemFont(ofSize: 18, weight: .regular)
+        
+        paxImage.frame = CGRect(x: 16, y: statusIndicator.frame.maxY + 16, width: paxLabel.intrinsicContentSize.height, height: paxLabel.intrinsicContentSize.height)
+        paxLabel.frame = CGRect(x: paxImage.frame.maxX + 8, y: paxImage.frame.minY, width: paxLabel.intrinsicContentSize.width, height: paxLabel.intrinsicContentSize.height)
+        
+        let calendarImage = UIImageView(image: UIImage(named: "calendar"))
+        let dateLabel = UILabel()
+        dateLabel.text = reservation.date
+        dateLabel.font = .systemFont(ofSize: 18, weight: .regular)
+        
+        calendarImage.frame = CGRect(x: paxLabel.frame.maxX + 16, y: paxImage.frame.minY, width: paxImage.frame.width, height: paxImage.frame.height)
+        dateLabel.frame = CGRect(x: calendarImage.frame.maxX + 8, y: calendarImage.frame.minY, width: dateLabel.intrinsicContentSize.width, height: dateLabel.intrinsicContentSize.height)
+        
+        
+         // ------------------------------------------------------------------------------------------
+        
+        
+        specialRequestLabel.text = "Sepcial Request:"
+        specialRequestLabel.numberOfLines = 1
+        specialRequestLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        specialRequestLabel.frame = CGRect(x: 16, y: paxImage.frame.maxY + 16, width: specialRequestLabel.intrinsicContentSize.width, height: reservation.note == nil ? 0 : specialRequestLabel.intrinsicContentSize.height)
+        
+//        noteLabel.layer.borderWidth = 1
+//        noteLabel.layer.borderColor = UIColor.lightGray.cgColor
+//        noteLabel.layer.cornerRadius = 8
+        noteLabel.text = reservation.note
+        noteLabel.numberOfLines = 0
+        noteLabel.font = .systemFont(ofSize: 18, weight: .regular)
+        noteLabel.frame = CGRect(x: 16, y: specialRequestLabel.frame.maxY + 8, width: viewWidth, height: noteLabel.intrinsicHeight(width: viewWidth))
+        
+        // ------------------------------------------------------------------------------------------
+        
+        let manageButton = BlackButton()
+        manageButton.configureTitle(title: "Manage Reservation")
+        manageButton.translatesAutoresizingMaskIntoConstraints = true
+        manageButton.layer.cornerRadius = 4
+        manageButton.addTarget(self, action: #selector(managedReservationButtonTapped), for: .touchUpInside)
+        
+        let requestButton = BlackButton()
+        requestButton.configureTitle(title: "Edit Special Request")
+        requestButton.translatesAutoresizingMaskIntoConstraints = true
+        requestButton.layer.cornerRadius = 4
+        requestButton.addTarget(self, action: #selector(requestButtonTapped), for: .touchUpInside)
+        
+        requestButton.frame = CGRect(x: 16, y: noteLabel.frame.maxY + 16, width: requestButton.intrinsicWidth + 32, height: 32)
+        manageButton.frame = CGRect(x: 16, y: requestButton.frame.maxY + 8, width: requestButton.intrinsicWidth + 32, height: 32)
+        
+         // ------------------------------------------------------------------------------------------
+        
+        let menuContainerView = makeContainerView(imageName: "menu", title: "Browse Menu")
+        menuContainerView.frame = CGRect(x: 16, y: manageButton.frame.maxY + 16, width: (viewWidth - 8) / 2 , height: 64)
+        
+        let directionContainerView = makeContainerView(imageName: "gps", title: "Get Direction")
+        directionContainerView.frame = CGRect(x: menuContainerView.frame.maxX + 16, y: menuContainerView.frame.minY, width: (viewWidth - 8) / 2 , height: 64)
+        
+         // ------------------------------------------------------------------------------------------
+        
+        
+        
+        scrollView.addSubview(restaurantNameLabel)
+        scrollView.addSubview(statusLabel)
+        scrollView.addSubview(statusIndicator)
+        scrollView.addSubview(paxImage)
+        scrollView.addSubview(paxLabel)
+        scrollView.addSubview(calendarImage)
+        scrollView.addSubview(dateLabel)
+        scrollView.addSubview(specialRequestLabel)
+        scrollView.addSubview(noteLabel)
+        scrollView.addSubview(manageButton)
+        scrollView.addSubview(requestButton)
+        scrollView.addSubview(menuContainerView)
+        scrollView.addSubview(directionContainerView)
+        
+        scrollView.contentSize = CGSize(width: view.frame.width, height: 2400)
         
         
         
     }
     
+    
+    private func makeContainerView(imageName: String, title: String) -> UIView {
+        
+        let containerView = UIView()
+        containerView.backgroundColor = scrollView.backgroundColor
+        containerView.layer.borderWidth = 2
+        containerView.layer.borderColor = UIColor.darkGray.cgColor
+        containerView.layer.cornerRadius = 8
+        
+        
+        let imageview = UIImageView(image: UIImage(named: imageName))
+        imageview.frame = CGRect(x: 8, y: 8, width: 48, height: 48)
+        imageview.contentMode = .scaleAspectFit
+        
+        let titleView = UILabel()
+        titleView.text = title
+        titleView.frame = CGRect(x: imageview.frame.maxX + 8, y: imageview.frame.midY - titleView.intrinsicContentSize.height/2, width: titleView.intrinsicContentSize.width, height: titleView.intrinsicContentSize.height)
+        
+        containerView.addSubview(imageview)
+        containerView.addSubview(titleView)
+        
+        return containerView
+        
+    }
+    
+    
+    
        private func setupNavigationBar() {
     
-           navigationItem.title = "Summary"
-           self.navigationController?.navigationBar.prefersLargeTitles = true
+           navigationItem.title = "Reservation"
+           self.navigationController?.navigationBar.prefersLargeTitles = false
            navigationController?.navigationBar.tintColor = .black
            self.navigationController?.navigationBar.isTranslucent = true
            self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
 
        }
-    
-    private func setupTableView() {
-        
-        optionsTableView.delegate = self
-        optionsTableView.dataSource = self
-        //        optionsTableView.contentInsetAdjustmentBehavior = .never
-        view.addSubview(optionsTableView)
 
+    
+    @objc
+    private func managedReservationButtonTapped() {
+        
+        
     }
     
     @objc
-    private func confirmReservation() {
+    private func requestButtonTapped() {
         
+        let instructionVC = InstructionsInputViewController()
+        instructionVC.delegate = self
+        instructionVC.textView.text = reservation.note ?? ""
+        let nav = UINavigationController(rootViewController: instructionVC)
+        present(nav, animated: true, completion: nil)
         
+           
     }
     
-    private func heightForCellLabel(text: String) -> CGFloat{
-        
-        let cell = CheckoutOptionsTableViewCell()
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: optionsTableView.frame.width - kChangeButtonWidth, height: CGFloat.greatestFiniteMagnitude))
+    private func heightForText(_ text: String, of font: UIFont) -> CGFloat{
+
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.font = cell.rowSubLabel.font
+        label.font = font
         label.text = text
         label.sizeToFit()
-        
-        return label.frame.height - 18
+
+        return label.frame.height
     }
 }
 
-extension ReservationViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return options.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if let cell = tableView.dequeueReusableCell(withIdentifier: CheckoutOptionsTableViewCell.identifier, for: indexPath) as? CheckoutOptionsTableViewCell {
-            cell.indexPath = indexPath
-            cell.delegate = self
-            cell.configureCell(with: options[indexPath.row])
-            return cell
-            
-            
-        }
-        
-        return UITableViewCell()
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return kCellHeightConstant + heightForCellLabel(text: options[indexPath.row].subTitle)
-    }
-    
-    
-    
-}
 
-extension ReservationViewController: CheckoutOptionCellDelegate, InstructionInputDelegate {
-
-
-    func didTapChangeButton(at indexPath: IndexPath) {
-
-        let option = options[indexPath.row]
-
-        switch option.optionType {
-            
-        case .pax:
-            option.subTitle =  option.subTitle == "Yes please!" ? "No thanks!" : "Yes please!"
-
-        case .scheduler:
-            handleScheduler()
-
-        case .note:
-            let instructionVC = InstructionsInputViewController()
-            instructionVC.delegate = self
-            instructionVC.textView.text = option.subTitle
-            let nav = UINavigationController(rootViewController: instructionVC)
-            present(nav, animated: true, completion: nil)
-        default:
-            return
-        }
-
-    }
-    
-    private func handleScheduler() {
-        let schedulerView = SchedulerView()
-        self.scheduelerView = schedulerView
-        schedulerView.donebutton.addTarget(self, action: #selector(schedulerViewDismiss), for: .touchUpInside)
-        launchMenu(view: schedulerView, height: 300)
-        
-    }
-    
-    @objc func schedulerViewDismiss() {
-        let date = self.scheduelerView?.selectedDate ?? "Now"
-        updateOptionOfType(.scheduler, with: date)
-        menuLauncher?.dismissMenu()
-    }
-
-    @objc func dismissMenu() {
-        menuLauncher?.dismissMenu()
-    }
-    
-    private func launchMenu(view: UIView, height: CGFloat) {
-    
-        let blackView = UIView()
-        let tapGes = UITapGestureRecognizer(target: self, action: #selector(dismissMenu))
-        blackView.addGestureRecognizer(tapGes)
-        blackView.isUserInteractionEnabled = true
-        
-        let menuLauncher = SlideInMenuLauncher(blackView: blackView, menuView: view, menuHeight: height)
-        self.menuLauncher = menuLauncher
-        menuLauncher.showMenu()
-
-    }
-    
-    private func updateOptionOfType(_ type: CustomOptionType, with text: String) {
-        
-        for (index,option) in options.enumerated() {
-            if option.optionType == type {
-                option.subTitle = text
-                optionsTableView.beginUpdates()
-                optionsTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                optionsTableView.endUpdates()
-                break
-            }
-        }
-    }
+extension ReservationViewController: InstructionInputDelegate {
     
     //MARK: - INPUT DELEGATE
     
     func didInputInstructions(_ instructions: String) {
         
-        updateOptionOfType(.note, with: instructions)
-
+        if instructions != "" {
+            
+            reservation.note = instructions
+            
+            for subview in scrollView.subviews {
+                subview.removeFromSuperview()
+            }
+            
+            setupScrollViewSubviews()
+        }
+        
     }
     
 
