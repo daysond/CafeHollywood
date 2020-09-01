@@ -130,6 +130,7 @@ class DBManager {
         
         if let tag = meal.comboTag {
             mealManaged.comboMealTag = NSNumber(value: tag)
+//            print(" TAG \(mealManaged.comboMealTag)")
         }
         
         if let type = meal.comboType?.rawValue {
@@ -163,6 +164,9 @@ class DBManager {
             let items = try context.fetch(request)
             
             if let managedItem = items.first {
+                if uid == "H01" {
+                    print(managedItem.comboType)
+                }
                 return Meal(managedObject: managedItem)
             } else {
                 return nil

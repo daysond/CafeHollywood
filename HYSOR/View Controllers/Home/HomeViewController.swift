@@ -16,7 +16,7 @@ class HomeViewController: UIViewController {
     
     let orderNowButton = BlackButton()
     
-    let favButton = BlackButton()
+    let quickOrderButton = BlackButton()
     
     private var menuLauncher: SlideInMenuLauncher?
     
@@ -31,6 +31,10 @@ class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushPreferenceVC(_:)), name: .didTapModifyButton, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
     //MARK: - SET UP
     
     private func setupView() {
@@ -52,17 +56,22 @@ class HomeViewController: UIViewController {
         orderNowButton.layer.cornerRadius = 4
         view.addSubview(orderNowButton)
         
-        favButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
-        favButton.addTarget(self, action: #selector(favButtonTapped), for: .touchUpInside)
-        favButton.layer.cornerRadius = 4
-        view.addSubview(favButton)
+        quickOrderButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
+        quickOrderButton.addTarget(self, action: #selector(quickOrderButtonTapped), for: .touchUpInside)
+        quickOrderButton.layer.cornerRadius = 4
+        view.addSubview(quickOrderButton)
         
         NSLayoutConstraint.activate([
             
             
             
+            quickOrderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            quickOrderButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -48),
+            quickOrderButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
+            quickOrderButton.heightAnchor.constraint(equalToConstant: 40),
+            
             reservationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            reservationButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -48),
+            reservationButton.topAnchor.constraint(equalTo: quickOrderButton.bottomAnchor, constant: 16),
             reservationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
             reservationButton.heightAnchor.constraint(equalToConstant: 40),
             
@@ -70,11 +79,6 @@ class HomeViewController: UIViewController {
             orderNowButton.topAnchor.constraint(equalTo: reservationButton.bottomAnchor, constant: 16),
             orderNowButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
             orderNowButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            favButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            favButton.topAnchor.constraint(equalTo: orderNowButton.bottomAnchor, constant: 16),
-            favButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
-            favButton.heightAnchor.constraint(equalToConstant: 40),
             
         ])
         
@@ -90,6 +94,7 @@ class HomeViewController: UIViewController {
     
     @objc
     private func reservationTapped() {
+        
         let width = view.frame.width
         let paxView = PaxView(frame: CGRect(x: 0, y: 0, width: width, height: 120))
         let schedulerView = SchedulerView(frame: CGRect(x: 0, y: 120, width: width, height: 300))
@@ -109,14 +114,18 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didConfirmReservation() {
-        let date = self.scheduelerView?.selectedDate ?? "Now"
-        let partySize = self.paxView?.paxSize ?? 2
-        print("\(date) for \(partySize)")
+        
+        let date = self.scheduelerView!.selectedDate
+        let partySize = self.paxView!.paxSize
         menuLauncher?.dismissMenu()
-        showAlert(alertTitile: "Your reservation for party of \(partySize) on \(date) has been confirmed!", message: nil, actionTitle: "Manage Reservation", action: showReservation)
+        let reservation = Reservation(pax: partySize, date: date)
+        let rvc = ReservationViewController(reservation: reservation)
+        rvc.modalPresentationStyle = .popover
+        self.navigationController?.pushViewController(rvc, animated: true)
+//        showAlert(alertTitile: "Your reservation for party of \(partySize) on \(date) has been confirmed!", message: nil, actionTitle: "Manage Reservation", action: showReservation)
     }
 
-    @objc private func favButtonTapped() {
+    @objc private func quickOrderButtonTapped() {
         
         let width = view.frame.width
         let height = view.frame.height * 2.0/3.0
@@ -142,7 +151,12 @@ class HomeViewController: UIViewController {
             }
         }
         
-        showAlert(alertTitile: "Successfully added \(count) meals to cart!", message: nil, actionTitle: "View Cart", action: showCart)
+//        showAlert(alertTitile: "Successfully added \(count) meals to cart!", message: nil, actionTitle: "View Cart", action: showCart)
+        let cartVC = CartViewController()
+        let nav = UINavigationController(rootViewController: cartVC)
+        nav.modalPresentationStyle = .automatic
+        self.present(nav, animated: true, completion: nil)
+
         dismissMenu()
         
     }

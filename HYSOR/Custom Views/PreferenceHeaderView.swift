@@ -71,7 +71,8 @@ class PreferenceHeaderView: UIView {
 
             titleLabel.bottomAnchor.constraint(equalTo: detailLabel.topAnchor, constant: -8),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-//            titleLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, constant: -48),
+//            titleLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -48),
+            titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -8),
 
 
             detailLabel.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -16),

@@ -160,6 +160,10 @@ struct Meal {
         self.details = managedObject.detail
         self.imageURL = managedObject.imageURL
         self.comboMealTag = managedObject.comboMealTag?.intValue
+        if let type = managedObject.comboType {
+            self.comboType = ComboType(rawValue: Int(type))
+        }
+       
         
         var preferences: [Preference] = []
         

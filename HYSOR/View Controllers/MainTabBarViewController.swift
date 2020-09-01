@@ -27,7 +27,7 @@ class MainTabBarViewController: UITabBarController {
         
         tabBar.tintColor = .black
         
-        let homeViewController = HomeViewController()
+        let homeViewController = UINavigationController(rootViewController: HomeViewController())
         let homeTBI = UITabBarItem(title: "HOME", image: UIImage(named: "home-1"), tag: 0)
         homeViewController.tabBarItem = homeTBI
         

@@ -112,6 +112,10 @@ struct PreferenceItem {
         self.quantity = 1
         self.isSelected = false
         
+        if uid == "a6013" {
+            print("tag \(managedObject.comboTag)")
+        }
+        
         if let price = managedObject.price {
             self.price = Money(amt: price.decimalValue)
         }

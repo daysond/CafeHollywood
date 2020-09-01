@@ -240,6 +240,34 @@ class SubMenuViewController: UIViewController {
         
     }
     
+    func intrinsicCellHeight(at item: Int ) -> CGFloat {
+        
+        let width = subMenuCollectionView.frame.width - 104 - padding * 2
+        
+        let nameLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width , height: CGFloat.greatestFiniteMagnitude))
+        nameLabel.numberOfLines = 0
+        nameLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        nameLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        nameLabel.text = meals[item].name
+        nameLabel.sizeToFit()
+        
+        let priceLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        priceLabel.numberOfLines = 0
+        priceLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        priceLabel.font = .systemFont(ofSize: 16)
+        priceLabel.text = "$\(meals[item].price.stringRepresentation)"
+        priceLabel.sizeToFit()
+        
+        let detailLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        detailLabel.numberOfLines = 0
+        detailLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        detailLabel.font = .systemFont(ofSize: 16)
+        detailLabel.text = meals[item].details
+        detailLabel.sizeToFit()
+        
+        return nameLabel.frame.height + priceLabel.frame.height + detailLabel.frame.height + 4 * 16
+        
+    }
     
     
     
@@ -277,7 +305,7 @@ extension SubMenuViewController: UICollectionViewDelegateFlowLayout, UICollectio
             return cell
         }
         
-        return UICollectionViewCell()
+        return SubMenuCollectionViewCell()
     }
     
     
@@ -305,8 +333,14 @@ extension SubMenuViewController: UICollectionViewDelegateFlowLayout, UICollectio
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+
+        
         let width = subMenuCollectionView.frame.width
-        return CGSize(width: width - 2 * padding, height:  120)
+        
+        let height = intrinsicCellHeight(at: indexPath.item)
+        
+        return CGSize(width: width - 2 * padding, height:  height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

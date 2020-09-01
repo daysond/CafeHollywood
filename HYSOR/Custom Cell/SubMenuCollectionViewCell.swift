@@ -17,7 +17,7 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
     private let nameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        l.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         l.text = "Name"
         l.numberOfLines = 0
         l.textColor = .black
@@ -28,7 +28,7 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
     private let priceLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 17)
+        l.font = UIFont.systemFont(ofSize: 16)
         l.text = "Name"
         l.numberOfLines = 1
         l.textColor = .black
@@ -39,7 +39,7 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
     private let detailLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 17)
+        l.font = UIFont.systemFont(ofSize: 16)
         l.text = "Name"
         l.numberOfLines = 0
         l.textColor = .black
@@ -73,39 +73,28 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(priceLabel)
         contentView.addSubview((seperator))
         backgroundColor = .white
-        
-        
-        //        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
-        //        favoriteButton.setImage(UIImage(named: "heartEmpty"), for: .normal)
-        //        favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
-        //        contentView.addSubview(favoriteButton)
-        
+ 
         NSLayoutConstraint.activate([
             
-            //            favoriteButton.heightAnchor.constraint(equalToConstant: 24),
-            //            favoriteButton.widthAnchor.constraint(equalToConstant: 24),
-            //            favoriteButton.trailingAnchor.constraint(equalTo: foodImageView.trailingAnchor, constant: -8),
-            //            favoriteButton.bottomAnchor.constraint(equalTo: foodImageView.bottomAnchor, constant: -8),
             
-            foodImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -8),
-            foodImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, constant: -16),
+            foodImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            foodImageView.heightAnchor.constraint(equalToConstant: 96),
             foodImageView.widthAnchor.constraint(equalTo: foodImageView.heightAnchor),
             foodImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
             
             nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            //            nameLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.25),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            nameLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 0),
+            nameLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 8),
             
             detailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8),
             //            detailLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.25),
             detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            detailLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 0),
+            detailLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 8),
             
             priceLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 16),
             //            priceLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.25),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            priceLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 0),
+//            priceLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 8),
             
             seperator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             seperator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
@@ -140,6 +129,8 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
         }
         
     }
+    
+
     
     override func prepareForReuse() {
         foodImageView.image = nil
