@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
     private  var scheduelerView: SchedulerView?
     private  var paxView: PaxView?
     private  var favouriteView: FavouriteView?
+    private let loadingView = LoadingViewController(animationFileName: "dotsLoading")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,12 +117,28 @@ class HomeViewController: UIViewController {
     @objc func didConfirmReservation() {
         
         let date = self.scheduelerView!.selectedDate
-        let partySize = self.paxView!.paxSize
+        let pax = self.paxView!.paxSize
         menuLauncher?.dismissMenu()
-        let reservation = Reservation(pax: partySize, date: date)
-        let rvc = ReservationViewController(reservation: reservation)
-        rvc.modalPresentationStyle = .popover
-        self.navigationController?.pushViewController(rvc, animated: true)
+        
+        createLoadingView()
+        let reservation = Reservation(pax: pax, date: date)
+        //upload reservation
+        
+        NetworkManager.shared.sendReservation(reservation) { [self] (err) in
+            guard err == nil else { return }
+            
+            DispatchQueue.main.async {
+                let rvc = ReservationViewController(reservation: reservation)
+                rvc.modalPresentationStyle = .popover
+                self.navigationController?.pushViewController(rvc, animated: true)
+                
+                self.dismissLoadingView()
+                
+            }
+        }
+        
+        
+
 //        showAlert(alertTitile: "Your reservation for party of \(partySize) on \(date) has been confirmed!", message: nil, actionTitle: "Manage Reservation", action: showReservation)
     }
 
@@ -132,9 +149,9 @@ class HomeViewController: UIViewController {
         self.favouriteView  = FavouriteView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         favouriteView?.addToCartButton.addTarget(self, action: #selector(addFavouriteToCart), for: .touchUpInside)
         favouriteView?.cancelButton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
-        for (index, meal) in APPSetting.shared.favouriteMeals.enumerated() {
+        for (index, meal) in APPSetting.favouriteMeals.enumerated() {
             if meal.isSelected {
-                APPSetting.shared.favouriteMeals[index].isSelected = false
+                APPSetting.favouriteMeals[index].isSelected = false
             }
         }
         launchMenu(view: favouriteView!, height: height)
@@ -143,9 +160,9 @@ class HomeViewController: UIViewController {
     
     @objc private func addFavouriteToCart() {
         var count = 0
-        for (index, meal) in APPSetting.shared.favouriteMeals.enumerated() {
+        for (index, meal) in APPSetting.favouriteMeals.enumerated() {
             if meal.isSelected {
-                APPSetting.shared.favouriteMeals[index].isSelected = false
+                APPSetting.favouriteMeals[index].isSelected = false
                 Cart.shared.meals.append(meal)
                 count += 1
             }
@@ -171,7 +188,7 @@ class HomeViewController: UIViewController {
 
         if let data = notification.userInfo as? [String: Int], let index = data["index"] {
             
-            let meal = APPSetting.shared.favouriteMeals[index]
+            let meal = APPSetting.favouriteMeals[index]
             let mealViewController = FavouriteMealViewController(meal:meal, index: index)
             mealViewController.delegate = favouriteView
             mealViewController.modalPresentationStyle = .popover
@@ -182,23 +199,42 @@ class HomeViewController: UIViewController {
         
     }
     
+    //MARK: - HELPERS
+    
+    private func createLoadingView() {
+        
+        addChild(loadingView)
+        loadingView.view.frame = view.frame
+        view.addSubview(loadingView.view)
+        loadingView.didMove(toParent: self)
+        
+    }
+    
+    private func dismissLoadingView() {
+        
+        loadingView.willMove(toParent: nil)
+        loadingView.view.removeFromSuperview()
+        loadingView.removeFromParent()
+        
+    }
+    
     //MARK: - SHOW ALERT
     
     
-    private func showAlert(alertTitile: String, message: String?, actionTitle: String, action: @escaping () -> Void ) {
-        
-        let alert = UIAlertController(title: alertTitile, message: message, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: { (_) in
-            action()
-        }))
-     
-
-        self.present(alert, animated: true)
-
-    }
-    
+//    private func showAlert(alertTitile: String, message: String?, actionTitle: String, action: @escaping () -> Void ) {
+//
+//        let alert = UIAlertController(title: alertTitile, message: message, preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//        alert.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: { (_) in
+//            action()
+//        }))
+//
+//
+//        self.present(alert, animated: true)
+//
+//    }
+//
     
     private func showCart() {
         

@@ -43,7 +43,7 @@ struct Meal {
     var instruction: String?
     
     var isFavourite: Bool {
-        return User.shared.favouriteList.contains(uid)
+        return APPSetting.favouriteList.contains(uid)
     }
     
     var isSelected: Bool = false

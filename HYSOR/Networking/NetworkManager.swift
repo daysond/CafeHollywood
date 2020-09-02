@@ -148,7 +148,7 @@ class NetworkManager {
         
         let uid = dataResult.user.uid
         
-        APPSetting.shared.storeUserInfo(email, name, uid, nil)
+        APPSetting.storeUserInfo(email, name, uid, nil)
         
         let data =  ["name": name, "email": email, "uid": uid ] as [String : Any]
         
@@ -173,69 +173,69 @@ class NetworkManager {
     
     
     
-    // MARK: - Set/ Get Stripe ID
-    
-    func setStripeCustomerInfoToDataBase(_ info: [String: Any]) -> Result<String, Error>{
-        //
-        let semaphore = DispatchSemaphore(value: 0)
-        //
-        var result: Result<String, Error>!
-        
-        guard let uid = info["description"] as? String, let stripeID = info["id"] as? String else {
-            result = .failure(NetworkError.jsonDataError)
-            return result
-        }
-        
-        let data = ["stripeID": stripeID]
-        
-        let customerReference = databaseRef.collection("customers").document(uid)
-        customerReference.updateData(data) { (error) in
-            
-            result = error == nil ? .success(stripeID) : .failure(error!)
-            
-            semaphore.signal()
-        }
-
-        _ = semaphore.wait(timeout: .distantFuture)
-        
-        return result
-    }
-    
-    
-    func fetchUserInfoFromDataBase(completion: @escaping (Result<[String: String], Error>) -> Void ) {
-        
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(.failure(NetworkError.argumentError))
-            return
-        }
-        
-        let customerReference = databaseRef.collection("customers").document(uid)
-        customerReference.getDocument { (snapshot, error) in
-            guard error == nil else {
-                completion(.failure(error!))
-                return
-            }
-            
-            guard let data = snapshot?.data() as? [String: String] else {
-                completion(.failure(NetworkError.jsonDataError))
-                return
-            }
-            
-            completion(.success(data))
-        }
-        
-    }
-    
-    func updateCurrentUserStripeID(stripeID: String) {
-        
-        let uid = User.shared.uid
-        let customerReference = databaseRef.collection("customers").document(uid)
-        
-        let data = ["stripeID": stripeID]
-        
-        customerReference.updateData(data)
-        
-    }
+//    // MARK: - Set/ Get Stripe ID
+//
+//    func setStripeCustomerInfoToDataBase(_ info: [String: Any]) -> Result<String, Error>{
+//        //
+//        let semaphore = DispatchSemaphore(value: 0)
+//        //
+//        var result: Result<String, Error>!
+//
+//        guard let uid = info["description"] as? String, let stripeID = info["id"] as? String else {
+//            result = .failure(NetworkError.jsonDataError)
+//            return result
+//        }
+//
+//        let data = ["stripeID": stripeID]
+//
+//        let customerReference = databaseRef.collection("customers").document(uid)
+//        customerReference.updateData(data) { (error) in
+//
+//            result = error == nil ? .success(stripeID) : .failure(error!)
+//
+//            semaphore.signal()
+//        }
+//
+//        _ = semaphore.wait(timeout: .distantFuture)
+//
+//        return result
+//    }
+//
+//
+//    func fetchUserInfoFromDataBase(completion: @escaping (Result<[String: String], Error>) -> Void ) {
+//
+//        guard let uid = Auth.auth().currentUser?.uid else {
+//            completion(.failure(NetworkError.argumentError))
+//            return
+//        }
+//
+//        let customerReference = databaseRef.collection("customers").document(uid)
+//        customerReference.getDocument { (snapshot, error) in
+//            guard error == nil else {
+//                completion(.failure(error!))
+//                return
+//            }
+//
+//            guard let data = snapshot?.data() as? [String: String] else {
+//                completion(.failure(NetworkError.jsonDataError))
+//                return
+//            }
+//
+//            completion(.success(data))
+//        }
+//
+//    }
+//
+//    func updateCurrentUserStripeID(stripeID: String) {
+//
+//        let uid = User.shared.uid
+//        let customerReference = databaseRef.collection("customers").document(uid)
+//
+//        let data = ["stripeID": stripeID]
+//
+//        customerReference.updateData(data)
+//
+//    }
     
     
     
@@ -516,7 +516,7 @@ class NetworkManager {
                 
             case .completed:
                 print("shoud delete")
-                self.databaseRef.collection("customers").document(User.shared.uid).collection("activeOrders").document(orderID).delete()
+                self.databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders").document(orderID).delete()
                 return
                 
             default:
@@ -580,7 +580,7 @@ class NetworkManager {
     
     func addActiveOrderListener() {
         
-        let activeOrderRef = databaseRef.collection("customers").document(User.shared.uid).collection("activeOrders")
+        let activeOrderRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders")
         
         activeOrderListener = activeOrderRef.addSnapshotListener({ (querySnapshot, err) in
             
@@ -615,6 +615,61 @@ class NetworkManager {
     func removeOrderListener() {
         activeOrderListener?.remove()
         print("did remove listener")
+    }
+    
+    
+    //MARK: - RESERVATIONS
+    
+    func sendReservation(_ reservation: Reservation, completion: @escaping (Error?) -> Void) {
+        
+        let reservationRef = databaseRef.collection("reservations")
+        let customerReservation = databaseRef.collection("customer_reservation")
+        
+        reservationRef.document(reservation.uid).setData(reservation.representation) { (err) in
+            
+            guard err == nil else {
+                completion(err)
+                return
+            }
+            
+            customerReservation.document(reservation.customerID).collection("reservations").document(reservation.uid).setData(["status": reservation.status.rawValue])
+            
+            completion(err)
+
+        }
+
+    }
+    
+    func addSpecialRequest(_ note: String, to reservationID: String) {
+        
+        let reservationRef = databaseRef.collection("reservations").document(reservationID)
+        
+        reservationRef.updateData(["note": note])
+        
+        
+    }
+    
+    func updateReservation(_ reservation: Reservation) {
+        
+        let reservationRef = databaseRef.collection("reservations").document(reservation.uid)
+        
+        reservationRef.updateData(["pax": reservation.pax, "date" : reservation.date ])
+        
+    }
+    
+    func cancelReservation(_ reservation: Reservation) {
+        
+        let reservationRef = databaseRef.collection("reservations")
+        let customerReservation = databaseRef.collection("customer_reservation")
+        reservationRef.document(reservation.uid).updateData(["status": reservation.status.rawValue])
+        customerReservation.document(reservation.customerID).collection("reservations").document(reservation.uid).delete()
+        
+    }
+    
+    func getReservations() {
+        
+        
+        
     }
     
     

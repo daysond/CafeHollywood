@@ -290,7 +290,7 @@ class SignUpViewController: UIViewController {
         
         guard let email = emailTextField.text, let password = passwordTextfield.text, let name = nameTextfield.text else { return }
         
-        APPSetting.shared.customerName = nameTextfield.text
+        APPSetting.customerName = nameTextfield.text!
         
         self.hintLabel.text = "Signing up ..."
         

@@ -24,7 +24,7 @@ class ReservationViewController: UIViewController {
     private let dateLabel = UILabel()
     let reservation: Reservation
     
-    var infoText = "dinfo text here dsa jsadkldjlaskd jalsdjlasdlalslvjlds howei sugldjs hdslj ldfshv wir gfhdkls jflawd ;gds dfklcaspw[ gotidslk lasf"
+    var infoText = "We have a 15 minute grace period. Please call us if you are running later than 15 munutes after your reservation time. Or else your reservation might be canceled.\n\nMasks are required to be worn by all guests when moving inside the property. \n\nIf you or any membber of your group, are experiencing any COVID-19 related symptoms, we do ask that you remain at home and ensure the safety of our staff and other guests.\n\nBoby temperature check is required upon arrival."
     
     init(reservation: Reservation) {
         self.reservation = reservation
@@ -74,7 +74,6 @@ class ReservationViewController: UIViewController {
     private func setupScrollViewSubviews() {
         
         
-        
         let restaurantNameLabel = UILabel()
         restaurantNameLabel.text = "Cafe Hollywood"
         restaurantNameLabel.numberOfLines = 0
@@ -84,10 +83,10 @@ class ReservationViewController: UIViewController {
         // ------------------------------------------------------------------------------------------
         
         let statusIndicator = UIImageView()
-        statusIndicator.image = UIImage(named: reservation.isConfirmed ? "completed" : "cancel")
+        statusIndicator.image = UIImage(named: reservation.status == .confirmed ? "completed" : "cancel")
         
         let statusLabel = UILabel()
-        statusLabel.text = reservation.isConfirmed ? "Reservation Confirmed!" : "Reservation Canceled."
+        statusLabel.text = reservation.status == .confirmed ? "Reservation Confirmed!" : "Reservation Canceled."
         statusLabel.numberOfLines = 0
         statusLabel.font = .systemFont(ofSize: 16, weight: .regular)
         let statusLabelHeight = statusLabel.intrinsicHeight(width: viewWidth - 36)
@@ -116,63 +115,24 @@ class ReservationViewController: UIViewController {
         
         
         // ------------------------------------------------------------------------------------------
-        let specialRequestLabel =  makeTitleLabel(text: "Sepcial Request:")
-        specialRequestLabel.frame = CGRect(x: 16, y: paxImage.frame.maxY + 16, width: specialRequestLabel.intrinsicContentSize.width, height: reservation.note == nil ? 0 : specialRequestLabel.intrinsicContentSize.height)
-        
-        let noteLabel =  makeDetailLabel(text: reservation.note)
-        noteLabel.frame = CGRect(x: 16, y: specialRequestLabel.frame.maxY + 8, width: viewWidth, height: noteLabel.intrinsicHeight(width: viewWidth))
-        
-        // ------------------------------------------------------------------------------------------
-        
-        let manageButton = BlackButton()
-        manageButton.configureTitle(title: "Manage Reservation")
-        manageButton.translatesAutoresizingMaskIntoConstraints = true
-        manageButton.layer.cornerRadius = 4
-        manageButton.addTarget(self, action: #selector(managedReservationButtonTapped), for: .touchUpInside)
-        
-        let requestButton = BlackButton()
-        requestButton.configureTitle(title: reservation.note == nil ? "Add Special Request" : "Edit Special Request")
-        requestButton.translatesAutoresizingMaskIntoConstraints = true
-        requestButton.layer.cornerRadius = 4
-        requestButton.addTarget(self, action: #selector(requestButtonTapped), for: .touchUpInside)
-        
-        requestButton.frame = CGRect(x: 16, y: noteLabel.frame.maxY + 16, width: requestButton.intrinsicWidth + 32, height: 32)
-        manageButton.frame = CGRect(x: 16, y: requestButton.frame.maxY + 8, width: requestButton.intrinsicWidth + 32, height: 32)
-        
-        // ------------------------------------------------------------------------------------------
+
         
         let menuContainerView = makeContainerView(imageName: "menu", title: "Browse Menu")
-        menuContainerView.frame = CGRect(x: 16, y: manageButton.frame.maxY + 16, width: (viewWidth - 8) / 2 , height: 64)
-        menuContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(browseMenuTapped)))
-        
         let directionContainerView = makeContainerView(imageName: "gps", title: "Get Direction")
-        directionContainerView.frame = CGRect(x: menuContainerView.frame.maxX + 16, y: menuContainerView.frame.minY, width: (viewWidth - 8) / 2 , height: 64)
+        
+        menuContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(browseMenuTapped)))
         directionContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(getDirectionTapped)))
         
-        
-        // ------------------------------------------------------------------------------------------
-        let infoTitleLabel = makeTitleLabel(text: "Restaurant information")
-        infoTitleLabel.frame = CGRect(x: 16, y: menuContainerView.frame.maxY + 16, width: infoTitleLabel.intrinsicContentSize.width, height: infoTitleLabel.intrinsicContentSize.height)
-        
-        let infoTextLabel = makeDetailLabel(text: infoText)
-        infoTextLabel.frame = CGRect(x: 16, y: infoTitleLabel.frame.maxY + 8, width: viewWidth, height: infoTextLabel.intrinsicHeight(width: viewWidth))
-        
         let phoneTitleLabel = makeTitleLabel(text: "Phone number")
-        phoneTitleLabel.frame = CGRect(x: 16, y: infoTextLabel.frame.maxY + 16, width: phoneTitleLabel.intrinsicContentSize.width, height: phoneTitleLabel.intrinsicContentSize.height)
-        
         let numberLabel = makeDetailLabel(text: "905-477-8877")
         numberLabel.textColor = .systemBlue
-        numberLabel.frame = CGRect(x: 16, y: phoneTitleLabel.frame.maxY + 8, width: numberLabel.intrinsicContentSize.width, height: numberLabel.intrinsicHeight(width: viewWidth))
         numberLabel.isUserInteractionEnabled = true
         numberLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(makePhoneCall)))
         
         let addressTitleLabel = makeTitleLabel(text: "Address")
-        addressTitleLabel.frame = CGRect(x: 16, y: numberLabel.frame.maxY + 16, width: addressTitleLabel.intrinsicContentSize.width, height: addressTitleLabel.intrinsicContentSize.height)
-        
         let addressLabel = makeDetailLabel(text: "7240 Kennedy Rd, Markham, ON L3R 7P2")
-        addressLabel.frame = CGRect(x: 16, y: addressTitleLabel.frame.maxY + 8, width: addressLabel.intrinsicContentSize.width, height: addressLabel.intrinsicHeight(width: viewWidth))
         
-        let mapView = MKMapView(frame: CGRect(x: 16, y: addressLabel.frame.maxY + 16, width: viewWidth, height: 240))
+        let mapView = MKMapView()
         let span = MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002)
         let location = CLLocationCoordinate2D(latitude: 43.832102, longitude: -79.306318)
         let region = MKCoordinateRegion(center: location, span: span)
@@ -180,19 +140,104 @@ class ReservationViewController: UIViewController {
         anno.coordinate = location
         anno.title = "Cafe Hollywood"
         mapView.addAnnotation(anno)
-        mapView.delegate = self
         mapView.isScrollEnabled = false
         mapView.isZoomEnabled = true
-        
         mapView.setRegion(region, animated: false)
+        
         
         let cancelButton = BlackButton()
         cancelButton.translatesAutoresizingMaskIntoConstraints = true
-        cancelButton.configureTitle(title: "Cancel Reservation")
         cancelButton.layer.cornerRadius = 4
-        //        cancelButton.layer.borderWidth = 1
-        //        cancelButton.layer.borderColor = UIColor.black.cgColor
+        
+        if reservation.status == .confirmed {
+            
+            let specialRequestLabel =  makeTitleLabel(text: "Sepcial Request:")
+            let noteLabel =  makeDetailLabel(text: reservation.note)
+        
+            let manageButton = BlackButton()
+            let requestButton = BlackButton()
+            
+            let infoTitleLabel = makeTitleLabel(text: "Restaurant information")
+            let infoTextLabel = makeDetailLabel(text: infoText)
+            
+            
+            specialRequestLabel.frame = CGRect(x: 16, y: paxImage.frame.maxY + 16, width: specialRequestLabel.intrinsicContentSize.width, height: reservation.note == nil ? 0 : specialRequestLabel.intrinsicContentSize.height)
+            
+            noteLabel.frame = CGRect(x: 16, y: specialRequestLabel.frame.maxY + 8, width: viewWidth, height: noteLabel.intrinsicHeight(width: viewWidth))
+            
+            manageButton.configureTitle(title: "Manage Reservation")
+            manageButton.translatesAutoresizingMaskIntoConstraints = true
+            manageButton.layer.cornerRadius = 4
+            manageButton.addTarget(self, action: #selector(managedReservationButtonTapped), for: .touchUpInside)
+            
+            requestButton.configureTitle(title: reservation.note == nil ? "Add Special Request" : "Edit Special Request")
+            requestButton.translatesAutoresizingMaskIntoConstraints = true
+            requestButton.layer.cornerRadius = 4
+            requestButton.addTarget(self, action: #selector(requestButtonTapped), for: .touchUpInside)
+            
+            requestButton.frame = CGRect(x: 16, y: noteLabel.frame.maxY + 16, width: requestButton.intrinsicWidth + 32, height: 32)
+            manageButton.frame = CGRect(x: 16, y: requestButton.frame.maxY + 8, width: requestButton.intrinsicWidth + 32, height: 32)
+            
+            menuContainerView.frame = CGRect(x: 16, y: manageButton.frame.maxY + 16, width: (viewWidth - 8) / 2 , height: 64)
+            directionContainerView.frame = CGRect(x: menuContainerView.frame.maxX + 16, y: menuContainerView.frame.minY, width: (viewWidth - 8) / 2 , height: 64)
+ 
+            infoTitleLabel.frame = CGRect(x: 16, y: menuContainerView.frame.maxY + 16, width: infoTitleLabel.intrinsicContentSize.width, height: infoTitleLabel.intrinsicContentSize.height)
+            infoTextLabel.frame = CGRect(x: 16, y: infoTitleLabel.frame.maxY + 8, width: viewWidth, height: infoTextLabel.intrinsicHeight(width: viewWidth))
+            
+            phoneTitleLabel.frame = CGRect(x: 16, y: infoTextLabel.frame.maxY + 16, width: phoneTitleLabel.intrinsicContentSize.width, height: phoneTitleLabel.intrinsicContentSize.height)
+            
+            
+            numberLabel.frame = CGRect(x: 16, y: phoneTitleLabel.frame.maxY + 8, width: numberLabel.intrinsicContentSize.width, height: numberLabel.intrinsicHeight(width: viewWidth))
+            
+            
+            addressTitleLabel.frame = CGRect(x: 16, y: numberLabel.frame.maxY + 16, width: addressTitleLabel.intrinsicContentSize.width, height: addressTitleLabel.intrinsicContentSize.height)
+            
+            addressLabel.frame = CGRect(x: 16, y: addressTitleLabel.frame.maxY + 8, width: addressLabel.intrinsicContentSize.width, height: addressLabel.intrinsicHeight(width: viewWidth))
+            
+           
+            cancelButton.configureTitle(title: "Cancel Reservation")
+            cancelButton.addTarget(self, action: #selector(cancelReservation), for: .touchUpInside)
+            
+            scrollView.addSubview(specialRequestLabel)
+            scrollView.addSubview(noteLabel)
+            scrollView.addSubview(manageButton)
+            scrollView.addSubview(requestButton)
+            scrollView.addSubview(infoTitleLabel)
+            scrollView.addSubview(infoTextLabel)
+        
+            
+        } else {
+            
+            menuContainerView.frame = CGRect(x: 16, y: paxImage.frame.maxY + 16, width: (viewWidth - 8) / 2 , height: 64)
+            directionContainerView.frame = CGRect(x: menuContainerView.frame.maxX + 16, y: menuContainerView.frame.minY, width: (viewWidth - 8) / 2 , height: 64)
+            
+            phoneTitleLabel.frame = CGRect(x: 16, y: menuContainerView.frame.maxY + 16, width: phoneTitleLabel.intrinsicContentSize.width, height: phoneTitleLabel.intrinsicContentSize.height)
+            
+            
+            numberLabel.frame = CGRect(x: 16, y: phoneTitleLabel.frame.maxY + 8, width: numberLabel.intrinsicContentSize.width, height: numberLabel.intrinsicHeight(width: viewWidth))
+            
+            
+            addressTitleLabel.frame = CGRect(x: 16, y: numberLabel.frame.maxY + 16, width: addressTitleLabel.intrinsicContentSize.width, height: addressTitleLabel.intrinsicContentSize.height)
+            
+            addressLabel.frame = CGRect(x: 16, y: addressTitleLabel.frame.maxY + 8, width: addressLabel.intrinsicContentSize.width, height: addressLabel.intrinsicHeight(width: viewWidth))
+            
+            mapView.frame = CGRect(x: 16, y: addressLabel.frame.maxY + 16, width: viewWidth, height: 240)
+            
+            cancelButton.configureTitle(title: "Done")
+            cancelButton.addTarget(self, action: #selector(dissmissVC), for: .touchUpInside)
+            
+            
+        }
+        
+        
+      
+        mapView.frame = CGRect(x: 16, y: addressLabel.frame.maxY + 16, width: viewWidth, height: 240)
         cancelButton.frame = CGRect(x: 16, y: mapView.frame.maxY + 16, width: viewWidth, height: Constants.kOrderButtonHeightConstant)
+
+        
+        
+ 
+    
         
         
         scrollView.addSubview(restaurantNameLabel)
@@ -202,14 +247,10 @@ class ReservationViewController: UIViewController {
         scrollView.addSubview(paxLabel)
         scrollView.addSubview(calendarImage)
         scrollView.addSubview(dateLabel)
-        scrollView.addSubview(specialRequestLabel)
-        scrollView.addSubview(noteLabel)
-        scrollView.addSubview(manageButton)
-        scrollView.addSubview(requestButton)
+
         scrollView.addSubview(menuContainerView)
         scrollView.addSubview(directionContainerView)
-        scrollView.addSubview(infoTitleLabel)
-        scrollView.addSubview(infoTextLabel)
+
         scrollView.addSubview(phoneTitleLabel)
         scrollView.addSubview(numberLabel)
         scrollView.addSubview(addressTitleLabel)
@@ -218,7 +259,6 @@ class ReservationViewController: UIViewController {
         scrollView.addSubview(cancelButton)
         
         scrollView.contentSize = CGSize(width: view.frame.width, height: cancelButton.frame.maxY + 16 )
-        
         
         
     }
@@ -304,6 +344,16 @@ class ReservationViewController: UIViewController {
         
     }
     
+    private func resetScrollView() {
+        
+        for subview in scrollView.subviews {
+            subview.removeFromSuperview()
+        }
+        
+        setupScrollViewSubviews()
+        
+    }
+    
     //MARK: - SELECTORS
     
     
@@ -325,8 +375,8 @@ class ReservationViewController: UIViewController {
             
             self.scheduelerView = schedulerView
             self.paxView = paxView
-            paxView.selectedSize = self.reservation.pax
-            
+//            paxView.selectedSize = self.reservation.pax
+//
             schedulerView.donebutton.addTarget(self, action: #selector(self.updateReservation), for: .touchUpInside)
             
             self.launchMenu(view: containerView, height: 420)
@@ -334,17 +384,29 @@ class ReservationViewController: UIViewController {
         }))
         
         alert.addAction(UIAlertAction(title: "Cancel Reservation", style: .destructive, handler: { (_) in
-            
-            
+            self.cancelReservation()
         }))
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
           
         }))
-     
 
         self.present(alert, animated: true)
         
         
+    }
+    
+    @objc private func cancelReservation() {
+        
+        reservation.status = .cancelled
+        NetworkManager.shared.cancelReservation(reservation)
+        resetScrollView()
+        
+    }
+    
+    @objc private func dissmissVC() {
+        
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func updateReservation() {
@@ -353,6 +415,7 @@ class ReservationViewController: UIViewController {
         let pax = self.paxView!.paxSize
         reservation.date = date
         reservation.pax = pax
+        NetworkManager.shared.updateReservation(reservation)
         paxLabel.text = "\(pax)"
         dateLabel.text = date
         menuLauncher?.dismissMenu()
@@ -372,9 +435,10 @@ class ReservationViewController: UIViewController {
     
     @objc
     private func browseMenuTapped() {
+        
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.selectedIndex = 1
-         print("brose menu")
+    
      }
     
     @objc
@@ -428,31 +492,21 @@ extension ReservationViewController: InstructionInputDelegate {
     
     func didInputInstructions(_ instructions: String) {
         
-        if instructions != "" {
+        if instructions != ""  {
+            
+            if instructions == reservation.note {
+                return
+            }
             
             reservation.note = instructions
             
-            for subview in scrollView.subviews {
-                subview.removeFromSuperview()
-            }
+            NetworkManager.shared.addSpecialRequest(reservation.note!, to: reservation.uid)
             
-            setupScrollViewSubviews()
+            resetScrollView()
+           
         }
         
     }
     
 }
 
-extension ReservationViewController: MKMapViewDelegate {
-    
-    //    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    //
-    //        let annotation = mapView.dequeueReusableAnnotationView(withIdentifier: "anno")
-    //        annotation?.canShowCallout = false
-    //
-    //
-    //
-    //    }
-    
-    
-}

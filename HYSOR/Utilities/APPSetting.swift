@@ -13,19 +13,16 @@ protocol JSONRepresentation {
     var representation: [String: Any] { get }
 }
 
+let userDefaults = UserDefaults.standard
+
 enum Constants {
-    static let baseURL = URL(string: "https://hysor-stripe-api.herokuapp.com")!
-    static let publishableKey = "pk_test_KMCerPRQaKzAv45qvFR58Vnl00Ccaf8NiN"
-    static let secrectKey = "sk_test_Gaah29dliX1UUMIe3a6OAqqO00OQIP9EWO"
-    static let localhostURLString = URL(string: "http://localhost:5001/hysor-5e8ed/us-central1/app")!
-    static let defaultCurrency = "usd"
-    static let defaultDescription = "Purchase from RWPuppies iOS"
-    static let customerID = "cus_HdCPqItG5nPXJl"
+
+  
     static let kOrderButtonHeightConstant: CGFloat = 50.0
-    static let kReceiptHeaderHeight: CGFloat = 200
-    static let kReceiptFooterHeight: CGFloat = 115
+    static let kReceiptHeaderHeight: CGFloat = 148
+    static let kReceiptFooterHeight: CGFloat = 50
     static let kReceiptCellHeight: CGFloat = 35
-    static let favouriteListKey: String = "favouriteList"
+    static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
     static let drinkMenuTypeRawValue = "drinkMenu"
     static let foodMenuTypeRawValue = "foodMenu"
 }
@@ -36,35 +33,57 @@ class APPSetting {
     static let shared = APPSetting()
 
     var taxRate: Float = 0.13
+    
     var isDineIn = false
+    
     var tableNumber: String?
-    var customerName: String? // store name in sign up.
-//    var user: User {
-//        get {
-////            print("TAG GEtting user")
-//            let name = UserDefaults.standard.string(forKey: "name") ?? "temp"
-//            let email = UserDefaults.standard.string(forKey: "email") ?? "temp@temp.com"
-//            let uid = UserDefaults.standard.string(forKey: "uid") ?? "tempid"
-//            let stripeID = UserDefaults.standard.string(forKey: "stripeID")
-//            let user = User(name: name, email: email, uid: uid, stripeID: stripeID ?? nil)
-//            return user
-//        }
-//    }
-    var currentCartRestaurantID: String?
     
-    var currentCartRestaurantName: String?
+    static var customerName: String = UserDefaults.standard.string(forKey: "name")!
     
-    var favouriteMeals: [Meal] = []
+    static var customerEmail: String = UserDefaults.standard.string(forKey: "email")!
+    
+    static let customerUID: String = UserDefaults.standard.string(forKey: "uid")!
+    
+    static let customerPhoneNumber: String = UserDefaults.standard.string(forKey: "phoneNumber")!
+    
+    static var favouriteMeals: [Meal] = []
+    
+    static var favouriteList: [String] {
+        
+        let list = userDefaults.array(forKey: Constants.favouriteListKey) as? [String]
+        return list ?? [String]()
+    
+    }
     
     
-    func storeUserInfo(_ email: String, _ name: String, _ uid: String, _ stripeID: String? ) {
+
+    
+    static func unfavouriteMeal(uid: String) {
+        
+        let newlist = APPSetting.favouriteList.filter { $0 != uid}
+        APPSetting.favouriteMeals = APPSetting.favouriteMeals.filter{ $0.uid != uid}
+        userDefaults.set(newlist, forKey: Constants.favouriteListKey)
+        userDefaults.removeObject(forKey: uid)
+        
+    }
+    
+    static func favouriteMeal(uid: String) {
+        
+        var newlist = APPSetting.favouriteList
+        newlist.append(uid)
+        userDefaults.set(newlist, forKey: Constants.favouriteListKey)
+        
+    
+    }
+    
+    static func storeUserInfo(_ email: String, _ name: String, _ uid: String, _ phoneNumber: String? ) {
         
         let userDefaults = UserDefaults.standard
         
         userDefaults.set(email, forKey: "email")
         userDefaults.set(uid, forKey: "uid")
         userDefaults.set(name, forKey: "name")
-        userDefaults.set(stripeID, forKey: "stripeID")
+        userDefaults.set(phoneNumber == nil ? "123456" : phoneNumber, forKey: "phoneNumber")
         
         print("didset info for \(UserDefaults.standard.string(forKey: "name"))")
     }

@@ -318,12 +318,12 @@ class MealViewController: UIViewController {
         
         if meal.isFavourite {
           
-            User.unfavouriteMeal(uid: meal.uid)
+            APPSetting.unfavouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartEmpty"), for: .normal)
             
         } else {
             
-            User.favouriteMeal(uid: meal.uid)
+            APPSetting.favouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartFilled"), for: .normal)
         }
 //        print("after \(User.shared.favouriteList)")

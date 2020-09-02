@@ -130,8 +130,8 @@ extension Cart: JSONRepresentation {
         
         let rep: [String: Any] = [
             //MARK: - NEED TO FIX THIS *****************************************************************************
-            "customerID": User.shared.uid,
-            "customerName": User.shared.name ,
+            "customerID": APPSetting.customerUID,
+            "customerName": APPSetting.customerName ,
             "subtotal": cartSubtotal.amount,
             "total": cartTotal.amount,
             "taxes": cartTaxes.amount,
@@ -139,8 +139,8 @@ extension Cart: JSONRepresentation {
             "promotion": promotion?.amount ?? 0,
             "paymentMethod": paymentMethod ?? "test visa",
             "orderTimestamp": orderTimestamp,
-            "restaurantID" : APPSetting.shared.currentCartRestaurantID ?? "YQk95Gnq5nQWWGqg7PIH",
-            "restaurantName" : APPSetting.shared.currentCartRestaurantID ?? "HYSOR RES",
+            "restaurantID" : "YQk95Gnq5nQWWGqg7PIH",
+            "restaurantName" :  "Cafe Hollywood",
             "orderStatus": OrderStatus.unconfirmed.rawValue,
             "mealsInfo": mealsInfo,
             

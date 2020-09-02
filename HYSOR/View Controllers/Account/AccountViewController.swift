@@ -44,10 +44,16 @@ class AccountViewController: UIViewController {
         
         setupView()
         
-        self.navigationItem.title = "Hi, \(User.shared.name)"
+        self.navigationItem.title = "Hi, \(APPSetting.customerName)"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        myTableView.reloadData()
+//        print("will appear")
+//        print("user \(User.shared)")
+//    }
     
     
     private func setupView() {
@@ -96,7 +102,8 @@ class AccountViewController: UIViewController {
         do {
             try NetworkManager.shared.signOut()
             print(NetworkManager.shared.isAuth)
-            let nav = UINavigationController(rootViewController: LoginViewController())
+//            let nav = UINavigationController(rootViewController: LoginViewController())
+            let nav = UINavigationController(rootViewController: AuthViewController())
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true) {
                 

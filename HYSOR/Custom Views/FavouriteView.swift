@@ -90,7 +90,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
     
         var shouldEnable = false
     
-        for meal in APPSetting.shared.favouriteMeals {
+        for meal in APPSetting.favouriteMeals {
              
             if meal.isSelected && meal.isModificationRequired {
                 return false
@@ -113,11 +113,11 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
         
         let group = DispatchGroup()
         
-        let uids = APPSetting.shared.favouriteMeals.map { (meal) -> String in
+        let uids = APPSetting.favouriteMeals.map { (meal) -> String in
             return meal.uid
         }
         
-        User.shared.favouriteList.forEach { (uid) in
+        APPSetting.favouriteList.forEach { (uid) in
             
             if !uids.contains(uid) {
                 
@@ -125,7 +125,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
                 
                 if var meal = DBManager.shared.readMeal(uid: uid) {
                     meal.recoverPreferenceState()
-                    APPSetting.shared.favouriteMeals.append(meal)
+                    APPSetting.favouriteMeals.append(meal)
                     group.leave()
                     
                 } else {
@@ -138,7 +138,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
 
                         DBManager.shared.writeMeal(meal)
                         meal.recoverPreferenceState()
-                        APPSetting.shared.favouriteMeals.append(meal)
+                        APPSetting.favouriteMeals.append(meal)
                         group.leave()
                     }
                 }
@@ -146,7 +146,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
             
             group.notify(queue: DispatchQueue.main) {
                 
-                APPSetting.shared.favouriteMeals.sort { (m1, m2) -> Bool in
+                APPSetting.favouriteMeals.sort { (m1, m2) -> Bool in
                     m1.uid < m2.uid
                 }
                 
@@ -162,7 +162,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
     
     private func heightForCellDetailLabel(at indexPath: IndexPath) -> CGFloat{
         
-        let meal = APPSetting.shared.favouriteMeals[indexPath.row]
+        let meal = APPSetting.favouriteMeals[indexPath.row]
     
         var text = meal.addOnInfo
         let instruction = meal.instruction
@@ -207,13 +207,13 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
 extension FavouriteView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("reloaded with \(APPSetting.shared.favouriteMeals.count)")
-        return APPSetting.shared.favouriteMeals.count
+        print("reloaded with \(APPSetting.favouriteMeals.count)")
+        return APPSetting.favouriteMeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let meal = APPSetting.shared.favouriteMeals[indexPath.row]
+        let meal = APPSetting.favouriteMeals[indexPath.row]
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: FavouriteTableViewCell.identifier, for: indexPath) as? FavouriteTableViewCell {
             cell.configureCellWithMeal(meal)
@@ -232,10 +232,10 @@ extension FavouriteView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FavouriteTableViewCell {
-            var meal = APPSetting.shared.favouriteMeals[indexPath.row]
+            var meal = APPSetting.favouriteMeals[indexPath.row]
             meal.isSelected = !meal.isSelected
             cell.isCellSelected = meal.isSelected
-            APPSetting.shared.favouriteMeals[indexPath.row] = meal
+            APPSetting.favouriteMeals[indexPath.row] = meal
             tableView.deselectRow(at: indexPath, animated: false)
              updateAddToCartButtonStatus()
         }

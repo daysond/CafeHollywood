@@ -24,8 +24,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
 //                let main = TabBarViewController()
 //        let main = ResturantViewController()
-        let main = Auth.auth().currentUser == nil ? UINavigationController(rootViewController: LoginViewController() ) : MainTabBarViewController()
+        let main = Auth.auth().currentUser == nil ? UINavigationController(rootViewController: AuthViewController() ) : MainTabBarViewController()
 //               let main = ReservationViewController(reservation: Reservation(pax: 2, date: "todat"))
+//        let main = AuthViewController()
         print(Auth.auth().currentUser?.email)
         window?.rootViewController = main
         window?.makeKeyAndVisible()

@@ -82,13 +82,13 @@ class AccountTableViewCell: UITableViewCell {
         switch field {
         
         case .email:
-            contentLabel.text = User.shared.email
+            contentLabel.text = APPSetting.customerEmail
             
         case .name:
-            contentLabel.text = User.shared.name
+            contentLabel.text = APPSetting.customerName
             
         case .phone:
-            contentLabel.text = "+1 416-123-8888"
+            contentLabel.text = APPSetting.customerPhoneNumber
             
         case .password:
             contentLabel.text = "******"

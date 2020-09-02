@@ -10,14 +10,14 @@ import Foundation
 import CoreData
 
 
-struct Resturant {
-    
-    let name: String
-    let uid: String
-    let imageURL: String
-    let menu: [Meal]
-    
-}
+//struct Resturant {
+//    
+//    let name: String
+//    let uid: String
+//    let imageURL: String
+//    let menu: [Meal]
+//    
+//}
 
 struct Table {
     
@@ -100,21 +100,4 @@ struct Menu {
     
 }
 
-class Reservation {
-    
-    var pax: Int
-    var date: String
-    var note: String?
-    var isConfirmed: Bool
-    
-    init(pax: Int, date: String) {
-        
-        self.pax = pax
-        self.date = date
-        self.isConfirmed = true
-        
-    }
-    
-    
-    
-}
+

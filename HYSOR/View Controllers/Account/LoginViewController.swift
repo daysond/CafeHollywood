@@ -258,22 +258,22 @@ class LoginViewController: UIViewController {
     
     private func setupUser() {
         
-        NetworkManager.shared.fetchUserInfoFromDataBase { (result) in
-            
-            switch result {
-                
-            case .success(let data):
-                guard let name =  data["name"], let email = data["email"], let uid = data["uid"] else { return }
-                
-                APPSetting.shared.storeUserInfo(email, name, uid,data["stripeID"] ?? nil )
-                
-                self.presentMainViewController()
-                
-            case .failure(let error):
-                // prompt error
-                print(error.localizedDescription)
-            }
-        }
+//        NetworkManager.shared.fetchUserInfoFromDataBase { (result) in
+//            
+//            switch result {
+//                
+//            case .success(let data):
+//                guard let name =  data["name"], let email = data["email"], let uid = data["uid"] else { return }
+//                
+//                APPSetting.shared.storeUserInfo(email, name, uid,data["stripeID"] ?? nil )
+//                
+//                self.presentMainViewController()
+//                
+//            case .failure(let error):
+//                // prompt error
+//                print(error.localizedDescription)
+//            }
+//        }
     }
     
     private func presentMainViewController() {

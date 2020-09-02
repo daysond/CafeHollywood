@@ -61,11 +61,11 @@ class ManageFavouriteViewController: UIViewController {
         
         let group = DispatchGroup()
         
-        let uids = APPSetting.shared.favouriteMeals.map { (meal) -> String in
+        let uids = APPSetting.favouriteMeals.map { (meal) -> String in
             return meal.uid
         }
         
-        User.shared.favouriteList.forEach { (uid) in
+        APPSetting.favouriteList.forEach { (uid) in
             
             if !uids.contains(uid) {
                 
@@ -73,7 +73,7 @@ class ManageFavouriteViewController: UIViewController {
                 
                 if var meal = DBManager.shared.readMeal(uid: uid) {
                     meal.recoverPreferenceState()
-                    APPSetting.shared.favouriteMeals.append(meal)
+                    APPSetting.favouriteMeals.append(meal)
                     group.leave()
                     
                 } else {
@@ -86,7 +86,7 @@ class ManageFavouriteViewController: UIViewController {
 
                         DBManager.shared.writeMeal(meal)
                         meal.recoverPreferenceState()
-                        APPSetting.shared.favouriteMeals.append(meal)
+                        APPSetting.favouriteMeals.append(meal)
                         group.leave()
                     }
                 }
@@ -94,7 +94,7 @@ class ManageFavouriteViewController: UIViewController {
             
             group.notify(queue: DispatchQueue.main) {
                 
-                APPSetting.shared.favouriteMeals.sort { (m1, m2) -> Bool in
+                APPSetting.favouriteMeals.sort { (m1, m2) -> Bool in
                     m1.uid < m2.uid
                 }
                 
@@ -118,13 +118,13 @@ class ManageFavouriteViewController: UIViewController {
 extension ManageFavouriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return APPSetting.shared.favouriteMeals.count
+        return APPSetting.favouriteMeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ManageFavouriteListTableViewCell.identifier, for: indexPath) as! ManageFavouriteListTableViewCell
-        cell.configureCellWith(meal: APPSetting.shared.favouriteMeals[indexPath.row])
+        cell.configureCellWith(meal: APPSetting.favouriteMeals[indexPath.row])
         return cell
     }
     
@@ -138,8 +138,8 @@ extension ManageFavouriteViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let uid = User.shared.favouriteList[indexPath.row]
-            User.unfavouriteMeal(uid: uid)
+            let uid = APPSetting.favouriteList[indexPath.row]
+            APPSetting.unfavouriteMeal(uid: uid)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

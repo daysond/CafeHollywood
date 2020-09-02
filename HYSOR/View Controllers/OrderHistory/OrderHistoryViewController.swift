@@ -37,17 +37,6 @@ class OrderHistoryViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("view will appeat ")
-//         addActiveOrderListener()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("will disappeat")
-//        removeActiveOrderListener()
-    }
     
 
     private func setupView() {
@@ -79,7 +68,7 @@ class OrderHistoryViewController: UIViewController {
     private func setupCollectionView() {
         
         receiptCollectionView.delegate = self
-        receiptCollectionView.register(ReceiptCollectionViewCell.self, forCellWithReuseIdentifier: ReceiptCollectionViewCell.identifier)
+        receiptCollectionView.register(OrderHistoryCollectionViewCell.self, forCellWithReuseIdentifier: OrderHistoryCollectionViewCell.identifier)
         receiptCollectionView.alwaysBounceVertical = true
         receiptCollectionView.contentInsetAdjustmentBehavior = .never
         
@@ -95,14 +84,13 @@ class OrderHistoryViewController: UIViewController {
     private func setupCollectionViewRX() {
         
         
-        receipts.bind(to: receiptCollectionView.rx.items(cellIdentifier: ReceiptCollectionViewCell.identifier, cellType: ReceiptCollectionViewCell.self)) {
+        receipts.bind(to: receiptCollectionView.rx.items(cellIdentifier: OrderHistoryCollectionViewCell.identifier, cellType: OrderHistoryCollectionViewCell.self)) {
             row, receipt, cell in
+            cell.delegate = self
             cell.receipt = receipt
 //            print( "meal info \(receipt.mealsInfo)")
         }
         .disposed(by: bag)
-        
-        
 
         
     }
@@ -141,7 +129,8 @@ extension OrderHistoryViewController: UICollectionViewDelegateFlowLayout {
         
         let itemCount = receipts.value[indexPath.item].mealsInfo.count
         let width = receiptCollectionView.frame.width - 32
-        let height = Constants.kReceiptFooterHeight + Constants.kReceiptHeaderHeight + Constants.kReceiptCellHeight * CGFloat(itemCount)
+        let height = Constants.kReceiptFooterHeight + Constants.kReceiptHeaderHeight + Constants.kReceiptCellHeight * CGFloat(itemCount) + 80
+        // 64 is view receipt button height plus padding 
 
         return CGSize(width: width, height: height )
     }
@@ -178,7 +167,18 @@ extension OrderHistoryViewController: ActiveOrderListenerDelegate {
         
     }
     
+}
+
+extension OrderHistoryViewController: ViewReceiptDelegate {
+    
+    func showReceipt(_ receipt: Receipt) {
+        print(receipt)
+    }
+    
+    
     
     
     
 }
+
+
