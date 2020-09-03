@@ -21,7 +21,7 @@ class CartTableViewCell: UITableViewCell {
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
-        l.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        l.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         return l
     }()
     
@@ -32,7 +32,7 @@ class CartTableViewCell: UITableViewCell {
         l.numberOfLines = 0
         l.textAlignment = .left
         l.textColor = .black
-        l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return l
     }()
     

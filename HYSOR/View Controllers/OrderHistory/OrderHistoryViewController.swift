@@ -16,6 +16,8 @@ class OrderHistoryViewController: UIViewController {
     
     private let bag = DisposeBag()
     
+    private var menuLauncher: SlideInMenuLauncher?
+    
     private let receiptCollectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.translatesAutoresizingMaskIntoConstraints = false
@@ -116,7 +118,28 @@ class OrderHistoryViewController: UIViewController {
         NetworkManager.shared.removeOrderListener()
         
     }
+    
+    //MARK:- HELPERS
 
+    private func launchMenu(view: UIView, height: CGFloat) {
+        
+        let blackView = UIView()
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(dismissMenu))
+        blackView.addGestureRecognizer(tapGes)
+        blackView.isUserInteractionEnabled = true
+        
+        let menuLauncher = SlideInMenuLauncher(blackView: blackView, menuView: view, menuHeight: height, menuViewCornerRadius: 8)
+        self.menuLauncher = menuLauncher
+        menuLauncher.showMenu()
+        
+    }
+    
+    @objc private func dismissMenu() {
+        
+        menuLauncher?.dismissMenu()
+        
+    }
+    
 }
 
 //MARK: - COLLECTION VIEW DELEGATE
@@ -172,12 +195,24 @@ extension OrderHistoryViewController: ActiveOrderListenerDelegate {
 extension OrderHistoryViewController: ViewReceiptDelegate {
     
     func showReceipt(_ receipt: Receipt) {
-        print(receipt)
+        
+        // launch menu with receipt
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height * 0.75))
+        containerView.backgroundColor = .white
+        let donebutton = BlackButton(frame: CGRect(x: 0, y: containerView.frame.maxY - 48, width: containerView.frame.width, height: 48))
+        let receiptView = ReceiptView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height - 48 - 8))
+        
+        donebutton.configureTitle(title: "Close Receipt")
+        donebutton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
+        donebutton.translatesAutoresizingMaskIntoConstraints = true
+        
+        containerView.addSubview(donebutton)
+        containerView.addSubview(receiptView)
+
+        receiptView.receipt = receipt
+        launchMenu(view: containerView, height: containerView.frame.height)
+        
     }
-    
-    
-    
-    
     
 }
 

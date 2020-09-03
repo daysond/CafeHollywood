@@ -175,6 +175,17 @@ class CartFooterView: UIView {
     
     }
     
+    func setupFooterViewWithReceipt(_ receipt: Receipt) {
+        
+        subTotalAmountLabel.text = "$" + "\(receipt.subtotal)"
+        taxesAmountLabel.text = "$" + "\(receipt.taxes)"
+        totalAmountLabel.text = "$" + "\(receipt.total)"
+        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + "\(receipt.promotion)"
+        
+        discountAmountLabel.text = Cart.shared.discountAmount == nil ? "-$0.00" : "-$" +  "\(receipt.discount)"
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

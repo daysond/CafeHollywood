@@ -124,10 +124,22 @@ class AccountViewController: UIViewController {
             
         case .reservation:
             let res = Reservation(pax: 2, date: "today")
-            presentController(ReservationViewController(reservation: res), style: .fullScreen)
+//            presentController(ReservationViewController(reservation: res), style: .fullScreen)
+            
+        case .password:
+            
+            return
+            
+        case .about:
+            
+            return
             
         default:
-            print(field.rawValue)
+            
+            let updateProfileVC = UpdateProfileViewController(field: field)
+            
+            self.navigationController?.pushViewController(updateProfileVC, animated: true)
+            
         }
         
         

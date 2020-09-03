@@ -64,7 +64,8 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
         
         receiptTableView.delegate = self
         receiptTableView.dataSource = self
-        receiptTableView.alwaysBounceVertical = false 
+        receiptTableView.alwaysBounceVertical = false
+        receiptTableView.allowsSelection = false
         
         addSubview(receiptTableView)
         addSubview(viewReceiptButton)

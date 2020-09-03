@@ -22,6 +22,9 @@
 		ED1989C724F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */; };
 		ED1FD80624B515C00016EBD2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80524B515C00016EBD2 /* MenuViewController.swift */; };
 		ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */; };
+		ED2C14A82500B57800F6BEB9 /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14A72500B57800F6BEB9 /* ReceiptView.swift */; };
+		ED2C14AA2500B9F100F6BEB9 /* RecepitTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */; };
+		ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */; };
 		ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */; };
 		ED3710DB24E103DE00AD6DAF /* scanner.json in Resources */ = {isa = PBXBuildFile; fileRef = ED3710DA24E103DE00AD6DAF /* scanner.json */; };
 		ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3710DC24E107C600AD6DAF /* RoundCartButton.swift */; };
@@ -107,6 +110,9 @@
 		ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavouriteListTableViewCell.swift; sourceTree = "<group>"; };
 		ED1FD80524B515C00016EBD2 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		ED2C14A72500B57800F6BEB9 /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
+		ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecepitTableViewHeader.swift; sourceTree = "<group>"; };
+		ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileViewController.swift; sourceTree = "<group>"; };
 		ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
 		ED3710DA24E103DE00AD6DAF /* scanner.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scanner.json; sourceTree = "<group>"; };
 		ED3710DC24E107C600AD6DAF /* RoundCartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCartButton.swift; sourceTree = "<group>"; };
@@ -335,6 +341,7 @@
 				EDD31BD224F59C9700010DC2 /* ManageFavouriteViewController.swift */,
 				ED47D58324BC41840044C116 /* LoginViewController.swift */,
 				ED12936024BAE01A0084EC09 /* SignUpViewController.swift */,
+				ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -362,6 +369,8 @@
 				ED7D6CAC24C00AA300D3583D /* OrderHistoryTableViewHeader.swift */,
 				ED7D6CAE24C00AB200D3583D /* OrderHistoryTableViewFooter.swift */,
 				ED7D6CAA24C00A7300D3583D /* OrderHistoryTableViewCell.swift */,
+				ED2C14A72500B57800F6BEB9 /* ReceiptView.swift */,
+				ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */,
 			);
 			path = OrderHistory;
 			sourceTree = "<group>";
@@ -590,6 +599,7 @@
 				ED0C75F72425CB1D008B8174 /* CollapsibleTableViewHeader.swift in Sources */,
 				EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */,
 				ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */,
+				ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */,
 				EDEA350324B6D9FD00F3AB21 /* CustomBarButtonItem.swift in Sources */,
 				ED5AA84324E3691D007387A5 /* FavouriteView.swift in Sources */,
 				ED1946A4241A00AB00F75CE7 /* Resturant.swift in Sources */,
@@ -612,6 +622,7 @@
 				EDA857C124E11D3B00D15B88 /* SchedulerView.swift in Sources */,
 				ED58384524E5C71B00E007CD /* FavouriteMealViewController.swift in Sources */,
 				ED3983BC24EA4CBB00DAC1C4 /* HYSOR.xcdatamodeld in Sources */,
+				ED2C14AA2500B9F100F6BEB9 /* RecepitTableViewHeader.swift in Sources */,
 				EDEA34FF24B6AB9C00F3AB21 /* CartHeaderView.swift in Sources */,
 				EDF8984324AAF1BC00488FEF /* PreferenceFooterView.swift in Sources */,
 				EDB3944E24B1047B00DDC725 /* CartTableViewCell.swift in Sources */,
@@ -622,6 +633,7 @@
 				ED46C74824BFEC900089CF43 /* HomeViewController.swift in Sources */,
 				ED4A8B2924BD4972008FAB28 /* SlideInMenuLauncher.swift in Sources */,
 				ED4A8B2324BCF2EA008FAB28 /* Reservation.swift in Sources */,
+				ED2C14A82500B57800F6BEB9 /* ReceiptView.swift in Sources */,
 				ED3DD9982418B6B300A4A28E /* SceneDelegate.swift in Sources */,
 				ED5AA84524E36C89007387A5 /* FavouriteTableViewCell.swift in Sources */,
 				ED46C74024BFA86A0089CF43 /* LoadingViewController.swift in Sources */,

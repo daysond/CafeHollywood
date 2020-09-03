@@ -29,7 +29,9 @@ class DimmedImageView: UIView {
         blackView.translatesAutoresizingMaskIntoConstraints = false
         blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
         
-        headerImageView.image = UIImage(named: "pikachu")
+        headerImageView.image = UIImage(named: "logo")
+        headerImageView.contentMode = .center
+        headerImageView.backgroundColor = .black
         
         addSubview(headerImageView)
         addSubview(blackView)
