@@ -177,12 +177,12 @@ class CartFooterView: UIView {
     
     func setupFooterViewWithReceipt(_ receipt: Receipt) {
         
-        subTotalAmountLabel.text = "$" + "\(receipt.subtotal)"
-        taxesAmountLabel.text = "$" + "\(receipt.taxes)"
-        totalAmountLabel.text = "$" + "\(receipt.total)"
-        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + "\(receipt.promotion)"
+        subTotalAmountLabel.text = "$" + Money(amt:receipt.subtotal).amount.stringRepresentation
+        taxesAmountLabel.text = "$" + Money(amt:receipt.taxes).amount.stringRepresentation
+        totalAmountLabel.text = "$" + Money(amt:receipt.total).amount.stringRepresentation
+        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + Money(amt:receipt.promotion).amount.stringRepresentation
         
-        discountAmountLabel.text = Cart.shared.discountAmount == nil ? "-$0.00" : "-$" +  "\(receipt.discount)"
+        discountAmountLabel.text = Cart.shared.discountAmount == nil ? "-$0.00" : "-$" +  Money(amt:receipt.discount).amount.stringRepresentation
         
     }
     

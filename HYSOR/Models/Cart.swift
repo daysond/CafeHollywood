@@ -21,6 +21,7 @@ class Cart {
     static let shared = Cart()
     
     var delegate: CartDelegate?
+    
     var uiDelegate: UpdateDisplayDelegate?
     
     var meals: [Meal] = [] {
@@ -31,7 +32,7 @@ class Cart {
     }
     
     var promotion: Money?
-//    var discountPercentage: Double?
+
     var discountAmount: Money? {
         
         var discountAmount = Decimal(0)
@@ -70,13 +71,8 @@ class Cart {
         discountAmount +=  wingCombos.count < wingTags.count ?
                 ComboType.wing.deductionAmount * Decimal(wingCombos.count) :
                 ComboType.wing.deductionAmount * Decimal(wingTags.count)
-
-        
-        
-
         
         return Money(amt: discountAmount)
-
         
     }
     
@@ -84,7 +80,7 @@ class Cart {
         let total = meals.reduce(Money(amt: 0.0)) { (runningTotal, meal) in
              runningTotal + meal.totalPrice
         }
-        
+
         return total - (discountAmount ?? Money(amt: 0.0))
     }
     
@@ -95,29 +91,38 @@ class Cart {
     var cartTotal: Money {
         return cartTaxes + cartSubtotal
     }
-    var orderID: String?
+//    var orderID: String?
     
     var orderTimestamp: String {
         return "\(Date.timestampInInt())"
     }
     
-    var paymentMethod: String?
+    var orderNote: String = ""
     
     var restaurantID: String?
     
     var isEmpty: Bool {
         return meals.isEmpty
     }
-    init() {
+    
+    
+    static func resetCart() {
         
-
-        self.orderID = UUID().uuidString
+        Cart.shared.meals.removeAll()
+        Cart.shared.orderNote = ""
+        
+        
     }
+    
+//    init() {
+//
+//
+//        self.orderID = UUID().uuidString
+//    }
     
 }
 
 extension Cart: JSONRepresentation {
-    
     
     
     var representation: [String : Any] {
@@ -129,24 +134,27 @@ extension Cart: JSONRepresentation {
         }
         
         let rep: [String: Any] = [
-            //MARK: - NEED TO FIX THIS *****************************************************************************
+
             "customerID": APPSetting.customerUID,
-            "customerName": APPSetting.customerName ,
+            "customerName": APPSetting.customerName,
+            "customerPhoneNumber": APPSetting.customerPhoneNumber,
+            
             "subtotal": cartSubtotal.amount,
             "total": cartTotal.amount,
             "taxes": cartTaxes.amount,
             "discount": discountAmount?.amount ?? 0,
             "promotion": promotion?.amount ?? 0,
-            "paymentMethod": paymentMethod ?? "test visa",
+            
+            "orderNote": orderNote,
             "orderTimestamp": orderTimestamp,
-            "restaurantID" : "YQk95Gnq5nQWWGqg7PIH",
+
             "restaurantName" :  "Cafe Hollywood",
-            "orderStatus": OrderStatus.unconfirmed.rawValue,
+            "status": OrderStatus.unconfirmed.rawValue,
             "mealsInfo": mealsInfo,
             
             /*
              
-            case cancelled = 0
+             case cancelled = 0
              case unconfirmed = 1
              case confirmed = 2
              case ready = 3

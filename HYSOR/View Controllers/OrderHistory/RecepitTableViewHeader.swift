@@ -10,7 +10,7 @@ import UIKit
 
 class RecepitTableViewHeader: UIView {
 
-    private let orderIDLabel: UILabel = {
+    private let restaurantNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .medium)
@@ -21,18 +21,18 @@ class RecepitTableViewHeader: UIView {
         return l
     }()
     
-    private let dateLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        l.text = "647-123-4678"
-        l.numberOfLines = 1
-        l.textColor = .darkGray
-        l.textAlignment = .left
-        return l
-    }()
+//    private let dateLabel: UILabel = {
+//        let l = UILabel()
+//        l.translatesAutoresizingMaskIntoConstraints = false
+//        l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+//        l.text = "647-123-4678"
+//        l.numberOfLines = 1
+//        l.textColor = .darkGray
+//        l.textAlignment = .left
+//        return l
+//    }()
     
-    private let customerNameLabel: UILabel = {
+    private let orderIDLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
@@ -65,7 +65,7 @@ class RecepitTableViewHeader: UIView {
         return l
     }()
     
-    private let phoneNumberLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -79,44 +79,40 @@ class RecepitTableViewHeader: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        addSubview(restaurantNameLabel)
         addSubview(orderIDLabel)
-        addSubview(customerNameLabel)
         addSubview(noteTitleLabel)
         addSubview(noteDetailLabel)
-        addSubview(phoneNumberLabel)
         addSubview(dateLabel)
         
         
         NSLayoutConstraint.activate([
             
-            orderIDLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32), //32 + 22 = 54
-            orderIDLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            restaurantNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32), //32 + 22 = 54
+            restaurantNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
-            dateLabel.centerYAnchor.constraint(equalTo: orderIDLabel.centerYAnchor),
-            dateLabel.leadingAnchor.constraint(equalTo: orderIDLabel.trailingAnchor, constant: 16),
+            orderIDLabel.topAnchor.constraint(equalTo: restaurantNameLabel.bottomAnchor, constant: 8), //54 + 16 + 22 = 92
+            orderIDLabel.leadingAnchor.constraint(equalTo: restaurantNameLabel.leadingAnchor),
             
-            customerNameLabel.topAnchor.constraint(equalTo: orderIDLabel.bottomAnchor, constant: 8), //54 + 16 + 22 = 92
-            customerNameLabel.leadingAnchor.constraint(equalTo: orderIDLabel.leadingAnchor),
-            
-            noteTitleLabel.leadingAnchor.constraint(equalTo: orderIDLabel.leadingAnchor), // 92 + 22 + 16 = 130
-            noteTitleLabel.topAnchor.constraint(equalTo: customerNameLabel.bottomAnchor, constant: 8),
+            noteTitleLabel.leadingAnchor.constraint(equalTo: restaurantNameLabel.leadingAnchor), // 92 + 22 + 16 = 130
+            noteTitleLabel.topAnchor.constraint(equalTo: orderIDLabel.bottomAnchor, constant: 8),
             
             noteDetailLabel.leadingAnchor.constraint(equalTo: noteTitleLabel.trailingAnchor, constant: 4),
             noteDetailLabel.centerYAnchor.constraint(equalTo: noteTitleLabel.centerYAnchor),
             
-            phoneNumberLabel.leadingAnchor.constraint(equalTo: customerNameLabel.trailingAnchor, constant: 16),
-            phoneNumberLabel.centerYAnchor.constraint(equalTo: customerNameLabel.centerYAnchor), // 130 + 8
+            dateLabel.leadingAnchor.constraint(equalTo: orderIDLabel.trailingAnchor, constant: 16),
+            dateLabel.centerYAnchor.constraint(equalTo: orderIDLabel.centerYAnchor), // 130 + 8
         
         
         ])
 
     }
     
-    func configureHeader(orderID: String, name: String, payment: String, timestamp: String) {
+    func configureHeader(orderID: String, restaurantName: String, note: String, timestamp: String) {
         
+        restaurantNameLabel.text = restaurantName
         orderIDLabel.text = orderID
-        customerNameLabel.text = name
-        noteDetailLabel.text = payment
+        noteDetailLabel.text = note
         dateLabel.text = Date.dateInYYYYMMddFromDate(Date.dateFromTimestamp(Double(timestamp)!))
         
     }

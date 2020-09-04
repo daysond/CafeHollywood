@@ -194,7 +194,7 @@ class CartViewController: UIViewController {
     
     @objc func orderButtonTapped() {
         
-        NetworkManager.shared.sendOrder { (err) in
+        NetworkManager.shared.placeOrder { (err) in
             print("error \(err)")
         }
         dismiss(animated: true, completion: nil)

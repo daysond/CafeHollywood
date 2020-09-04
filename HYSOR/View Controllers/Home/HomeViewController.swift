@@ -137,9 +137,7 @@ class HomeViewController: UIViewController {
             }
         }
         
-        
 
-//        showAlert(alertTitile: "Your reservation for party of \(partySize) on \(date) has been confirmed!", message: nil, actionTitle: "Manage Reservation", action: showReservation)
     }
 
     @objc private func quickOrderButtonTapped() {

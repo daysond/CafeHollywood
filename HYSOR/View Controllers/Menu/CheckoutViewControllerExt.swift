@@ -133,6 +133,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
     
     func didInputInstructions(_ instructions: String) {
         
+        Cart.shared.orderNote = instructions
         updateOptionOfType(.note, with: instructions)
 
     }

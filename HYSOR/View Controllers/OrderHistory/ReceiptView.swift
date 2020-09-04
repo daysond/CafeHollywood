@@ -59,7 +59,7 @@ class ReceiptView: UIView {
         receiptTableView.tableHeaderView = receiptHeaderView
         receiptHeaderView.frame.size.height = 150
         receiptHeaderView.backgroundColor = .white
-        receiptHeaderView.configureHeader(orderID: receipt.orderID, name: receipt.customerName, payment: receipt.paymentMethod, timestamp: receipt.orderTimestamp)
+        receiptHeaderView.configureHeader(orderID: receipt.orderID, restaurantName: receipt.restaurantName, note: receipt.orderNote, timestamp: receipt.orderTimestamp)
         
         
     }

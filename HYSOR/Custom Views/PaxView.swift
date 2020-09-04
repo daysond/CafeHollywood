@@ -36,7 +36,6 @@ class PaxView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("pax pax init")
         setupSize()
         setupView()
         

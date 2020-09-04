@@ -41,7 +41,6 @@ class ReservationViewController: UIViewController {
         
         viewWidth = view.frame.width - 32
         view.backgroundColor = .white
-        //        reservation.note = "I dont want any thing thingthing scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)"
         setupNavigationBar()
         setupView()
         navigationController?.navigationBar.isHidden = false
@@ -157,7 +156,13 @@ class ReservationViewController: UIViewController {
             let manageButton = BlackButton()
             let requestButton = BlackButton()
             
-            let infoTitleLabel = makeTitleLabel(text: "Restaurant information")
+            let restaurantNoticeLabel = UILabel()
+            restaurantNoticeLabel.text = "Restaurant information"
+            restaurantNoticeLabel.numberOfLines = 0
+            restaurantNoticeLabel.font = .systemFont(ofSize: 20, weight: .bold)
+            
+            
+            let infoTitleLabel = makeTitleLabel(text: "Important dining information")
             let infoTextLabel = makeDetailLabel(text: infoText)
             
             
@@ -180,8 +185,10 @@ class ReservationViewController: UIViewController {
             
             menuContainerView.frame = CGRect(x: 16, y: manageButton.frame.maxY + 16, width: (viewWidth - 8) / 2 , height: 64)
             directionContainerView.frame = CGRect(x: menuContainerView.frame.maxX + 16, y: menuContainerView.frame.minY, width: (viewWidth - 8) / 2 , height: 64)
+            
+            restaurantNoticeLabel.frame = CGRect(x: 16, y: menuContainerView.frame.maxY + 16, width: viewWidth, height: restaurantNameLabel.intrinsicHeight(width: viewWidth))
  
-            infoTitleLabel.frame = CGRect(x: 16, y: menuContainerView.frame.maxY + 16, width: infoTitleLabel.intrinsicContentSize.width, height: infoTitleLabel.intrinsicContentSize.height)
+            infoTitleLabel.frame = CGRect(x: 16, y: restaurantNoticeLabel.frame.maxY + 8, width: viewWidth, height: infoTitleLabel.intrinsicContentSize.height)
             infoTextLabel.frame = CGRect(x: 16, y: infoTitleLabel.frame.maxY + 8, width: viewWidth, height: infoTextLabel.intrinsicHeight(width: viewWidth))
             
             phoneTitleLabel.frame = CGRect(x: 16, y: infoTextLabel.frame.maxY + 16, width: phoneTitleLabel.intrinsicContentSize.width, height: phoneTitleLabel.intrinsicContentSize.height)
@@ -204,6 +211,7 @@ class ReservationViewController: UIViewController {
             scrollView.addSubview(requestButton)
             scrollView.addSubview(infoTitleLabel)
             scrollView.addSubview(infoTextLabel)
+            scrollView.addSubview(restaurantNoticeLabel)
         
             
         } else {
@@ -234,12 +242,6 @@ class ReservationViewController: UIViewController {
         mapView.frame = CGRect(x: 16, y: addressLabel.frame.maxY + 16, width: viewWidth, height: 240)
         cancelButton.frame = CGRect(x: 16, y: mapView.frame.maxY + 16, width: viewWidth, height: Constants.kOrderButtonHeightConstant)
 
-        
-        
- 
-    
-        
-        
         scrollView.addSubview(restaurantNameLabel)
         scrollView.addSubview(statusLabel)
         scrollView.addSubview(statusIndicator)
@@ -311,7 +313,7 @@ class ReservationViewController: UIViewController {
     
     private func setupNavigationBar() {
         
-        navigationItem.title = "Reservation"
+//        navigationItem.title = "Reservation"
         self.navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.isTranslucent = true

@@ -25,7 +25,7 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
     var receipt: Receipt? {
         didSet {
             if let receipt = receipt {
-                headerView.configureHeader(orderStatus: receipt.orderStatus, timestamp: receipt.orderTimestamp, orderID: receipt.orderID, restaurantName: receipt.restaurantName)
+                headerView.configureHeader(orderStatus: receipt.status, timestamp: receipt.orderTimestamp, orderID: receipt.orderID, restaurantName: receipt.restaurantName)
                 
                 footerView.configureFooter(total: Money(amt: receipt.total).amount.stringRepresentation, tip: nil)
                 receiptTableView.reloadData()

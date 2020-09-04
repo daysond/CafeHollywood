@@ -87,7 +87,7 @@ extension AuthViewController: FUIAuthDelegate {
         
         print("\(uid) singed in \(name) \(phnenumber) \(email)" )
         
-        APPSetting.storeUserInfo(email, name, uid, phnenumber)
+//        APPSetting.storeUserInfo(email, name, uid, phnenumber)
         
         presentMainViewController()
         

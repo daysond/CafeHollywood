@@ -14,6 +14,8 @@
 		ED117C0B24B4025B00994068 /* PreferenceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117C0A24B4025B00994068 /* PreferenceHeaderView.swift */; };
 		ED117C0D24B4439600994068 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117C0C24B4439600994068 /* Preference.swift */; };
 		ED12936124BAE01A0084EC09 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED12936024BAE01A0084EC09 /* SignUpViewController.swift */; };
+		ED14A5E825019E8400263ADD /* ManageReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */; };
+		ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */; };
 		ED1946A4241A00AB00F75CE7 /* Resturant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A3241A00AB00F75CE7 /* Resturant.swift */; };
 		ED1946A6241A02FE00F75CE7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A5241A02FE00F75CE7 /* Meal.swift */; };
 		ED1946AA241A0AC300F75CE7 /* SubMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */; };
@@ -102,6 +104,8 @@
 		ED117C0A24B4025B00994068 /* PreferenceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceHeaderView.swift; sourceTree = "<group>"; };
 		ED117C0C24B4439600994068 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
 		ED12936024BAE01A0084EC09 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageReservationViewController.swift; sourceTree = "<group>"; };
+		ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationListTableViewCell.swift; sourceTree = "<group>"; };
 		ED1946A3241A00AB00F75CE7 /* Resturant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resturant.swift; sourceTree = "<group>"; };
 		ED1946A5241A02FE00F75CE7 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuViewController.swift; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				ED117C0824B3B3D700994068 /* StretchyHeaderLayout.swift */,
+				EDF8984024AAF16C00488FEF /* Custom Cell */,
 			);
 			path = "Custom Layout";
 			sourceTree = "<group>";
@@ -258,7 +263,6 @@
 				EDB3944F24B104A300DDC725 /* View Controllers */,
 				EDF8984124AAF18A00488FEF /* Custom Views */,
 				ED117C0724B3B3AE00994068 /* Custom Layout */,
-				EDF8984024AAF16C00488FEF /* Custom Cell */,
 				ED3983BF24EA5AF000DAC1C4 /* CoreData */,
 				ED46C74224BFADAB0089CF43 /* Networking */,
 				ED412E0D2420857500EBBA4C /* Models */,
@@ -339,6 +343,7 @@
 				ED48E8AA24FF4AE3004979A2 /* AuthViewController.swift */,
 				EDA416EF24BD8F9600501F0E /* AccountViewController.swift */,
 				EDD31BD224F59C9700010DC2 /* ManageFavouriteViewController.swift */,
+				ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */,
 				ED47D58324BC41840044C116 /* LoginViewController.swift */,
 				ED12936024BAE01A0084EC09 /* SignUpViewController.swift */,
 				ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */,
@@ -413,6 +418,7 @@
 				ED41FA4124F4D2650068E316 /* AccountTableViewCell.swift */,
 				ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */,
 				ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */,
+				ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */,
 			);
 			path = "Custom Cell";
 			sourceTree = "<group>";
@@ -594,6 +600,7 @@
 				ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */,
 				EDEA350124B6ABBB00F3AB21 /* CartFooterView.swift in Sources */,
 				ED1946AC241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift in Sources */,
+				ED14A5E825019E8400263ADD /* ManageReservationViewController.swift in Sources */,
 				ED117C0924B3B3D700994068 /* StretchyHeaderLayout.swift in Sources */,
 				ED0C75F52425BE8E008B8174 /* PreferenceTableViewCell.swift in Sources */,
 				ED0C75F72425CB1D008B8174 /* CollapsibleTableViewHeader.swift in Sources */,
@@ -649,6 +656,7 @@
 				ED1946B0241A15B600F75CE7 /* ScannerViewController.swift in Sources */,
 				ED412E0A2420842C00EBBA4C /* Extensions.swift in Sources */,
 				EDD31BD024F599CA00010DC2 /* MenuManaged+CoreDataClass.swift in Sources */,
+				ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */,
 				ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */,
 				EDF8983F24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift in Sources */,
 			);

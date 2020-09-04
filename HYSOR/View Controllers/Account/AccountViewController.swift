@@ -14,7 +14,7 @@ enum AccountField: String {
     case phone = "Phone Number"
     case name = "Name"
     case password = "Password"
-    case reservation = "Manage Reservation"
+    case reservation = "My Reservation"
     case favourite = "My Favourite"
     case about = "About"
     
@@ -44,21 +44,19 @@ class AccountViewController: UIViewController {
         
         setupView()
         
-        self.navigationItem.title = "Hi, \(APPSetting.customerName)"
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+        
         
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        myTableView.reloadData()
-//        print("will appear")
-//        print("user \(User.shared)")
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.title = "Hi, \(APPSetting.customerName)"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
     
     
     private func setupView() {
         
-        print(NetworkManager.shared.isAuth)
         view.backgroundColor = .white
         myTableView.dataSource = self
         myTableView.delegate = self
@@ -123,13 +121,11 @@ class AccountViewController: UIViewController {
             presentController(ManageFavouriteViewController(), style: .popover)
             
         case .reservation:
-            let res = Reservation(pax: 2, date: "today")
-//            presentController(ReservationViewController(reservation: res), style: .fullScreen)
             
-        case .password:
-            
-            return
-            
+            self.navigationItem.title = ""
+       
+            self.navigationController?.pushViewController(ManageReservationViewController(), animated: true)
+  
         case .about:
             
             return

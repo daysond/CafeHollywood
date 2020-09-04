@@ -44,7 +44,7 @@ class ManageFavouriteViewController: UIViewController {
         
         ])
         
-        navigationItem.title = "My Favourite"
+        navigationItem.title = "My Favourites"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(back))
         navigationItem.rightBarButtonItem = editButtonItem
    

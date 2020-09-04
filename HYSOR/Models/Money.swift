@@ -12,7 +12,7 @@ struct Money: Comparable, Hashable {
     
     static let decimalHandlerRounded = NSDecimalNumberHandler.init(roundingMode:.up, scale: 2, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     
-    static let decimalHandler = NSDecimalNumberHandler.init(roundingMode:.up, scale: 2, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+    static let decimalHandler = NSDecimalNumberHandler.init(roundingMode:.down, scale: 2, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     
     let money: NSDecimalNumber
 

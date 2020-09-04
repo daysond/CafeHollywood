@@ -133,11 +133,11 @@ class CheckoutViewController: UIViewController {
         
         // send order && add listener to the oder status
         print("sending order")
-        NetworkManager.shared.sendOrder { (error) in
+        NetworkManager.shared.placeOrder { (error) in
             guard error == nil else { return }
             NetworkManager.shared.orderStatusDelegate = self
             self.dismiss(animated: true, completion: nil)
-            Cart.shared.meals.removeAll()
+            Cart.resetCart()
             self.tabBarController?.selectedIndex = 2
         }
         

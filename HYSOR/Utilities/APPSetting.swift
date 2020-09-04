@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 import UIKit
 
 protocol JSONRepresentation {
@@ -38,13 +39,13 @@ class APPSetting {
     
     var tableNumber: String?
     
-    static var customerName: String = UserDefaults.standard.string(forKey: "name")!
+    static var customerName: String = Auth.auth().currentUser?.displayName ?? "null"
     
-    static var customerEmail: String = UserDefaults.standard.string(forKey: "email")!
+    static var customerEmail: String = Auth.auth().currentUser?.email ?? "null"
     
-    static let customerUID: String = UserDefaults.standard.string(forKey: "uid")!
+    static let customerUID: String = Auth.auth().currentUser?.uid ?? "null"
     
-    static let customerPhoneNumber: String = UserDefaults.standard.string(forKey: "phoneNumber")!
+    static let customerPhoneNumber: String = Auth.auth().currentUser?.phoneNumber ?? "null"
     
     static var favouriteMeals: [Meal] = []
     

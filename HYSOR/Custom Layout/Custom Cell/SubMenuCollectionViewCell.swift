@@ -114,14 +114,25 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
         if meal.price == 0 {
             
             if let price = meal.preferences?[0].preferenceItems[0].price {
-                priceLabel.text = "$\(price.amount)"
+                priceLabel.text = "$\(price.amount.stringRepresentation)"
             } else {
-                priceLabel.text = ""
+                if let preferences = meal.preferences {
+                    for p in preferences {
+                        if let price = p.preferenceItems[0].price {
+                            
+                            priceLabel.text = "$\(price.amount.stringRepresentation)"
+                            break
+                        }
+                    }
+                }
             }
             
         } else {
-            //MARK: - TODO 
-            priceLabel.text = "$\(meal.price)"
+            //MARK: - TODO
+       
+            print("p \(meal.price)  \(Money(amt: meal.price).amount)")
+
+            priceLabel.text = "$\(Money(amt: meal.price).amount.stringRepresentation)"
         }
         
         if let imageURL = meal.imageURL {

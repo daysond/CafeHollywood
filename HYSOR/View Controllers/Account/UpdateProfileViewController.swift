@@ -29,12 +29,35 @@ class UpdateProfileViewController: UIViewController {
         return tf
     }()
     
+    private let passwordTextField: UITextField = {
+        let tf = UITextField()
+        tf.borderStyle = .roundedRect
+        tf.textColor = .black
+        tf.font = UIFont.systemFont(ofSize: 18)
+        tf.addPadding(.left(4))
+        tf.isSecureTextEntry = true
+        tf.backgroundColor = .whiteSmoke
+        tf.clearButtonMode = .always
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
     private let profileFieldTitle: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textAlignment = .left
         l.textColor = .black
         l.text = "Name"
+        l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        return l
+    }()
+    
+    private let errorMessageLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.textAlignment = .left
+        l.textColor = .systemRed
+        l.numberOfLines = 5
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return l
     }()
@@ -67,7 +90,6 @@ class UpdateProfileViewController: UIViewController {
         setupDisplay()
         setupNavigationBar()
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +97,7 @@ class UpdateProfileViewController: UIViewController {
         
         profileTextField.becomeFirstResponder()
     }
+    
     
     private func setupDisplay() {
         
@@ -96,6 +119,12 @@ class UpdateProfileViewController: UIViewController {
             profileTextField.text = APPSetting.customerPhoneNumber
             profileTextField.keyboardType = .phonePad
             
+        case .password:
+            
+            profileTextField.isSecureTextEntry = true
+            profileTextField.placeholder = "Enter New Password"
+            passwordTextField.placeholder = "Re-Enter New Password"
+            
         default:
             return
         }
@@ -111,6 +140,7 @@ class UpdateProfileViewController: UIViewController {
         view.addSubview(profileFieldTitle)
         view.addSubview(profileTextField)
         view.addSubview(updateButton)
+        view.addSubview(errorMessageLabel)
         
         updateButtonBottomAnchorConstraint = updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         
@@ -118,6 +148,7 @@ class UpdateProfileViewController: UIViewController {
             
             profileFieldTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             profileFieldTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileFieldTitle.heightAnchor.constraint(equalToConstant: profileFieldTitle.intrinsicContentSize.height),
             
             profileTextField.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
             profileTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -127,10 +158,32 @@ class UpdateProfileViewController: UIViewController {
             updateButton.leadingAnchor.constraint(equalTo: profileTextField.leadingAnchor),
             updateButton.trailingAnchor.constraint(equalTo: profileTextField.trailingAnchor),
             updateButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-            updateButtonBottomAnchorConstraint!
+            updateButtonBottomAnchorConstraint!,
+            
+            errorMessageLabel.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
+            errorMessageLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
         
         
         ])
+        
+        if field == .password {
+            
+            view.addSubview(passwordTextField)
+            
+            NSLayoutConstraint.activate([
+            
+                passwordTextField.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
+                passwordTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                passwordTextField.heightAnchor.constraint(equalToConstant: 40),
+                passwordTextField.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8),
+
+                errorMessageLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 8),
+            
+            ])
+            
+        } else {
+            errorMessageLabel.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8).isActive = true
+        }
         
         
     }
@@ -147,30 +200,91 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
+    
+    //MARK: - HELPERS
+    
+    private func displayMessage(_ text: String) {
+        
+        self.errorMessageLabel.text = text
+        
+    }
+    
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+    
+    private func isValidName(_ name: String) -> Bool {
+        guard name.count > 1, name.count < 18 else { return false }
+        let namePred = NSPredicate(format: "SELF MATCHES %@", "^(([^ ]?)(^[a-zA-Z].*[a-zA-Z]$)([^ ]?))$")
+        return namePred.evaluate(with: name)
+        
+    }
+    
+    private func isPasswordSame(_ t1: String, _ t2: String) -> Bool {
+        return t1 == t2
+    }
+    
     //MARK: -ACTIONS
     
     @objc private func updateProfile() {
         
-        //MARK: TODO
+        guard let text = profileTextField.text, text != "" else {
+            displayMessage("\(field.rawValue) cannot be empty.")
+            return
+        }
+        
+        guard let password = passwordTextField.text, password != "" else {
+            displayMessage("Please re-enter your password.")
+            return
+        }
         
         switch field {
         
         case .name:
-            print("update name")
+            if !isValidName(text) {
+                displayMessage("Please enter a valid name.")
+                return
+            }
+            
+            if text == APPSetting.customerName {
+                return
+            }
             
         case .email:
-            print("update email")
+            if !isValidEmail(text) {
+                displayMessage("Please enter a valid E-mail address.")
+                return
+            }
+            if text == APPSetting.customerEmail {
+                return
+            }
             
-        case .phone:
-            print("update phone")
+        case .password:
+            if !isPasswordSame(text, password) {
+                displayMessage("Passwords do not match. Please try again.")
+                return
+            }
             
         default:
-            return
+            break
         }
         
-        self.navigationController?.popViewController(animated: true)
-        
-        
+        NetworkManager.shared.updateProfileField(field, to: text) { (error) in
+            
+            DispatchQueue.main.async {
+                guard error == nil else {
+                    
+                    print(error)
+                    self.displayMessage(error!.localizedDescription)
+                    return
+                }
+                
+                self.navigationController?.popViewController(animated: true)
+            }
+            
+        }
     }
     
     @objc private func backButtonTapped() {

@@ -71,13 +71,11 @@ class PreferenceHeaderView: UIView {
 
             titleLabel.bottomAnchor.constraint(equalTo: detailLabel.topAnchor, constant: -8),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-//            titleLabel.widthAnchor.constraint(equalTo: widthAnchor, constant: -48),
-            titleLabel.trailingAnchor.constraint(equalTo: favoriteButton.leadingAnchor, constant: -8),
-
-
+            titleLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
+            
             detailLabel.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -16),
             detailLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            detailLabel.widthAnchor.constraint(equalTo: titleLabel.widthAnchor),
+          detailLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
             
         ])
     }
