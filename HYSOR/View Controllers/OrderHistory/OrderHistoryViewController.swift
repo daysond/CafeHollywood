@@ -204,11 +204,14 @@ class OrderHistoryViewController: UIViewController {
     }
     
     private func closeOrder(_ id: String, for status: OrderStatus) {
-        
-        NetworkManager.shared.closeOrder(id, status: status)
+
 
         activeReceipts.removeAll { (r) -> Bool in
-            r.status == status
+            if r.status == status {
+                let timestamp = r.orderTimestamp
+                NetworkManager.shared.closeOrder(id, status: status, timestamp: timestamp)
+            }
+            return r.status == status
         }
         receiptsModel.accept(activeReceipts)
         

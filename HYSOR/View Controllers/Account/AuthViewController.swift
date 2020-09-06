@@ -1,100 +1,290 @@
 //
-//  AuthViewController.swift
+//  SetProfileViewController.swift
 //  HYSOR
 //
-//  Created by Dayson Dong on 2020-09-01.
+//  Created by Dayson Dong on 2020-09-05.
 //  Copyright © 2020 Dayson Dong. All rights reserved.
 //
 
 import UIKit
-import FirebaseUI
 
+protocol AuthStatusUpdateDelegate {
+    
+    func didLogIn()
+    func didSignUp()
+    
+}
 
-class AuthViewController: UIViewController {
-
+class AuthViewController: UpdateProfileViewController {
+    
+    let isLogin: Bool
+    
+    private var email: String?
+    private var name: String?
+    private var phoneNumber: String?
+    private var password: String?
+    
+    var delegate: AuthStatusUpdateDelegate?
+    
+    init(field: AccountField, isLogin: Bool) {
+        self.isLogin = isLogin
+        super.init(field: field)
+        
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        let loginButton = BlackButton()
-        loginButton.configureTitle(title: "log in")
-        loginButton.translatesAutoresizingMaskIntoConstraints = true
-        loginButton.frame = CGRect(x: 16, y: 100, width: view.frame.width - 32, height: 48)
-        
-        view.addSubview(loginButton)
-        
-        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
-        
-        // Do any additional setup after loading the view.
+        setButtonTitle()
     }
     
-    @objc private func handleLogin() {
+    
+    private func setButtonTitle() {
         
-        let authUI = FUIAuth.defaultAuthUI()
+        switch field {
+        case .password:
+            
+            let title = isLogin ? "LOG IN" : "SIGN UP"
+            updateButton.configureSubtitle(title: title)
+            
+        default:
+            updateButton.configureTitle(title: "NEXT")
+        }
         
-        guard authUI != nil else {
+        
+    }
+    
+    override func setupDisplay() {
+        
+        errorMessageLabel.text = ""
+        profileFieldTitle.text = "ENTER YOUR \(field.rawValue.uppercased())"
+        profileTextField.isSecureTextEntry = false
+        self.passwordTFHeightConstraint?.constant = 0
+        
+        
+        switch field {
+        
+        case .name:
             
-            //log error
+            profileFieldTitle.text = "TELL US YOUR NAME"
+            profileTextField.placeholder = "NAME"
+            profileTextField.keyboardType = .default
+            if name != nil {
+                profileTextField.text = name!
+            }
             
+        case .email:
+            
+            profileTextField.placeholder = "EMAIL ADDRESS"
+            profileTextField.keyboardType = .emailAddress
+            if email != nil {
+                profileTextField.text = email!
+            }
+            
+        case .phone:
+            
+            profileTextField.placeholder = "PHONE NUMBER"
+            profileTextField.keyboardType = .phonePad
+            if phoneNumber != nil {
+                profileTextField.text = phoneNumber!
+            }
+            
+        case .password:
+            
+            if isLogin == false {
+                
+                passwordTFHeightConstraint?.constant = 40
+                
+            }
+            profileTextField.isSecureTextEntry = true
+            profileTextField.keyboardType = .default
+            profileTextField.placeholder =  isLogin ? "PASSWORD" : "Enter New Password"
+            passwordTextField.placeholder = "Re-Enter New Password"
+            
+        default:
+            return
+        }
+    }
+    
+    override func isPasswordSame(_ text: String) -> Bool {
+        if isLogin { return true }
+        return super.isPasswordSame(text)
+    }
+    
+    
+    
+    override func updateProfile() {
+        
+        if !shouldProceed() {
             return
         }
         
-        authUI?.delegate = self
-
-        let providers: [FUIAuthProvider] = [FUIEmailAuth(), FUIPhoneAuth(authUI: FUIAuth.defaultAuthUI()!)]
-        authUI?.providers = providers
-//
-        let authVC = authUI!.authViewController()
-   
-        present(authVC, animated: true, completion: nil)
-        
-        
-        
-        
-    }
-    
-    private func presentMainViewController() {
-        
-        let mainVC = MainTabBarViewController()
-        mainVC.modalPresentationStyle = .fullScreen
-        self.present(mainVC, animated: true) {
-            print("completed")
-        }
-
-    }
-    
-    
-
-
-
-}
-
-extension AuthViewController: FUIAuthDelegate {
-    
-    
-    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
-        
-        guard error == nil else {
-            print(error)
+        switch field {
+        case .email:
+            
+            
+            setText()
+            switchField(isLogin ? .password : .name)
+            
+            
+            
+        case .name:
+            
+            setText()
+            switchField(.phone)
+            
+            
+        case .phone:
+            
+            setText()
+            switchField(.password)
+            
+            
+        case .password:
+            
+            setText()
+            handleAuth()
+            
+            
+        default:
             return
         }
         
-        guard let uid = authDataResult?.user.uid,
-        let name = authDataResult?.user.displayName,
-        let email = authDataResult?.user.email else { return }
-        
-        let phnenumber = authDataResult?.user.phoneNumber
-        
-        print("\(uid) singed in \(name) \(phnenumber) \(email)" )
-        
-//        APPSetting.storeUserInfo(email, name, uid, phnenumber)
-        
-        presentMainViewController()
-        
-        
     }
     
     
+    override func handleBackButton() {
+        
+        switch field {
+        case .email:
+            self.navigationController?.dismiss(animated: true, completion: nil)
+            
+        case .name:
+            switchField(.email)
+            
+        case .phone:
+            switchField(.name)
+            
+        case .password:
+            switchField(isLogin ? .email : .phone)
+        default:
+            return
+        }
+        
+    }
+    
+    //MARK: - HELPERS
+    
+    private func handleAuth() {
+        
+        switch isLogin {
+        case true:
+            
+            signIn()
+            
+        default:
+            
+            signUp()
+            
+        }
+        
+    }
+    
+    private func switchField(_ field: AccountField) {
+        
+        self.field = field
+        setupDisplay()
+    }
+    
+    private func setText() {
+        
+        switch field {
+        case .email:
+            email = profileTextField.text
+        case .name:
+            name = profileTextField.text
+        case .password:
+            password = profileTextField.text
+        case .phone:
+            phoneNumber = profileTextField.text
+        default:
+            break
+        }
+        
+        profileTextField.text = nil
+        
+    }
+    
+    private func signIn() {
+        
+        print(email)
+        print(password)
+        
+        guard let email = email, let password = password else { return }
+        
+        NetworkManager.shared.signInWith(email, password) { (authResult, error) in
+            guard error ==  nil else {
+                DispatchQueue.main.async {
+                    self.errorMessageLabel.text = error!.localizedDescription
+                }
+                return
+            }
+            
+            guard authResult != nil else {
+                DispatchQueue.main.async {
+                    self.errorMessageLabel.text = "Unknow error."
+                }
+                return
+            }
+            self.navigationController?.dismiss(animated: true, completion: {
+            
+                self.delegate?.didLogIn()
+            
+            })
+           
+            
+        }
+    }
+    
+    @objc private func signUp() {
+        
+        guard let email = email, let password = password, let name = name, let phoneNumber = phoneNumber else { return }
+        
+        DispatchQueue.global(qos: .background).async {
+            
+            
+            let res = NetworkManager.shared.signUpWith(email, password, name, phoneNumber)
+            
+            switch res {
+            
+            case .success:
+                
+                DispatchQueue.main.async {
+                    self.navigationController?.dismiss(animated: true, completion: {
+                    
+                        self.delegate?.didSignUp()
+                    })
+                    
+                    
+                    
+                }
+                
+            case .failure(let err):
+                DispatchQueue.main.async {
+                    
+                    self.errorMessageLabel.text = err.localizedDescription
+                }
+            }
+        }
+        
+        
+        
+    }
     
     
 }

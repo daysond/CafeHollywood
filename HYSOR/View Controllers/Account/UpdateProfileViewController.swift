@@ -11,13 +11,13 @@ import UIKit
 class UpdateProfileViewController: UIViewController {
     
     
-    private let field: AccountField
+    internal var field: AccountField
     
-    private let updateButton = BlackButton()
+    internal let updateButton = BlackButton()
     
     private var tabBarHeight: CGFloat = 0
     
-    private let profileTextField: UITextField = {
+    internal let profileTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.textColor = .black
@@ -29,20 +29,21 @@ class UpdateProfileViewController: UIViewController {
         return tf
     }()
     
-    private let passwordTextField: UITextField = {
+    internal let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.textColor = .black
         tf.font = UIFont.systemFont(ofSize: 18)
         tf.addPadding(.left(4))
         tf.isSecureTextEntry = true
+        tf.keyboardType = .default
         tf.backgroundColor = .whiteSmoke
         tf.clearButtonMode = .always
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
-    private let profileFieldTitle: UILabel = {
+    internal let profileFieldTitle: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textAlignment = .left
@@ -52,7 +53,7 @@ class UpdateProfileViewController: UIViewController {
         return l
     }()
     
-    private let errorMessageLabel: UILabel = {
+    internal let errorMessageLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textAlignment = .left
@@ -62,7 +63,9 @@ class UpdateProfileViewController: UIViewController {
         return l
     }()
     
-    var updateButtonBottomAnchorConstraint: NSLayoutConstraint?
+    private var updateButtonBottomAnchorConstraint: NSLayoutConstraint?
+    
+    var passwordTFHeightConstraint: NSLayoutConstraint?
     
     init(field: AccountField) {
         
@@ -99,7 +102,7 @@ class UpdateProfileViewController: UIViewController {
     }
     
     
-    private func setupDisplay() {
+    internal func setupDisplay() {
         
         profileFieldTitle.text = field.rawValue
         
@@ -107,6 +110,7 @@ class UpdateProfileViewController: UIViewController {
         case .name:
             
             profileFieldTitle.text = "First & Last Name"
+            profileTextField.keyboardType = .default
             profileTextField.text = APPSetting.customerName
             
         case .email:
@@ -122,8 +126,10 @@ class UpdateProfileViewController: UIViewController {
         case .password:
             
             profileTextField.isSecureTextEntry = true
+            profileTextField.keyboardType = .default
             profileTextField.placeholder = "Enter New Password"
             passwordTextField.placeholder = "Re-Enter New Password"
+            passwordTFHeightConstraint?.constant = 40
             
         default:
             return
@@ -141,13 +147,15 @@ class UpdateProfileViewController: UIViewController {
         view.addSubview(profileTextField)
         view.addSubview(updateButton)
         view.addSubview(errorMessageLabel)
+        view.addSubview(passwordTextField)
         
         updateButtonBottomAnchorConstraint = updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+        passwordTFHeightConstraint = passwordTextField.heightAnchor.constraint(equalToConstant: 0)
         
         NSLayoutConstraint.activate([
             
             profileFieldTitle.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            profileFieldTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            profileFieldTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 48),
             profileFieldTitle.heightAnchor.constraint(equalToConstant: profileFieldTitle.intrinsicContentSize.height),
             
             profileTextField.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
@@ -162,35 +170,38 @@ class UpdateProfileViewController: UIViewController {
             
             errorMessageLabel.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
             errorMessageLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            
+            passwordTextField.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
+            passwordTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            passwordTFHeightConstraint!,
+            passwordTextField.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8),
+
+            errorMessageLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 8),
         
         
         ])
-        
-        if field == .password {
-            
-            view.addSubview(passwordTextField)
-            
-            NSLayoutConstraint.activate([
-            
-                passwordTextField.leadingAnchor.constraint(equalTo: profileFieldTitle.leadingAnchor),
-                passwordTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-                passwordTextField.heightAnchor.constraint(equalToConstant: 40),
-                passwordTextField.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8),
-
-                errorMessageLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 8),
-            
-            ])
-            
-        } else {
-            errorMessageLabel.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8).isActive = true
-        }
-        
+//
+//        if field == .password {
+//
+//
+//
+//            NSLayoutConstraint.activate([
+//
+//
+//
+//            ])
+//
+//        } else {
+//            errorMessageLabel.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8).isActive = true
+//        }
+//
         
     }
     
     private func setupNavigationBar() {
 
-        let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(backButtonTapped))
+        let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(handleBackButton))
+        self.navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.tintColor = .black
         self.navigationItem.leftBarButtonItem = backButton
         self.navigationController?.navigationBar.isTranslucent = true
@@ -222,22 +233,21 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
-    private func isPasswordSame(_ t1: String, _ t2: String) -> Bool {
-        return t1 == t2
-    }
-    
-    //MARK: -ACTIONS
-    
-    @objc private func updateProfile() {
-        
-        guard let text = profileTextField.text, text != "" else {
-            displayMessage("\(field.rawValue) cannot be empty.")
-            return
-        }
+    internal func isPasswordSame(_ text: String) -> Bool {
         
         guard let password = passwordTextField.text, password != "" else {
             displayMessage("Please re-enter your password.")
-            return
+            return false
+        }
+        
+        return text == password
+    }
+    
+    internal func shouldProceed() -> Bool {
+        
+        guard let text = profileTextField.text, text != "" else {
+            displayMessage("\(field.rawValue) cannot be empty.")
+            return false
         }
         
         switch field {
@@ -245,55 +255,69 @@ class UpdateProfileViewController: UIViewController {
         case .name:
             if !isValidName(text) {
                 displayMessage("Please enter a valid name.")
-                return
+                return false
             }
             
             if text == APPSetting.customerName {
-                return
+                return false
             }
             
         case .email:
             if !isValidEmail(text) {
                 displayMessage("Please enter a valid E-mail address.")
-                return
+                return false
             }
             if text == APPSetting.customerEmail {
-                return
+                return false
             }
             
         case .password:
-            if !isPasswordSame(text, password) {
+            if !isPasswordSame(text) {
                 displayMessage("Passwords do not match. Please try again.")
-                return
+                return false
             }
             
         default:
             break
         }
         
-        NetworkManager.shared.updateProfileField(field, to: text) { (error) in
+        return true
+        
+    }
+    
+    //MARK: -ACTIONS
+    
+    @objc internal func updateProfile() {
+        
+        if shouldProceed() {
             
-            DispatchQueue.main.async {
-                guard error == nil else {
-                    
-                    print(error)
-                    self.displayMessage(error!.localizedDescription)
-                    return
-                }
+            errorMessageLabel.text = ""
+            
+            NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
                 
-                self.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.async {
+                    guard error == nil else {
+                        
+                        print(error)
+                        self.displayMessage(error!.localizedDescription)
+                        return
+                    }
+                    
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
-            
         }
     }
     
-    @objc private func backButtonTapped() {
+
+    
+    @objc internal func handleBackButton() {
         
         self.navigationController?.popViewController(animated: true)
         
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc private func keyboardWillShow(notification: NSNotification) {
         
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
                // if keyboard size is not available for some reason, dont do anything
@@ -309,7 +333,7 @@ class UpdateProfileViewController: UIViewController {
         
         
     }
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification: NSNotification) {
         
         UIView.animate(withDuration: 0.1) {
             self.updateButtonBottomAnchorConstraint?.constant = -16

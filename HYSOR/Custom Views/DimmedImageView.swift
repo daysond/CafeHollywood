@@ -21,6 +21,7 @@ class DimmedImageView: UIView {
     
     private let blackView = UIView()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -52,9 +53,10 @@ class DimmedImageView: UIView {
         
     }
     
-    func setImage(_ image: UIImage) {
+    func setImage(_ image: UIImage, alpha: CGFloat?) {
         
         self.headerImageView.image = image
+        blackView.backgroundColor = UIColor(white: 0, alpha: alpha ?? 0.5)
         
     }
     

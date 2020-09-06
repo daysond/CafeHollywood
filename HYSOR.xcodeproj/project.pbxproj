@@ -45,13 +45,14 @@
 		ED41FA4224F4D2650068E316 /* AccountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED41FA4124F4D2650068E316 /* AccountTableViewCell.swift */; };
 		ED437CC8241DD9DD0098E3ED /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED437CC7241DD9DD0098E3ED /* Money.swift */; };
 		ED437CCA241E0E040098E3ED /* OLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED437CC9241E0E040098E3ED /* OLImageView.swift */; };
+		ED450BBA2504233B00A9B339 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED450BB92504233B00A9B339 /* AuthViewController.swift */; };
 		ED46C73E24BFA5AD0089CF43 /* dotsLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */; };
 		ED46C74024BFA86A0089CF43 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */; };
 		ED46C74824BFEC900089CF43 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C74724BFEC900089CF43 /* HomeViewController.swift */; };
 		ED46C74A24BFECB60089CF43 /* OrderHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C74924BFECB60089CF43 /* OrderHistoryViewController.swift */; };
 		ED46C74E24BFF1470089CF43 /* CustomSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C74D24BFF1470089CF43 /* CustomSegmentedControl.swift */; };
 		ED47D58424BC41840044C116 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED47D58324BC41840044C116 /* LoginViewController.swift */; };
-		ED48E8AB24FF4AE3004979A2 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED48E8AA24FF4AE3004979A2 /* AuthViewController.swift */; };
+		ED48E8AB24FF4AE3004979A2 /* AuthHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED48E8AA24FF4AE3004979A2 /* AuthHomeViewController.swift */; };
 		ED4A8B2324BCF2EA008FAB28 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */; };
 		ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */; };
 		ED4A8B2724BD3D27008FAB28 /* CheckoutViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */; };
@@ -137,13 +138,14 @@
 		ED41FA4124F4D2650068E316 /* AccountTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTableViewCell.swift; sourceTree = "<group>"; };
 		ED437CC7241DD9DD0098E3ED /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		ED437CC9241E0E040098E3ED /* OLImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OLImageView.swift; sourceTree = "<group>"; };
+		ED450BB92504233B00A9B339 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dotsLoading.json; sourceTree = "<group>"; };
 		ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		ED46C74724BFEC900089CF43 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		ED46C74924BFECB60089CF43 /* OrderHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryViewController.swift; sourceTree = "<group>"; };
 		ED46C74D24BFF1470089CF43 /* CustomSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControl.swift; sourceTree = "<group>"; };
 		ED47D58324BC41840044C116 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		ED48E8AA24FF4AE3004979A2 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		ED48E8AA24FF4AE3004979A2 /* AuthHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHomeViewController.swift; sourceTree = "<group>"; };
 		ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewControllerExt.swift; sourceTree = "<group>"; };
@@ -340,7 +342,8 @@
 		ED46C74624BFEC5D0089CF43 /* Account */ = {
 			isa = PBXGroup;
 			children = (
-				ED48E8AA24FF4AE3004979A2 /* AuthViewController.swift */,
+				ED48E8AA24FF4AE3004979A2 /* AuthHomeViewController.swift */,
+				ED450BB92504233B00A9B339 /* AuthViewController.swift */,
 				EDA416EF24BD8F9600501F0E /* AccountViewController.swift */,
 				EDD31BD224F59C9700010DC2 /* ManageFavouriteViewController.swift */,
 				ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */,
@@ -596,11 +599,12 @@
 				ED7D6CB124C00F8200D3583D /* OrderHistoryCollectionViewCell.swift in Sources */,
 				EDB1751F24C03D240054618C /* DimmedImageView.swift in Sources */,
 				ED47D58424BC41840044C116 /* LoginViewController.swift in Sources */,
-				ED48E8AB24FF4AE3004979A2 /* AuthViewController.swift in Sources */,
+				ED48E8AB24FF4AE3004979A2 /* AuthHomeViewController.swift in Sources */,
 				ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */,
 				EDEA350124B6ABBB00F3AB21 /* CartFooterView.swift in Sources */,
 				ED1946AC241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift in Sources */,
 				ED14A5E825019E8400263ADD /* ManageReservationViewController.swift in Sources */,
+				ED450BBA2504233B00A9B339 /* AuthViewController.swift in Sources */,
 				ED117C0924B3B3D700994068 /* StretchyHeaderLayout.swift in Sources */,
 				ED0C75F52425BE8E008B8174 /* PreferenceTableViewCell.swift in Sources */,
 				ED0C75F72425CB1D008B8174 /* CollapsibleTableViewHeader.swift in Sources */,

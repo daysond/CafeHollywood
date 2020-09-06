@@ -39,13 +39,13 @@ class APPSetting {
     
     var tableNumber: String?
     
-    static var customerName: String = Auth.auth().currentUser?.displayName ?? "null"
+    static var customerName: String = Auth.auth().currentUser?.displayName ?? ""
     
-    static var customerEmail: String = Auth.auth().currentUser?.email ?? "null"
+    static var customerEmail: String = Auth.auth().currentUser?.email ?? ""
     
-    static let customerUID: String = Auth.auth().currentUser?.uid ?? "null"
+    static let customerUID: String = Auth.auth().currentUser?.uid ?? ""
     
-    static let customerPhoneNumber: String = Auth.auth().currentUser?.phoneNumber ?? "null"
+    static let customerPhoneNumber: String = Auth.auth().currentUser?.phoneNumber ?? ""
     
     static var favouriteMeals: [Meal] = []
     

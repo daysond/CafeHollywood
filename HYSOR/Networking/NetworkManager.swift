@@ -102,7 +102,7 @@ class NetworkManager {
     }
     
     
-    func signUpWith(_ email: String, _ password: String, _ name: String) -> Result<AuthDataResult, Error> {
+    func signUpWith(_ email: String, _ password: String, _ name: String, _ phoneNumber: String) -> Result<AuthDataResult, Error> {
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -118,13 +118,17 @@ class NetworkManager {
             }
             guard let dataResult = dataResult else { return }
             
-//            self.setDataOfCustomer(name: name, with: dataResult)
-            
             result = .success(dataResult)
+            
+            self.updateProfileField(.name, to: name) { (err) in
+                guard err == nil else { print(err?.localizedDescription ); return }
+            }
+            
             semaphore.signal()
         }
         
         _ = semaphore.wait(timeout: .distantFuture)
+        
         
         return result
     }
@@ -361,6 +365,8 @@ class NetworkManager {
         
         //        databaseRef.collection("orders").order(by: "timestamp").limit(to: 5)
         
+
+        
         ordersRef.setData(Cart.shared.representation) { (error) in
             guard error == nil else {
                 ordersRef.delete()
@@ -375,7 +381,7 @@ class NetworkManager {
         
         group.enter()
         
-        customerActiveOrderRef.setData(["status": OrderStatus.unconfirmed.rawValue]) { (error) in
+        customerActiveOrderRef.setData(["status": OrderStatus.unconfirmed.rawValue, "timestamp": Cart.shared.orderTimestamp]) { (error) in
             err = error
             group.leave()
         }
@@ -405,7 +411,8 @@ class NetworkManager {
     
     func fetchCloseOrders() -> Result<[Receipt], Error> {
         
-        let customerOrdersRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("orders")
+        let customerOrdersRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("orders").order(by: "timestamp", descending: true).limit(to: 5)
+//        customerOrdersRef.limit(to: 5)
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -424,6 +431,8 @@ class NetworkManager {
                 semaphore.signal()
                 return
             }
+            
+            print(snapshot?.count)
             
            
             docs.forEach { (doc) in
@@ -566,7 +575,7 @@ class NetworkManager {
         print("did remove listener")
     }
     
-    func closeOrder(_ id: String, status: OrderStatus) {
+    func closeOrder(_ id: String, status: OrderStatus, timestamp: String) {
         
         let activeOrderRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders")
         
@@ -574,7 +583,7 @@ class NetworkManager {
         
         activeOrderRef.document(id).delete()
         
-        orderRef.document(id).setData(["status": status.rawValue])
+        orderRef.document(id).setData(["status": status.rawValue, "timestamp": timestamp])
 
         
     }

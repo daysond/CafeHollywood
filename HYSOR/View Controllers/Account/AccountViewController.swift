@@ -101,9 +101,10 @@ class AccountViewController: UIViewController {
             try NetworkManager.shared.signOut()
             print(NetworkManager.shared.isAuth)
 //            let nav = UINavigationController(rootViewController: LoginViewController())
-            let nav = UINavigationController(rootViewController: AuthViewController())
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true) {
+//            let nav = UINavigationController(rootViewController: AuthHomeViewController())
+            let authVC = AuthHomeViewController()
+            authVC.modalPresentationStyle = .fullScreen
+            present(authVC, animated: true) {
                 
             }
         } catch let error as NSError {

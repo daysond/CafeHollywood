@@ -22,9 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        let main = Auth.auth().currentUser == nil ? UINavigationController(rootViewController: AuthViewController() ) : MainTabBarViewController()
-//               let main = ReservationViewController(reservation: Reservation(pax: 2, date: "todat"))
-//        let main = UpdateProfileViewController(field: .email)
+        let main = Auth.auth().currentUser == nil ? UINavigationController(rootViewController: AuthHomeViewController() ) : MainTabBarViewController()
+//        let main = Auth.auth().currentUser == nil ? AuthHomeViewController()  : MainTabBarViewController()
+//        let main = AuthHomeViewController()
         print(Auth.auth().currentUser?.email)
         window?.rootViewController = main
         window?.makeKeyAndVisible()
