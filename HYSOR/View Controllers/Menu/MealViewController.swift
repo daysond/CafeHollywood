@@ -182,7 +182,8 @@ class MealViewController: UIViewController {
         
         var shouldEnableButton = false
         
-        guard let preferences = meal.preferences else { print("no preferences found "); return true }
+        guard let preferences = meal.preferences, preferences.count > 0 else { print("no preferences found "); return true }
+        
         
         for preference in preferences {
             

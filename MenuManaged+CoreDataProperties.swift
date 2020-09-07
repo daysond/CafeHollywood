@@ -2,7 +2,7 @@
 //  MenuManaged+CoreDataProperties.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-25.
+//  Created by Dayson Dong on 2020-09-06.
 //
 //
 

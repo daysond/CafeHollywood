@@ -15,6 +15,8 @@ class UpdateProfileViewController: UIViewController {
     
     internal let updateButton = BlackButton()
     
+    internal var shouldAnimateKeyboard: Bool = true
+    
     private var tabBarHeight: CGFloat = 0
     
     internal let profileTextField: UITextField = {
@@ -53,7 +55,7 @@ class UpdateProfileViewController: UIViewController {
         return l
     }()
     
-    internal let errorMessageLabel: UILabel = {
+    private let errorMessageLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textAlignment = .left
@@ -141,7 +143,8 @@ class UpdateProfileViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        updateButton.addTarget(self, action: #selector(UpdateProfileViewController.updateProfile), for: .touchUpInside)
+        updateButton.addTarget(self, action: #selector(UpdateProfileViewController.handleButtonTapped), for: .touchUpInside)
+        updateButton.layer.cornerRadius = 4
         
         view.addSubview(profileFieldTitle)
         view.addSubview(profileTextField)
@@ -180,21 +183,7 @@ class UpdateProfileViewController: UIViewController {
         
         
         ])
-//
-//        if field == .password {
-//
-//
-//
-//            NSLayoutConstraint.activate([
-//
-//
-//
-//            ])
-//
-//        } else {
-//            errorMessageLabel.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8).isActive = true
-//        }
-//
+
         
     }
     
@@ -214,7 +203,7 @@ class UpdateProfileViewController: UIViewController {
     
     //MARK: - HELPERS
     
-    private func displayMessage(_ text: String) {
+    internal func displayMessage(_ text: String) {
         
         self.errorMessageLabel.text = text
         
@@ -287,7 +276,7 @@ class UpdateProfileViewController: UIViewController {
     
     //MARK: -ACTIONS
     
-    @objc internal func updateProfile() {
+    @objc internal func handleButtonTapped() {
         
         if shouldProceed() {
             
@@ -324,21 +313,33 @@ class UpdateProfileViewController: UIViewController {
                return
             }
           
-          // move the root view up by the distance of keyboard height
-        UIView.animate(withDuration: 0.1) {
+        if shouldAnimateKeyboard {
+            
+            UIView.animate(withDuration: 0.1) {
+                self.updateButtonBottomAnchorConstraint?.constant = -keyboardSize.height - 16 + self.tabBarHeight
+                self.view.layoutIfNeeded()
+            }
+            
+        } else {
             self.updateButtonBottomAnchorConstraint?.constant = -keyboardSize.height - 16 + self.tabBarHeight
-            self.view.layoutIfNeeded()
         }
+
         
         
         
     }
     @objc private func keyboardWillHide(notification: NSNotification) {
         
-        UIView.animate(withDuration: 0.1) {
+        if shouldAnimateKeyboard {
+            UIView.animate(withDuration: 0.1) {
+                self.updateButtonBottomAnchorConstraint?.constant = -16
+                self.view.layoutIfNeeded()
+            }
+            
+        } else {
             self.updateButtonBottomAnchorConstraint?.constant = -16
-            self.view.layoutIfNeeded()
         }
+        
     }
     
 

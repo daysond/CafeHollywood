@@ -110,6 +110,7 @@ extension Notification.Name {
     static let didTapModifyButton = Notification.Name("didTapModifyButton")
     static let updateFavouriteListTableView = Notification.Name("updateFavouriteListTableView")
     static let didUpdateOrderStatus = Notification.Name("didUpdateOrderStatus")
+    static let authStateDidChange = Notification.Name("authStateDidChange")
     
 }
 

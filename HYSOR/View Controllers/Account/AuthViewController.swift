@@ -29,6 +29,7 @@ class AuthViewController: UpdateProfileViewController {
     init(field: AccountField, isLogin: Bool) {
         self.isLogin = isLogin
         super.init(field: field)
+        shouldAnimateKeyboard = false
         
     }
     
@@ -61,7 +62,7 @@ class AuthViewController: UpdateProfileViewController {
     
     override func setupDisplay() {
         
-        errorMessageLabel.text = ""
+        displayMessage("")
         profileFieldTitle.text = "ENTER YOUR \(field.rawValue.uppercased())"
         profileTextField.isSecureTextEntry = false
         self.passwordTFHeightConstraint?.constant = 0
@@ -101,8 +102,9 @@ class AuthViewController: UpdateProfileViewController {
                 passwordTFHeightConstraint?.constant = 40
                 
             }
+          
             profileTextField.isSecureTextEntry = true
-            profileTextField.keyboardType = .default
+            profileTextField.keyboardType = .alphabet
             profileTextField.placeholder =  isLogin ? "PASSWORD" : "Enter New Password"
             passwordTextField.placeholder = "Re-Enter New Password"
             
@@ -118,38 +120,31 @@ class AuthViewController: UpdateProfileViewController {
     
     
     
-    override func updateProfile() {
+    override func handleButtonTapped() {
         
         if !shouldProceed() {
             return
         }
         
+        setText()
+        
         switch field {
+        
         case .email:
-            
-            
-            setText()
+         
             switchField(isLogin ? .password : .name)
-            
-            
-            
+
         case .name:
-            
-            setText()
+           
             switchField(.phone)
-            
             
         case .phone:
             
-            setText()
             switchField(.password)
-            
             
         case .password:
             
-            setText()
-            handleAuth()
-            
+            isLogin ? signIn() : signUp()
             
         default:
             return
@@ -162,7 +157,7 @@ class AuthViewController: UpdateProfileViewController {
         
         switch field {
         case .email:
-            self.navigationController?.dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
             
         case .name:
             switchField(.email)
@@ -180,25 +175,12 @@ class AuthViewController: UpdateProfileViewController {
     
     //MARK: - HELPERS
     
-    private func handleAuth() {
-        
-        switch isLogin {
-        case true:
-            
-            signIn()
-            
-        default:
-            
-            signUp()
-            
-        }
-        
-    }
-    
     private func switchField(_ field: AccountField) {
         
         self.field = field
         setupDisplay()
+        profileTextField.resignFirstResponder()
+        profileTextField.becomeFirstResponder()
     }
     
     private func setText() {
@@ -216,7 +198,10 @@ class AuthViewController: UpdateProfileViewController {
             break
         }
         
-        profileTextField.text = nil
+        if field != .password {
+            profileTextField.text = nil
+        }
+        
         
     }
     
@@ -230,17 +215,19 @@ class AuthViewController: UpdateProfileViewController {
         NetworkManager.shared.signInWith(email, password) { (authResult, error) in
             guard error ==  nil else {
                 DispatchQueue.main.async {
-                    self.errorMessageLabel.text = error!.localizedDescription
+                    self.displayMessage(error!.localizedDescription)
                 }
                 return
             }
             
             guard authResult != nil else {
                 DispatchQueue.main.async {
-                    self.errorMessageLabel.text = "Unknow error."
+                    self.displayMessage("Unknow error.")
                 }
                 return
             }
+            
+            print(authResult?.user.email)
             self.navigationController?.dismiss(animated: true, completion: {
             
                 self.delegate?.didLogIn()
@@ -276,8 +263,7 @@ class AuthViewController: UpdateProfileViewController {
                 
             case .failure(let err):
                 DispatchQueue.main.async {
-                    
-                    self.errorMessageLabel.text = err.localizedDescription
+                    self.displayMessage(err.localizedDescription)
                 }
             }
         }

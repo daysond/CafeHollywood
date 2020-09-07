@@ -64,6 +64,10 @@ class NetworkManager {
         }
     }
     
+    var currentUser: User? {
+        return Auth.auth().currentUser
+    }
+    
     var orderStatusDelegate: OrderStatusUpdateDelegate?
     var activeOrderListenerDelegate: ActiveOrderListenerDelegate?
     
@@ -121,7 +125,11 @@ class NetworkManager {
             result = .success(dataResult)
             
             self.updateProfileField(.name, to: name) { (err) in
-                guard err == nil else { print(err?.localizedDescription ); return }
+                guard err == nil else { print(err!.localizedDescription ); return }
+            }
+            
+            self.updateProfileField(.phone, to: phoneNumber) { (err) in
+                guard err == nil else { print(err!.localizedDescription ); return }
             }
             
             semaphore.signal()
@@ -188,7 +196,6 @@ class NetworkManager {
                 
                 let uid = doc.documentID
                 guard let imageURL = doc["imageURL"] as? String,
-                      let isSingleMealMenu = doc["isSingleMealMenu"] as? Bool,
                       let mealsInUID = doc["mealsInUID"] as? [String],
                       let menuDetail = doc["menuDetail"] as? String,
                       let menuTitle = doc["menuTitle"] as? String else {
@@ -225,13 +232,12 @@ class NetworkManager {
             guard let mealUID = documentSnapShot?.documentID else { print("uid wrong"); return }
             guard let name = data["name"] as? String else { print("name wrong"); return }
             guard let price = data["price"] as? Double else { print("price wrong \(uid)"); return }
+            guard let mealDescription = data["description"] as? String else {print("mealDescription \(uid) not found "); return }
             
             let detail = data["detail"] as? String
             let imageURL = data["imageURL"] as? String
-            //            let priceInInt = Int(price * 100)
-            //            let priceInDecimal = Decimal(integerLiteral: priceInInt) / 100
             let comboTag = data["comboTag"] as? Int
-            var meal = Meal(uid: mealUID, name: name, price: Decimal(floatLiteral: price), details: detail ?? "", imageURL: imageURL, preferences: nil, comboMealTag: comboTag)
+            var meal = Meal(uid: mealUID, name: name, price: Decimal(floatLiteral: price), details: detail ?? "", imageURL: imageURL, preferences: nil, comboMealTag: comboTag, description: mealDescription)
             
             if let comboType = data["comboType"] as? Int, let type = ComboType(rawValue: comboType) {
                 meal.comboType = type
@@ -273,8 +279,9 @@ class NetworkManager {
             }
             guard let uid = snapshot?.documentID else { print("no snapshot"); return }
             guard let name = data["name"] as? String else { print("no item name \(uid)"); return }
+            guard let itemDescription = data["description"] as? String else { print("no itemDescription \(uid)"); return}
             
-            var item = PreferenceItem(name: name, price: nil, uid: uid)
+            var item = PreferenceItem(name: name, price: nil, uid: uid, description: itemDescription)
             if let price = data["price"] as? Double {
                 //                let priceInInt = Decimal(price * 100)
                 
@@ -719,6 +726,12 @@ class NetworkManager {
             Auth.auth().currentUser?.updatePassword(to: newProfile, completion: { (error) in
                 completion(error)
             })
+            
+        case .phone:
+            
+            return
+//            let credential = PhoneAuthProvider.provider().credential(withVerificationID: APPSetting.customerUID, verificationCode: newProfile)
+//            Auth.auth().currentUser?.updatePhoneNumber(PhoneAuthCredential, completion: credential)
             
         default:
             return

@@ -19,7 +19,7 @@ class AccountTableViewCell: UITableViewCell {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "title"
         l.numberOfLines = 1
-        l.textColor = .black
+        l.textColor = .darkGray
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return l
@@ -77,7 +77,7 @@ class AccountTableViewCell: UITableViewCell {
     
     func configureCellForField(_ field: AccountField) {
         
-        titleLabel.text = field.rawValue
+        titleLabel.text = field.rawValue.uppercased()
         
         switch field {
         

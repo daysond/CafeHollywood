@@ -2,7 +2,7 @@
 //  MealManaged+CoreDataProperties.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-18.
+//  Created by Dayson Dong on 2020-09-06.
 //
 //
 
@@ -23,6 +23,7 @@ extension MealManaged {
     @NSManaged public var name: String?
     @NSManaged public var price: NSDecimalNumber?
     @NSManaged public var uid: String?
+    @NSManaged public var mealDescription: String?
     @NSManaged public var preferences: NSSet?
 
 }

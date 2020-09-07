@@ -125,7 +125,9 @@ struct MealInfo {
     let totalPrice: Double
     let addOnInfo: String
     let instruction: String
-    
+//    let mealDescription: String
+//    let addOnDescription: String
+//
     init?(id: String, data: [String: Any]) {
         
         guard
@@ -134,6 +136,8 @@ struct MealInfo {
             let totalPrice = data["totalPrice"] as? Double,
             let addOnInfo = data["addOnInfo"] as? String,
             let instruction = data["instruction"] as? String
+//            let addOnDescription = data["addOnDescription"] as? String,
+//            let mealDescription = data["description"] as? String
             else { return nil }
         
         self.mealInfoID = id
@@ -142,6 +146,8 @@ struct MealInfo {
         self.totalPrice = totalPrice
         self.addOnInfo = addOnInfo
         self.instruction = instruction
+//        self.addOnDescription = addOnDescription
+//        self.mealDescription = mealDescription
         
     }
     

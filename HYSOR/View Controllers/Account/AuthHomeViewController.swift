@@ -174,7 +174,7 @@ class AuthHomeViewController: UIViewController {
         let mainVC = MainTabBarViewController()
         mainVC.modalPresentationStyle = .fullScreen
         self.present(mainVC, animated: true) {
-            print("completed")
+            NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": true])
         }
 
     }
@@ -188,10 +188,12 @@ class AuthHomeViewController: UIViewController {
 extension AuthHomeViewController: AuthStatusUpdateDelegate {
     
     func didLogIn() {
+        print(NetworkManager.shared.currentUser?.email)
         presentMainViewController()
     }
     
     func didSignUp() {
+        print(NetworkManager.shared.currentUser?.email)
         presentMainViewController()
     }
     

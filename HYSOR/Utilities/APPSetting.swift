@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseAuth
 import UIKit
 
 protocol JSONRepresentation {
@@ -39,13 +38,23 @@ class APPSetting {
     
     var tableNumber: String?
     
-    static var customerName: String = Auth.auth().currentUser?.displayName ?? ""
+    static var customerName: String {
+        return NetworkManager.shared.currentUser?.displayName ?? ""
+    }
     
-    static var customerEmail: String = Auth.auth().currentUser?.email ?? ""
+    static var customerEmail: String {
+        return NetworkManager.shared.currentUser?.email ?? ""
+    }
     
-    static let customerUID: String = Auth.auth().currentUser?.uid ?? ""
     
-    static let customerPhoneNumber: String = Auth.auth().currentUser?.phoneNumber ?? ""
+    static var customerUID: String {
+        return NetworkManager.shared.currentUser?.uid ?? ""
+    }
+    
+    
+    static var customerPhoneNumber: String {
+        return NetworkManager.shared.currentUser?.phoneNumber ?? ""
+    }
     
     static var favouriteMeals: [Meal] = []
     

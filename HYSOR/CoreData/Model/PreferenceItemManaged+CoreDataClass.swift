@@ -2,7 +2,7 @@
 //  PreferenceItemManaged+CoreDataClass.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-18.
+//  Created by Dayson Dong on 2020-09-06.
 //
 //
 
@@ -18,6 +18,8 @@ public class PreferenceItemManaged: NSManagedObject {
         
         self.uid = item.uid
         
+        self.itemDescription = item.itemDescription
+        
         if let itemPrice = item.price?.amount {
             self.price = NSDecimalNumber(decimal: itemPrice)
         }
@@ -30,26 +32,24 @@ public class PreferenceItemManaged: NSManagedObject {
     
     func convertToItem() -> PreferenceItem? {
         
-        guard let name = self.name, let uid = self.uid else { return nil}
+        guard let name = self.name, let uid = self.uid, let itemDescription = self.itemDescription else { return nil}
         
         if let price = self.price {
             
             let priceInDecimal = Money(amt: price as Decimal)
-            var item = PreferenceItem(name: name, price: priceInDecimal , uid: uid)
+            var item = PreferenceItem(name: name, price: priceInDecimal , uid: uid, description: itemDescription)
             item.comboTag = self.comboTag?.intValue
             return item
             
         } else {
             
-            var item = PreferenceItem(name: name, price: nil, uid: uid)
+            var item = PreferenceItem(name: name, price: nil, uid: uid, description: itemDescription)
             item.comboTag = self.comboTag?.intValue
             return item
             
         }
 
     }
-    
-    
     
 
 }
