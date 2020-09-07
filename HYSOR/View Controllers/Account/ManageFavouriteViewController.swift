@@ -15,7 +15,7 @@ class ManageFavouriteViewController: UIViewController {
         tb.separatorStyle = .singleLine
         tb.translatesAutoresizingMaskIntoConstraints = false
         tb.backgroundColor = .white
-        tb.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tb.register(ManageFavouriteListTableViewCell.self, forCellReuseIdentifier: ManageFavouriteListTableViewCell.identifier)
         return tb
     }()
     
@@ -44,8 +44,15 @@ class ManageFavouriteViewController: UIViewController {
         
         ])
         
-        navigationItem.title = "My Favourite"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(back))
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = "My Favourites"
+        let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(back))
+        navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.leftBarButtonItem = backButton
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
+        
         navigationItem.rightBarButtonItem = editButtonItem
    
         
@@ -53,7 +60,8 @@ class ManageFavouriteViewController: UIViewController {
     }
     
     @objc private func back() {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.popViewController(animated: true)
     }
     
 
@@ -61,11 +69,11 @@ class ManageFavouriteViewController: UIViewController {
         
         let group = DispatchGroup()
         
-        let uids = APPSetting.shared.favouriteMeals.map { (meal) -> String in
+        let uids = APPSetting.favouriteMeals.map { (meal) -> String in
             return meal.uid
         }
         
-        User.shared.favouriteList.forEach { (uid) in
+        APPSetting.favouriteList.forEach { (uid) in
             
             if !uids.contains(uid) {
                 
@@ -73,7 +81,7 @@ class ManageFavouriteViewController: UIViewController {
                 
                 if var meal = DBManager.shared.readMeal(uid: uid) {
                     meal.recoverPreferenceState()
-                    APPSetting.shared.favouriteMeals.append(meal)
+                    APPSetting.favouriteMeals.append(meal)
                     group.leave()
                     
                 } else {
@@ -86,7 +94,7 @@ class ManageFavouriteViewController: UIViewController {
 
                         DBManager.shared.writeMeal(meal)
                         meal.recoverPreferenceState()
-                        APPSetting.shared.favouriteMeals.append(meal)
+                        APPSetting.favouriteMeals.append(meal)
                         group.leave()
                     }
                 }
@@ -94,7 +102,7 @@ class ManageFavouriteViewController: UIViewController {
             
             group.notify(queue: DispatchQueue.main) {
                 
-                APPSetting.shared.favouriteMeals.sort { (m1, m2) -> Bool in
+                APPSetting.favouriteMeals.sort { (m1, m2) -> Bool in
                     m1.uid < m2.uid
                 }
                 
@@ -118,14 +126,18 @@ class ManageFavouriteViewController: UIViewController {
 extension ManageFavouriteViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return APPSetting.shared.favouriteMeals.count
+        return APPSetting.favouriteMeals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = APPSetting.shared.favouriteMeals[indexPath.row].name
+        let cell = tableView.dequeueReusableCell(withIdentifier: ManageFavouriteListTableViewCell.identifier, for: indexPath) as! ManageFavouriteListTableViewCell
+        cell.configureCellWith(meal: APPSetting.favouriteMeals[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        120
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -134,8 +146,8 @@ extension ManageFavouriteViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let uid = User.shared.favouriteList[indexPath.row]
-            User.unfavouriteMeal(uid: uid)
+            let uid = APPSetting.favouriteList[indexPath.row]
+            APPSetting.unfavouriteMeal(uid: uid)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

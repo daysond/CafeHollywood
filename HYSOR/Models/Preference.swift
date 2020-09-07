@@ -87,6 +87,8 @@ struct PreferenceItem {
     
     var name: String
     //    var detail: String?
+    var itemDescription: String
+    
     var price: Money?
     
     var isSelected: Bool
@@ -95,22 +97,28 @@ struct PreferenceItem {
     
     var comboTag: Int?
     
-    init(name: String, price: Money?, uid: String) {
+    init(name: String, price: Money?, uid: String, description: String) {
         self.uid = uid
         self.name = name
         self.price = price
         self.quantity = 1
+        self.itemDescription = description
         self.isSelected = false
     }
     
     init?(managedObject: PreferenceItemManaged) {
         
-        guard let uid = managedObject.uid, let name = managedObject.name else { return nil}
+        guard let uid = managedObject.uid, let name = managedObject.name, let itemDescription = managedObject.itemDescription else { return nil}
         
         self.uid = uid
         self.name = name
         self.quantity = 1
         self.isSelected = false
+        self.itemDescription = itemDescription
+        
+        if uid == "a6013" {
+            print("tag \(managedObject.comboTag)")
+        }
         
         if let price = managedObject.price {
             self.price = Money(amt: price.decimalValue)

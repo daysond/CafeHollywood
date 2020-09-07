@@ -21,6 +21,7 @@ class DimmedImageView: UIView {
     
     private let blackView = UIView()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -29,7 +30,9 @@ class DimmedImageView: UIView {
         blackView.translatesAutoresizingMaskIntoConstraints = false
         blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
         
-        headerImageView.image = UIImage(named: "pikachu")
+        headerImageView.image = UIImage(named: "logo")
+        headerImageView.contentMode = .center
+        headerImageView.backgroundColor = .black
         
         addSubview(headerImageView)
         addSubview(blackView)
@@ -50,9 +53,10 @@ class DimmedImageView: UIView {
         
     }
     
-    func setImage(_ image: UIImage) {
+    func setImage(_ image: UIImage, alpha: CGFloat?) {
         
         self.headerImageView.image = image
+        blackView.backgroundColor = UIColor(white: 0, alpha: alpha ?? 0.5)
         
     }
     

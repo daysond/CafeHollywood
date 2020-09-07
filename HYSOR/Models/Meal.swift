@@ -41,9 +41,10 @@ struct Meal {
     var preferences: [Preference]?
     var quantity: Int
     var instruction: String?
+    var mealDescription: String
     
     var isFavourite: Bool {
-        return User.shared.favouriteList.contains(uid)
+        return APPSetting.favouriteList.contains(uid)
     }
     
     var isSelected: Bool = false
@@ -137,8 +138,29 @@ struct Meal {
         }
     }
     
+    var addOnDescription: String {
+        var addOnDetails: String = ""
+        
+        if preferences == nil {
+            return addOnDetails
+        } else {
+            preferences!.forEach { (preference) in
+                preference.preferenceItems.forEach { (item) in
+                    if item.isSelected == true {
+                        
+                        addOnDetails = item.quantity == 1 ? "\(addOnDetails)\(item.itemDescription)" : "\(addOnDetails)\(item.quantity) \(item.itemDescription)"
+                        
+                        addOnDetails = item.price == nil ? "\(addOnDetails)\n" : "\(addOnDetails) ($\((item.price! * Float(item.quantity) ).amount.stringRepresentation))\n"
+                    }
+                }
+            }
+            
+            return String(addOnDetails.dropLast())
+        }
+    }
     
-    init(uid: String, name: String, price: Decimal, details: String?, imageURL: String?, preferences: [Preference]?, comboMealTag: Int?) {
+    
+    init(uid: String, name: String, price: Decimal, details: String?, imageURL: String?, preferences: [Preference]?, comboMealTag: Int?, description: String) {
         
         self.name = name
         self.price = price
@@ -148,11 +170,12 @@ struct Meal {
         self.preferences = preferences
         self.quantity = 1
         self.comboMealTag = comboMealTag
+        self.mealDescription = description
     }
     
     init?(managedObject: MealManaged) {
         
-        guard let name = managedObject.name, let price = managedObject.price, let uid = managedObject.uid else { return nil }
+        guard let name = managedObject.name, let price = managedObject.price, let uid = managedObject.uid, let mealDescription = managedObject.mealDescription else { return nil }
         
         self.name = name
         self.price = price.decimalValue
@@ -160,6 +183,11 @@ struct Meal {
         self.details = managedObject.detail
         self.imageURL = managedObject.imageURL
         self.comboMealTag = managedObject.comboMealTag?.intValue
+        self.mealDescription = mealDescription
+        if let type = managedObject.comboType {
+            self.comboType = ComboType(rawValue: Int(type))
+        }
+       
         
         var preferences: [Preference] = []
         
@@ -266,6 +294,8 @@ extension Meal: JSONRepresentation {
             "quantity" : quantity,
             "totalPrice" : totalPrice.amount,
             "addOnInfo" : addOnInfo,
+            "description": mealDescription,
+            "addOnDescription": addOnDescription,
             
         ]
         

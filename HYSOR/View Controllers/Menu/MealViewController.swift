@@ -182,7 +182,8 @@ class MealViewController: UIViewController {
         
         var shouldEnableButton = false
         
-        guard let preferences = meal.preferences else { print("no preferences found "); return true }
+        guard let preferences = meal.preferences, preferences.count > 0 else { print("no preferences found "); return true }
+        
         
         for preference in preferences {
             
@@ -318,12 +319,12 @@ class MealViewController: UIViewController {
         
         if meal.isFavourite {
           
-            User.unfavouriteMeal(uid: meal.uid)
+            APPSetting.unfavouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartEmpty"), for: .normal)
             
         } else {
             
-            User.favouriteMeal(uid: meal.uid)
+            APPSetting.favouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartFilled"), for: .normal)
         }
 //        print("after \(User.shared.favouriteList)")
@@ -445,13 +446,26 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
             
 //            tableView.cellForRow(at: indexPath)
             
-        default: // MAX PICK NO LIMIT
+        default: // MAX PICK greater than 1
             
             switch preference.maxItemQuantity {
             // SINGLE ITEM
             case 1:
                 
-                preference.preferenceItems[indexPath.row].isSelected = !preference.preferenceItems[indexPath.row].isSelected
+                let currentSelected = preference.preferenceItems.reduce(0) { (res, item) -> Int in
+                    return item.isSelected ? res + 1 : res + 0
+                }
+                
+                if currentSelected < preference.maxPick {
+                    preference.preferenceItems[indexPath.row].isSelected = !preference.preferenceItems[indexPath.row].isSelected
+                } else {
+                    
+                    if preference.preferenceItems[indexPath.row].isSelected {
+                        preference.preferenceItems[indexPath.row].isSelected = false
+                    }
+                    
+                }
+                
                 
             // MULTI ITEM WITH - 99 +
             default:

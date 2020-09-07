@@ -81,7 +81,7 @@ class DBManager {
         
         print("did saved menu")
         
-        saveContext()
+        saveContext(menu.menuTitle)
         
     }
     
@@ -127,9 +127,11 @@ class DBManager {
         mealManaged.detail = meal.details
         mealManaged.imageURL = meal.imageURL
         mealManaged.price = NSDecimalNumber(decimal: meal.price)
+        mealManaged.mealDescription = meal.mealDescription
         
         if let tag = meal.comboTag {
             mealManaged.comboMealTag = NSNumber(value: tag)
+//            print(" TAG \(mealManaged.comboMealTag)")
         }
         
         if let type = meal.comboType?.rawValue {
@@ -147,7 +149,7 @@ class DBManager {
             }
         }
         
-        saveContext()
+        saveContext(meal.name)
         
     }
     
@@ -163,6 +165,9 @@ class DBManager {
             let items = try context.fetch(request)
             
             if let managedItem = items.first {
+                if uid == "H01" {
+                    print(managedItem.comboType)
+                }
                 return Meal(managedObject: managedItem)
             } else {
                 return nil
@@ -199,7 +204,7 @@ class DBManager {
         
         }
         
-        saveContext()
+        saveContext(preference.name)
         
         return preferenceManaged
         
@@ -244,6 +249,8 @@ class DBManager {
         
         itemManaged.uid = item.uid
         
+        itemManaged.itemDescription = item.itemDescription
+        
         if let itemPrice = item.price?.amount {
             itemManaged.price = NSDecimalNumber(decimal: itemPrice)
         }
@@ -252,7 +259,7 @@ class DBManager {
             itemManaged.comboTag = NSNumber(value: itemComboTag)
         }
         
-        saveContext()
+        saveContext(item.name)
         
         return itemManaged
         
@@ -287,12 +294,14 @@ class DBManager {
         }
     }
     
-    func saveContext() {
+    func saveContext(_ t: String) {
         
         do {
              try context.save()
-          } catch {
-              print("cant save")
+            print("did save \(t)")
+          } catch let error {
+            print("cant save \(t) \(error)")
+            
           }
         
     }

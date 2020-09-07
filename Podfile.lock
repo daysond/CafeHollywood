@@ -158,9 +158,6 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - Alamofire (5.2.1)
-  - AlamofireImage (4.1.0):
-    - Alamofire (~> 5.1)
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -236,6 +233,13 @@ PODS:
     - FirebaseAuthInterop (~> 1.1)
     - FirebaseCore (~> 6.6)
     - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseUI/Auth (8.4.2):
+    - Firebase/Auth (~> 6.0)
+    - GoogleUtilities/UserDefaults
+  - FirebaseUI/Email (8.4.2):
+    - FirebaseUI/Auth
+  - FirebaseUI/Phone (8.4.2):
+    - FirebaseUI/Auth
   - GoogleAppMeasurement (6.3.1):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -295,27 +299,24 @@ PODS:
   - RxRelay (5.0.0):
     - RxSwift (~> 5)
   - RxSwift (5.0.0)
-  - Stripe (19.3.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.2)
-  - AlamofireImage (~> 4.1)
   - Firebase
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Firestore
   - Firebase/Storage
   - FirebaseDatabase
+  - FirebaseUI/Auth
+  - FirebaseUI/Email
+  - FirebaseUI/Phone
   - lottie-ios
   - RxCocoa (~> 5)
   - RxSwift (~> 5)
-  - Stripe
 
 SPEC REPOS:
   trunk:
     - abseil
-    - Alamofire
-    - AlamofireImage
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAnalytics
@@ -328,6 +329,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseInstallations
     - FirebaseStorage
+    - FirebaseUI
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -342,12 +344,9 @@ SPEC REPOS:
     - RxCocoa
     - RxRelay
     - RxSwift
-    - Stripe
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
-  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
-  AlamofireImage: c4a2ba349885fb3064feb74d2e547bd42ce9be10
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   Firebase: d55ddb0e0bb3207166cddc028647833d8a1b5b6f
   FirebaseAnalytics: 572e467f3d977825266e8ccd52674aa3e6f47eac
@@ -360,6 +359,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: ce81b0e390174e33c4b713c22c4dbd83e50e07b0
   FirebaseInstallations: 575cd32f2aec0feeb0e44f5d0110a09e5e60b47b
   FirebaseStorage: b43ee271294227e1a3225544b073f3b49b427f46
+  FirebaseUI: e57e9b9c4340631151fbe67a14206d23d0974f37
   GoogleAppMeasurement: c29d405ff76e18551b5d158eaba6753fda8c7542
   GoogleDataTransport: a857c6a002d201b524dd4bc2ed7e7355ed07e785
   GoogleDataTransportCCTSupport: 32f75fbe904c82772fcbb6b6bd4525bfb6f2a862
@@ -374,8 +374,7 @@ SPEC CHECKSUMS:
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
-  Stripe: dd5bfdd5f1daed4f9ddbfb47e9449ec302f9f708
 
-PODFILE CHECKSUM: 00fd5c78eec695097b9f6271f0b39e6c7d400d72
+PODFILE CHECKSUM: 25b710f3af370a421da424e177a15e1758154bac
 
 COCOAPODS: 1.9.3

@@ -15,8 +15,7 @@ target 'HYSOR' do
 	pod 'Firebase/Firestore'
 	pod 'RxSwift', '~> 5'
 	pod 'RxCocoa', '~> 5'
-	pod 'Stripe'
-	pod 'Alamofire', '~> 5.2'
-	pod 'AlamofireImage', '~> 4.1'
-	 
+	pod 'FirebaseUI/Auth'
+	pod 'FirebaseUI/Phone'
+	pod 'FirebaseUI/Email' 
 end

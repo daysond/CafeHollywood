@@ -27,7 +27,7 @@ class MainTabBarViewController: UITabBarController {
         
         tabBar.tintColor = .black
         
-        let homeViewController = HomeViewController()
+        let homeViewController = UINavigationController(rootViewController: HomeViewController())
         let homeTBI = UITabBarItem(title: "HOME", image: UIImage(named: "home-1"), tag: 0)
         homeViewController.tabBarItem = homeTBI
         
@@ -35,7 +35,7 @@ class MainTabBarViewController: UITabBarController {
         
         let menuNavViewController = UINavigationController(rootViewController: MenuViewController())
 //        let menuNavViewController = MenuViewController()
-        menuNavViewController.tabBarItem = UITabBarItem(title: "MENU", image: UIImage(named: "menu-1"), tag: 1)
+        menuNavViewController.tabBarItem = UITabBarItem(title: "MENU", image: UIImage(named: "menu"), tag: 1)
         
         
         

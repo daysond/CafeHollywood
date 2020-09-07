@@ -82,7 +82,8 @@ extension UIColor {
     static let whiteSmoke =  UIColor(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1.0)
     static let ghostWhite = UIColor(red: 248/255.0, green: 248/255.0, blue: 248/255.0, alpha: 1)
     static let black85 = UIColor(red: 0/255.0, green: 0/255.0, blue:  0/255.0, alpha: 0.85)
-    
+    static let smokyBlack = UIColor(red: 18/255.0, green: 18/255.0, blue:  18/255.0, alpha: 1.0)
+    static let starYellow = UIColor(red: 255.0/255.0, green: 149.0/255.0, blue:  15.0/255.0, alpha: 1.0)
     func isEqualToColor(_ color: UIColor) -> Bool {
         
         var red:CGFloat = 0
@@ -109,6 +110,8 @@ extension Notification.Name {
     
     static let didTapModifyButton = Notification.Name("didTapModifyButton")
     static let updateFavouriteListTableView = Notification.Name("updateFavouriteListTableView")
+    static let didUpdateOrderStatus = Notification.Name("didUpdateOrderStatus")
+    static let authStateDidChange = Notification.Name("authStateDidChange")
     
 }
 
@@ -163,4 +166,20 @@ extension NSManagedObjectContext {
         let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: result?.result as? [NSManagedObjectID] ?? []]
         NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [self])
     }
+}
+
+extension UILabel {
+    
+     func intrinsicHeight(width: CGFloat) -> CGFloat{
+
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = self.font
+        label.text = self.text
+        label.sizeToFit()
+
+        return label.frame.height
+    }
+    
 }

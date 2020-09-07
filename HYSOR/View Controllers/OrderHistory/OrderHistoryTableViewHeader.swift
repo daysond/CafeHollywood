@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReceiptTableViewHeader: UIView {
+class OrderHistoryTableViewHeader: UIView {
     
     private let headerImageView = DimmedImageView()
     
@@ -17,7 +17,7 @@ class ReceiptTableViewHeader: UIView {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         l.text = "BIG TITLE BIG TITLE BIG TITLE TITLETITLE TITLETITLE TITLETITLE"
-        l.numberOfLines = 2
+        l.numberOfLines = 1
         l.textColor = .white
         l.textAlignment = .center
         return l
@@ -37,7 +37,7 @@ class ReceiptTableViewHeader: UIView {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         l.text = "Order Completed"
-        l.numberOfLines = 0
+        l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
         return l
@@ -46,10 +46,10 @@ class ReceiptTableViewHeader: UIView {
     private let dateLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 14)
+        l.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         l.text = "Sun Jan 01 2019"
-        l.numberOfLines = 0
-        l.textColor = .darkGray
+        l.numberOfLines = 1
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -57,10 +57,10 @@ class ReceiptTableViewHeader: UIView {
     private let orderIDLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 14)
+        l.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         l.text = "AS23AS"
-        l.numberOfLines = 0
-        l.textColor = .darkGray
+        l.numberOfLines = 1
+        l.textColor = .white
         l.textAlignment = .left
         return l
     }()
@@ -86,9 +86,14 @@ class ReceiptTableViewHeader: UIView {
             headerImageView.heightAnchor.constraint(equalToConstant: 100),  //100
             
             titleLabel.centerXAnchor.constraint(equalTo: headerImageView.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32),
             titleLabel.widthAnchor.constraint(equalTo: headerImageView.widthAnchor, multiplier: 0.8),
-//            titleLabel.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: dateLabel.topAnchor, constant: -8),
+  
+            dateLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
+            dateLabel.centerYAnchor.constraint(equalTo: headerImageView.centerYAnchor),
+            
+            orderIDLabel.centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor),
+            orderIDLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8),
             
             statusImageView.leadingAnchor.constraint(equalTo: headerImageView.leadingAnchor),
             statusImageView.topAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: 16), //16
@@ -97,17 +102,10 @@ class ReceiptTableViewHeader: UIView {
             
             statusLabel.leadingAnchor.constraint(equalTo: statusImageView.trailingAnchor, constant: 8),
             statusLabel.centerYAnchor.constraint(equalTo: statusImageView.centerYAnchor),
-//            statusLabel.heightAnchor.constraint(equalToConstant: 24), //  14
+
+
             
-            dateLabel.leadingAnchor.constraint(equalTo: statusLabel.leadingAnchor),
-            dateLabel.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 8), // 8
-//            dateLabel.heightAnchor.constraint(equalToConstant: 24), // 14
-            
-            orderIDLabel.leadingAnchor.constraint(equalTo: statusLabel.leadingAnchor),
-            orderIDLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8), //8
-//            orderIDLabel.heightAnchor.constraint(equalToConstant: 24), //14 + 16
-            
-            //total height = 192
+            //total height = 140
         
         
         ])

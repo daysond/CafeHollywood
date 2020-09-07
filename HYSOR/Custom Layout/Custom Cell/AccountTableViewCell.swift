@@ -19,7 +19,7 @@ class AccountTableViewCell: UITableViewCell {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "title"
         l.numberOfLines = 1
-        l.textColor = .black
+        l.textColor = .darkGray
         l.textAlignment = .left
         l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return l
@@ -77,18 +77,18 @@ class AccountTableViewCell: UITableViewCell {
     
     func configureCellForField(_ field: AccountField) {
         
-        titleLabel.text = field.rawValue
+        titleLabel.text = field.rawValue.uppercased()
         
         switch field {
         
         case .email:
-            contentLabel.text = User.shared.email
+            contentLabel.text = APPSetting.customerEmail
             
         case .name:
-            contentLabel.text = User.shared.name
+            contentLabel.text = APPSetting.customerName
             
         case .phone:
-            contentLabel.text = "+1 416-123-8888"
+            contentLabel.text = APPSetting.customerPhoneNumber
             
         case .password:
             contentLabel.text = "******"

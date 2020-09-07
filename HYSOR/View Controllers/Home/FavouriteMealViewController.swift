@@ -43,7 +43,7 @@ class FavouriteMealViewController: MealViewController {
     @objc
     private func didTapSave() {
         
-        APPSetting.shared.favouriteMeals[index] = meal
+        APPSetting.favouriteMeals[index] = meal
         storePreferenceForMeal(meal)
         self.delegate?.updateFavouriteTableView()
         self.dismiss(animated: true, completion: nil)
@@ -67,12 +67,12 @@ class FavouriteMealViewController: MealViewController {
         
         if meal.isFavourite {
           
-            User.unfavouriteMeal(uid: meal.uid)
+            APPSetting.unfavouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartEmpty"), for: .normal)
             
         } else {
             
-            User.favouriteMeal(uid: meal.uid)
+            APPSetting.favouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartFilled"), for: .normal)
         }
         

@@ -16,13 +16,14 @@ class HomeViewController: UIViewController {
     
     let orderNowButton = BlackButton()
     
-    let favButton = BlackButton()
+    let quickOrderButton = BlackButton()
     
     private var menuLauncher: SlideInMenuLauncher?
     
     private  var scheduelerView: SchedulerView?
     private  var paxView: PaxView?
     private  var favouriteView: FavouriteView?
+    private let loadingView = LoadingViewController(animationFileName: "dotsLoading")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,10 @@ class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(pushPreferenceVC(_:)), name: .didTapModifyButton, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
     //MARK: - SET UP
     
     private func setupView() {
@@ -52,17 +57,22 @@ class HomeViewController: UIViewController {
         orderNowButton.layer.cornerRadius = 4
         view.addSubview(orderNowButton)
         
-        favButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
-        favButton.addTarget(self, action: #selector(favButtonTapped), for: .touchUpInside)
-        favButton.layer.cornerRadius = 4
-        view.addSubview(favButton)
+        quickOrderButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
+        quickOrderButton.addTarget(self, action: #selector(quickOrderButtonTapped), for: .touchUpInside)
+        quickOrderButton.layer.cornerRadius = 4
+        view.addSubview(quickOrderButton)
         
         NSLayoutConstraint.activate([
             
             
             
+            quickOrderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            quickOrderButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -48),
+            quickOrderButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
+            quickOrderButton.heightAnchor.constraint(equalToConstant: 40),
+            
             reservationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            reservationButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -48),
+            reservationButton.topAnchor.constraint(equalTo: quickOrderButton.bottomAnchor, constant: 16),
             reservationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
             reservationButton.heightAnchor.constraint(equalToConstant: 40),
             
@@ -70,11 +80,6 @@ class HomeViewController: UIViewController {
             orderNowButton.topAnchor.constraint(equalTo: reservationButton.bottomAnchor, constant: 16),
             orderNowButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
             orderNowButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            favButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            favButton.topAnchor.constraint(equalTo: orderNowButton.bottomAnchor, constant: 16),
-            favButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
-            favButton.heightAnchor.constraint(equalToConstant: 40),
             
         ])
         
@@ -90,6 +95,7 @@ class HomeViewController: UIViewController {
     
     @objc
     private func reservationTapped() {
+        
         let width = view.frame.width
         let paxView = PaxView(frame: CGRect(x: 0, y: 0, width: width, height: 120))
         let schedulerView = SchedulerView(frame: CGRect(x: 0, y: 120, width: width, height: 300))
@@ -109,23 +115,41 @@ class HomeViewController: UIViewController {
     }
     
     @objc func didConfirmReservation() {
-        let date = self.scheduelerView?.selectedDate ?? "Now"
-        let partySize = self.paxView?.paxSize ?? 2
-        print("\(date) for \(partySize)")
+        
+        let date = self.scheduelerView!.selectedDate
+        let pax = self.paxView!.paxSize
         menuLauncher?.dismissMenu()
-        showAlert(alertTitile: "Your reservation for party of \(partySize) on \(date) has been confirmed!", message: nil, actionTitle: "Manage Reservation", action: showReservation)
+        
+        createLoadingView()
+        let reservation = Reservation(pax: pax, date: date)
+        //upload reservation
+        
+        NetworkManager.shared.sendReservation(reservation) { [self] (err) in
+            guard err == nil else { return }
+            
+            DispatchQueue.main.async {
+                let rvc = ReservationViewController(reservation: reservation)
+                rvc.modalPresentationStyle = .popover
+                self.navigationController?.pushViewController(rvc, animated: true)
+                
+                self.dismissLoadingView()
+                
+            }
+        }
+        
+
     }
 
-    @objc private func favButtonTapped() {
+    @objc private func quickOrderButtonTapped() {
         
         let width = view.frame.width
         let height = view.frame.height * 2.0/3.0
         self.favouriteView  = FavouriteView(frame: CGRect(x: 0, y: 0, width: width, height: height))
         favouriteView?.addToCartButton.addTarget(self, action: #selector(addFavouriteToCart), for: .touchUpInside)
         favouriteView?.cancelButton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
-        for (index, meal) in APPSetting.shared.favouriteMeals.enumerated() {
+        for (index, meal) in APPSetting.favouriteMeals.enumerated() {
             if meal.isSelected {
-                APPSetting.shared.favouriteMeals[index].isSelected = false
+                APPSetting.favouriteMeals[index].isSelected = false
             }
         }
         launchMenu(view: favouriteView!, height: height)
@@ -134,15 +158,20 @@ class HomeViewController: UIViewController {
     
     @objc private func addFavouriteToCart() {
         var count = 0
-        for (index, meal) in APPSetting.shared.favouriteMeals.enumerated() {
+        for (index, meal) in APPSetting.favouriteMeals.enumerated() {
             if meal.isSelected {
-                APPSetting.shared.favouriteMeals[index].isSelected = false
+                APPSetting.favouriteMeals[index].isSelected = false
                 Cart.shared.meals.append(meal)
                 count += 1
             }
         }
         
-        showAlert(alertTitile: "Successfully added \(count) meals to cart!", message: nil, actionTitle: "View Cart", action: showCart)
+//        showAlert(alertTitile: "Successfully added \(count) meals to cart!", message: nil, actionTitle: "View Cart", action: showCart)
+        let cartVC = CartViewController()
+        let nav = UINavigationController(rootViewController: cartVC)
+        nav.modalPresentationStyle = .automatic
+        self.present(nav, animated: true, completion: nil)
+
         dismissMenu()
         
     }
@@ -157,7 +186,7 @@ class HomeViewController: UIViewController {
 
         if let data = notification.userInfo as? [String: Int], let index = data["index"] {
             
-            let meal = APPSetting.shared.favouriteMeals[index]
+            let meal = APPSetting.favouriteMeals[index]
             let mealViewController = FavouriteMealViewController(meal:meal, index: index)
             mealViewController.delegate = favouriteView
             mealViewController.modalPresentationStyle = .popover
@@ -168,23 +197,42 @@ class HomeViewController: UIViewController {
         
     }
     
+    //MARK: - HELPERS
+    
+    private func createLoadingView() {
+        
+        addChild(loadingView)
+        loadingView.view.frame = view.frame
+        view.addSubview(loadingView.view)
+        loadingView.didMove(toParent: self)
+        
+    }
+    
+    private func dismissLoadingView() {
+        
+        loadingView.willMove(toParent: nil)
+        loadingView.view.removeFromSuperview()
+        loadingView.removeFromParent()
+        
+    }
+    
     //MARK: - SHOW ALERT
     
     
-    private func showAlert(alertTitile: String, message: String?, actionTitle: String, action: @escaping () -> Void ) {
-        
-        let alert = UIAlertController(title: alertTitile, message: message, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: { (_) in
-            action()
-        }))
-     
-
-        self.present(alert, animated: true)
-
-    }
-    
+//    private func showAlert(alertTitile: String, message: String?, actionTitle: String, action: @escaping () -> Void ) {
+//
+//        let alert = UIAlertController(title: alertTitile, message: message, preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//        alert.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: { (_) in
+//            action()
+//        }))
+//
+//
+//        self.present(alert, animated: true)
+//
+//    }
+//
     
     private func showCart() {
         

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReceiptTableViewFooter: UIView {
+class OrderHistoryTableViewFooter: UIView {
 
     private let totalLabel: UILabel = {
         let l = UILabel()
@@ -32,7 +32,7 @@ class ReceiptTableViewFooter: UIView {
         return l
     }()
     
-    private let viewReceiptButton = BlackButton()
+
     
     
     override init(frame: CGRect) {
@@ -42,9 +42,9 @@ class ReceiptTableViewFooter: UIView {
         
         addSubview(totalLabel)
         addSubview(tipLabel)
-        addSubview(viewReceiptButton)
+    
         
-        viewReceiptButton.configureTitle(title: "View Receipt")
+        
         
         NSLayoutConstraint.activate([
         
@@ -54,11 +54,7 @@ class ReceiptTableViewFooter: UIView {
             tipLabel.leadingAnchor.constraint(equalTo: totalLabel.trailingAnchor, constant: 16),
             tipLabel.topAnchor.constraint(equalTo: totalLabel.topAnchor),
             
-            viewReceiptButton.topAnchor.constraint(equalTo: totalLabel.bottomAnchor, constant: 16),
-            viewReceiptButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            viewReceiptButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            viewReceiptButton.heightAnchor.constraint(equalToConstant: 48),
-        
+
             // height = 16 + 18 + 16 + 48 + 16 = 114
     
         ])

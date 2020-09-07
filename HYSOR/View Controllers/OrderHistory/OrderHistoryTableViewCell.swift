@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReceiptTableViewCell: UITableViewCell {
+class OrderHistoryTableViewCell: UITableViewCell {
     
     static var identifier: String {
         return String(describing: self)

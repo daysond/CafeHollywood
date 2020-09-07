@@ -14,7 +14,7 @@ enum AccountField: String {
     case phone = "Phone Number"
     case name = "Name"
     case password = "Password"
-    case reservation = "Manage Reservation"
+    case reservation = "My Reservation"
     case favourite = "My Favourite"
     case about = "About"
     
@@ -44,15 +44,19 @@ class AccountViewController: UIViewController {
         
         setupView()
         
-        self.navigationItem.title = "Hi, \(User.shared.name)"
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.title = "Hi, \(APPSetting.customerName)"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     
     private func setupView() {
         
-        print(NetworkManager.shared.isAuth)
         view.backgroundColor = .white
         myTableView.dataSource = self
         myTableView.delegate = self
@@ -96,10 +100,12 @@ class AccountViewController: UIViewController {
         do {
             try NetworkManager.shared.signOut()
             print(NetworkManager.shared.isAuth)
-            let nav = UINavigationController(rootViewController: LoginViewController())
+//            let nav = UINavigationController(rootViewController: LoginViewController())
+            let nav = UINavigationController(rootViewController: AuthHomeViewController())
+//            let authVC = AuthHomeViewController()
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: true) {
-                
+                NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": false])
             }
         } catch let error as NSError {
             print(error.localizedDescription)
@@ -113,15 +119,37 @@ class AccountViewController: UIViewController {
         switch field {
         case .favourite:
             
-            let nvc = UINavigationController(rootViewController: ManageFavouriteViewController())
-            nvc.modalPresentationStyle = .popover
-            self.present(nvc, animated: true, completion: nil)
+            self.navigationItem.title = ""
+       
+            self.navigationController?.pushViewController(ManageFavouriteViewController(), animated: true)
+            
+        case .reservation:
+            
+            self.navigationItem.title = ""
+       
+            self.navigationController?.pushViewController(ManageReservationViewController(), animated: true)
+  
+        case .about:
+            
+            return
             
         default:
-            print(field.rawValue)
+            
+            let updateProfileVC = UpdateProfileViewController(field: field)
+            
+            self.navigationController?.pushViewController(updateProfileVC, animated: true)
+            
         }
         
         
+        
+    }
+    
+    private func presentController(_ vc: UIViewController, style: UIModalPresentationStyle) {
+        
+        let nvc = UINavigationController(rootViewController: vc)
+        nvc.modalPresentationStyle = style
+        self.present(nvc, animated: true, completion: nil)
         
     }
     

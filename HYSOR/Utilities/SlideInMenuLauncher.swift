@@ -17,6 +17,7 @@ class SlideInMenuLauncher: NSObject {
     
     let menuHeight: CGFloat
     
+    var cornerRadius: CGFloat = 4
     
     
     init(blackView: UIView, menuView: UIView, menuHeight height: CGFloat) {
@@ -24,9 +25,15 @@ class SlideInMenuLauncher: NSObject {
         self.menuHeight = height
         self.blackView = blackView
         super.init()
-        
-       
-          
+
+    }
+    
+    init(blackView: UIView, menuView: UIView, menuHeight height: CGFloat, menuViewCornerRadius: CGFloat) {
+        self.menuView = menuView
+        self.menuHeight = height
+        self.blackView = blackView
+        super.init()
+        cornerRadius = menuViewCornerRadius
     }
     
     func showMenu() {
@@ -48,7 +55,8 @@ class SlideInMenuLauncher: NSObject {
             let y = keyWindow.frame.height - menuHeight - 16
             
             menuView.frame = CGRect(x: 0, y: keyWindow.frame.height, width: keyWindow.frame.width, height: menuHeight)
-            
+            menuView.clipsToBounds = true
+            menuView.layer.cornerRadius = cornerRadius
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 

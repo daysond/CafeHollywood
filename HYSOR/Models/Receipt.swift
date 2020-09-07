@@ -54,13 +54,12 @@ enum OrderStatus: Int {
 }
 
 
-struct Receipt {
+class Receipt {
     
     let orderID: String
     let customerID: String
-    let restaurantID: String
     let orderTimestamp: String
-    let paymentMethod: String
+    let orderNote: String
     let discount: Double
     let promotion: Double
     let subtotal: Double
@@ -68,23 +67,23 @@ struct Receipt {
     let total:Double
     let mealsInfo: [MealInfo]
     let restaurantName: String
-    var orderStatus: OrderStatus
+    var status: OrderStatus
     let customerName: String
     
     
     init?(id: String, data: [String: Any]) {
 
         guard let customerID = data["customerID"] as? String,
-            let restaurantID = data["restaurantID"] as? String,
+        
             let restaurantName = data["restaurantName"] as? String,
             let orderTimestamp = data["orderTimestamp"] as? String,
-            let paymentMethod = data["paymentMethod"] as? String,
+            let orderNote = data["orderNote"] as? String,
             let discount = data["discount"] as? Double,
             let promotion = data["promotion"] as? Double,
             let taxes = data["taxes"] as? Double,
             let subtotal = data["subtotal"] as? Double,
             let total = data["total"] as? Double,
-            let orderStatusInt = data["orderStatus"] as? Int,
+            let orderStatusInt = data["status"] as? Int,
             let customerName = data["customerName"] as? String,
             let orderStatus = OrderStatus(rawValue: orderStatusInt),
             let mealsInfo = data["mealsInfo"] as? [Dictionary<String,Any>]
@@ -100,9 +99,9 @@ struct Receipt {
 
         self.orderID = id
         self.customerID = customerID
-        self.restaurantID = restaurantID
+   
         self.orderTimestamp = orderTimestamp
-        self.paymentMethod = paymentMethod
+        self.orderNote = orderNote
         self.discount = discount
         self.promotion = promotion
         self.subtotal = subtotal
@@ -111,7 +110,7 @@ struct Receipt {
         self.mealsInfo = mealsInfoObj
         self.restaurantName = restaurantName
         self.customerName = customerName
-        self.orderStatus = orderStatus
+        self.status = orderStatus
 
     }
     
@@ -126,7 +125,9 @@ struct MealInfo {
     let totalPrice: Double
     let addOnInfo: String
     let instruction: String
-    
+//    let mealDescription: String
+//    let addOnDescription: String
+//
     init?(id: String, data: [String: Any]) {
         
         guard
@@ -135,6 +136,8 @@ struct MealInfo {
             let totalPrice = data["totalPrice"] as? Double,
             let addOnInfo = data["addOnInfo"] as? String,
             let instruction = data["instruction"] as? String
+//            let addOnDescription = data["addOnDescription"] as? String,
+//            let mealDescription = data["description"] as? String
             else { return nil }
         
         self.mealInfoID = id
@@ -143,6 +146,8 @@ struct MealInfo {
         self.totalPrice = totalPrice
         self.addOnInfo = addOnInfo
         self.instruction = instruction
+//        self.addOnDescription = addOnDescription
+//        self.mealDescription = mealDescription
         
     }
     

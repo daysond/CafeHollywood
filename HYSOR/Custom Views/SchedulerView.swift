@@ -100,14 +100,14 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
 
     }
     
-    @objc
-    private func doneTapped() {
-
-
-        print(selectedDate)
-
-    }
-    
+//    @objc
+//    private func doneTapped() {
+//
+//
+//        print(selectedDate)
+//
+//    }
+//
 
     
     

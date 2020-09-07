@@ -2,7 +2,7 @@
 //  MealManaged+CoreDataClass.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-18.
+//  Created by Dayson Dong on 2020-09-06.
 //
 //
 

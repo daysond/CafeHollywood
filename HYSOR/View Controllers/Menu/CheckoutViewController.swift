@@ -7,15 +7,8 @@
 //
 
 import UIKit
-import Stripe
-import Alamofire
 
-enum PaymentMethod {
-    case online
-    case inStore
-}
-
-class CheckoutViewController: UIViewController, STPAuthenticationContext {
+class CheckoutViewController: UIViewController {
 
     internal let optionsTableView: UITableView = {
         let tb = UITableView()
@@ -35,11 +28,6 @@ class CheckoutViewController: UIViewController, STPAuthenticationContext {
     internal let kChangeButtonWidth: CGFloat = 88.0
     
     internal var menuLauncher: SlideInMenuLauncher?
-    
-    internal var paymentContext: STPPaymentContext?
-    internal var customerContext: STPCustomerContext?
-    
-    internal var paymentMethod: PaymentMethod = .online
     
     internal weak var scheduelerView: SchedulerView?
     
@@ -70,10 +58,10 @@ class CheckoutViewController: UIViewController, STPAuthenticationContext {
         
         let cutlery = CustomOption(mainImageNmae: "cutlery", mainTitle: "UTENSILS, STRAWS, ETC", subTitle: "No, thank you.", subImageName: nil, optionType: .utensil)
         let pickupTime = CustomOption(mainImageNmae: "clock", mainTitle: "PICK UP TIME", subTitle: "Now", subImageName: nil, optionType: .scheduler)
-        let paymentMethod = CustomOption(mainImageNmae: "creditCard", mainTitle: "PAYMENT METHOD", subTitle: "Visa", subImageName: nil, optionType: .payment)
+//        let paymentMethod = CustomOption(mainImageNmae: "creditCard", mainTitle: "PAYMENT METHOD", subTitle: "Visa", subImageName: nil, optionType: .payment)
         let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: "", subImageName: nil, optionType: .note)
         
-        options = [cutlery, pickupTime, paymentMethod, note]
+        options = [cutlery, pickupTime, note]
    
     }
     
@@ -137,58 +125,28 @@ class CheckoutViewController: UIViewController, STPAuthenticationContext {
     }
     
     
-    func setupSTP() {
-        
-        let config = STPPaymentConfiguration.shared()
-        //        config.additionalPaymentOptions = .applePay
-        config.companyName = "DSN TECH"
-        let theme = STPTheme()
-        theme.accentColor = .black
-        paymentContext = STPPaymentContext(customerContext: customerContext!, configuration: config, theme: theme)
-        
-        self.paymentContext!.delegate = self
-        self.paymentContext!.hostViewController = self
-        self.paymentContext!.paymentAmount = Cart.shared.cartTotal.amountInCents
-        self.paymentContext?.paymentCurrency = "cad"
-        
-    }
-    
-    func authenticationPresentingViewController() -> UIViewController {
-        return self
-    }
+
     
     //MARK: - ACTION
     
     @objc func placeOrder() {
         
-        switch paymentMethod {
-            
-        case .online:
-            // send order && add listener to the oder status
-            print("sending order")
-            NetworkManager.shared.sendOrder { (error) in
-                guard error == nil else { return }
-                NetworkManager.shared.orderStatusDelegate = self
-                print("order sent")
-            }
-            
-            // now go to update status delegate
-            
-        case .inStore:
-            print("in store")
+        // send order && add listener to the oder status
+        print("sending order")
+        NetworkManager.shared.placeOrder { (error) in
+            guard error == nil else { return }
+            NetworkManager.shared.orderStatusDelegate = self
+            self.dismiss(animated: true, completion: nil)
+            Cart.resetCart()
+            self.tabBarController?.selectedIndex = 2
         }
-        print("place order logic here")
         
+        // now go to update status delegate
+        
+
     }
     
-    
-    @objc func addCardButtonTapp() {
-        
-        let addCardViewController = STPAddCardViewController()
-        addCardViewController.delegate = self
-        navigationController?.pushViewController(addCardViewController, animated: true)
-        
-    }
+
     
     @objc private func backButtonTapped() {
          
@@ -252,109 +210,6 @@ extension CheckoutViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 
-
-//MARK: - STP DELEGATE
-
-
-extension CheckoutViewController: STPAddCardViewControllerDelegate {
-
-    func addCardViewControllerDidCancel(_ addCardViewController: STPAddCardViewController) {
-        navigationController?.popViewController(animated: true)
-    }
-
-    func addCardViewController(_ addCardViewController: STPAddCardViewController, didCreatePaymentMethod paymentMethod: STPPaymentMethod, completion: @escaping STPErrorBlock) {
-        //        paymentMethod.stripeId
-        print(paymentMethod.stripeId)
-        addCardViewController.dismiss(animated: true, completion: nil)
-
-    }
-
-}
-
-extension CheckoutViewController: STPPaymentContextDelegate{
-    
-    func paymentContextDidChange(_ paymentContext: STPPaymentContext) {
-    
-        //        self.activityIndicator.animating = paymentContext.loading
-        //        self.paymentButton.enabled = paymentContext.selectedPaymentOption != nil
-        //        self.paymentLabel.text = paymentContext.selectedPaymentOption?.label
-        //        self.paymentIcon.image = paymentContext.selectedPaymentOption?.image
-        for option in options {
-            if option.optionType == .payment {
-                option.subTitle = paymentContext.selectedPaymentOption?.label ?? "Please select a payment method"
-                optionsTableView.reloadData()
-                break
-            }
-        }
-    }
-    
-    func paymentContext(_ paymentContext: STPPaymentContext, didFailToLoadWithError error: Error) {
-        self.navigationController?.popViewController(animated: true)
-        // Show the error to your user, etc.
-    }
-    
-    
-    func paymentContext(_ paymentContext: STPPaymentContext, didCreatePaymentResult paymentResult: STPPaymentResult, completion: @escaping STPPaymentStatusBlock) {
-        
-        StripeAPIClient.shared.createPaymenintent(paymentContext: paymentContext) { [self] (paymentIntentResponse, error) in
-                    guard error == nil else {
-                        print(error!)
-//                        self.displayStatus(error!.localizedDescription)
-                        return
-                    }
-                    
-                    guard let responseDict = paymentIntentResponse as? [String : Any] else {
-                        print("wrong data")
-                        return
-                    }
-
-                       let clientSecret = responseDict["clientSecret"] as! String //local server
-                    
-                    
-                    let paymentIntentParams = STPPaymentIntentParams(clientSecret: clientSecret)
-                    paymentIntentParams.paymentMethodId = paymentResult.paymentMethod?.stripeId
-                    paymentIntentParams.paymentMethodParams = paymentResult.paymentMethodParams
-                    //                    let paymentMethodParams = STPPaymentMethodParams(card: self.paymentTextField.cardParams, billingDetails: nil, metadata: nil)
-                    //                    paymentIntentParams.paymentMethodParams = paymentMethodParams
-                    STPPaymentHandler.shared().confirmPayment(withParams: paymentIntentParams, authenticationContext: self) { (status, paymenintent, error) in
-                        
-                        switch status {
-                            
-                        case .succeeded:
-                            self.didFinishPayment()
-                            print("paid \(paymenintent?.amount)")
-                        case .failed:
-                            print(error?.localizedDescription)
-                          
-                        case .canceled:
-                           print("cancelled")
-                        @unknown default:
-                            print("defauklt")
-                        }
-                    }
-                }
-    
-    }
-    
-    func paymentContext(_ paymentContext: STPPaymentContext, didFinishWith status: STPPaymentStatus, error: Error?) {
-        
-                switch status {
-                case .error:
-//                    self.showError(error)
-                    print("hellp?")
-                case .success:
-//                    self.showReceipt()
-                    print("succeesssss?????")
-                case .userCancellation:
-                    return // Do nothing
-                @unknown default:
-                    return 
-        }
-        
-    }
- 
-}
-
 //MARK: - UPDATE STATUS DELEGATE
 
 extension CheckoutViewController: OrderStatusUpdateDelegate {
@@ -366,7 +221,6 @@ extension CheckoutViewController: OrderStatusUpdateDelegate {
             
         case .confirmed:
             print("order confirmed")
-            self.paymentContext?.requestPayment()
             
         case .cancelled:
             

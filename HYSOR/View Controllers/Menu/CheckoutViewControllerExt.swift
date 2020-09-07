@@ -23,8 +23,8 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
         case .scheduler:
             handleScheduler()
             
-        case .payment:
-            handlePayment()
+//        case .payment:
+//            handlePayment()
             
         case .note:
             let instructionVC = InstructionsInputViewController()
@@ -41,29 +41,29 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
         optionsTableView.reloadData()
     }
     
-    private func handlePayment() {
-        
-        let creditCardButton = BlackButton()
-        creditCardButton.configureButton(headTitleText: "Credit/Debit Card", titleColor: .black, backgroud: UIColor.white)
-        creditCardButton.addTarget(self, action: #selector(didTapCreditCardButton), for: .touchUpInside)
-        
-        let payAtStoreButton = BlackButton()
-        payAtStoreButton.configureButton(headTitleText: "Pay At Restaurant", titleColor: .black, backgroud: UIColor.white)
-        payAtStoreButton.addTarget(self, action: #selector(didTapPayAtStoreButton), for: .touchUpInside)
-        
-        let cancelButton = BlackButton()
-        cancelButton.configureTitle(title: "Cancel")
-        cancelButton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
-        
-        let menuStackView = UIStackView(arrangedSubviews: [creditCardButton, payAtStoreButton, cancelButton])
-        menuStackView.axis = .vertical
-        menuStackView.distribution = .fillEqually
-        menuStackView.spacing = 0
-
-        let height = Constants.kOrderButtonHeightConstant * 3 + 40
-        launchMenu(view: menuStackView, height: height)
-        
-    }
+//    private func handlePayment() {
+//
+//        let creditCardButton = BlackButton()
+//        creditCardButton.configureButton(headTitleText: "Credit/Debit Card", titleColor: .black, backgroud: UIColor.white)
+//        creditCardButton.addTarget(self, action: #selector(didTapCreditCardButton), for: .touchUpInside)
+//
+//        let payAtStoreButton = BlackButton()
+//        payAtStoreButton.configureButton(headTitleText: "Pay At Restaurant", titleColor: .black, backgroud: UIColor.white)
+//        payAtStoreButton.addTarget(self, action: #selector(didTapPayAtStoreButton), for: .touchUpInside)
+//
+//        let cancelButton = BlackButton()
+//        cancelButton.configureTitle(title: "Cancel")
+//        cancelButton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
+//
+//        let menuStackView = UIStackView(arrangedSubviews: [creditCardButton, payAtStoreButton, cancelButton])
+//        menuStackView.axis = .vertical
+//        menuStackView.distribution = .fillEqually
+//        menuStackView.spacing = 0
+//
+//        let height = Constants.kOrderButtonHeightConstant * 3 + 40
+//        launchMenu(view: menuStackView, height: height)
+//
+//    }
     
     private func handleScheduler() {
         let schedulerView = SchedulerView()
@@ -100,19 +100,19 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
         menuLauncher?.dismissMenu()
     }
     
-    @objc func didTapCreditCardButton() {
-        
-        menuLauncher?.dismissMenu()
-        paymentMethod = .online
-        paymentContext?.pushPaymentOptionsViewController()
-    }
-    
-    @objc func didTapPayAtStoreButton() {
-        
-        paymentMethod = .inStore
-        updateOptionOfType(.payment, with: "Pay at the restaurant")
-        menuLauncher?.dismissMenu()
-    }
+//    @objc func didTapCreditCardButton() {
+//        
+//        menuLauncher?.dismissMenu()
+//        paymentMethod = .online
+//        paymentContext?.pushPaymentOptionsViewController()
+//    }
+//    
+//    @objc func didTapPayAtStoreButton() {
+//        
+//        paymentMethod = .inStore
+//        updateOptionOfType(.payment, with: "Pay at the restaurant")
+//        menuLauncher?.dismissMenu()
+//    }
     
     //MARK: - HELPERS
     
@@ -133,6 +133,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
     
     func didInputInstructions(_ instructions: String) {
         
+        Cart.shared.orderNote = instructions
         updateOptionOfType(.note, with: instructions)
 
     }

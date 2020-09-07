@@ -2,7 +2,7 @@
 //  PreferenceItemManaged+CoreDataProperties.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-18.
+//  Created by Dayson Dong on 2020-09-06.
 //
 //
 
@@ -20,11 +20,12 @@ extension PreferenceItemManaged {
     @NSManaged public var name: String?
     @NSManaged public var price: NSDecimalNumber?
     @NSManaged public var uid: String?
-    @NSManaged public var preferences: NSSet?
+    @NSManaged public var itemDescription: String?
+    @NSManaged public var preference: NSSet?
 
 }
 
-// MARK: Generated accessors for preferences
+// MARK: Generated accessors for preference
 extension PreferenceItemManaged {
 
     @objc(addPreferenceObject:)
@@ -40,4 +41,3 @@ extension PreferenceItemManaged {
     @NSManaged public func removeFromPreference(_ values: NSSet)
 
 }
-
