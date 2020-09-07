@@ -119,7 +119,9 @@ class AccountViewController: UIViewController {
         switch field {
         case .favourite:
             
-            presentController(ManageFavouriteViewController(), style: .popover)
+            self.navigationItem.title = ""
+       
+            self.navigationController?.pushViewController(ManageFavouriteViewController(), animated: true)
             
         case .reservation:
             

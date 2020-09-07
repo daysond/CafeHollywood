@@ -17,6 +17,7 @@ class ReceiptView: UIView {
         let tb = UITableView()
         tb.separatorStyle = .singleLine
 //        tb.translatesAutoresizingMaskIntoConstraints = false
+        tb.allowsSelection = false
         tb.backgroundColor = .white
         tb.register(CartTableViewCell.self, forCellReuseIdentifier: CartTableViewCell.identifier)
         return tb

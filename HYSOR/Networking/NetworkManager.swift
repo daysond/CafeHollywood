@@ -52,6 +52,7 @@ class NetworkManager {
     
     private var orderStatusListener: ListenerRegistration?
     
+    
     var isAuth: Bool {
         get{
             return Auth.auth().currentUser != nil

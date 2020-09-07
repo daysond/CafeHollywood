@@ -40,6 +40,7 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
         tb.separatorStyle = .singleLine
         tb.translatesAutoresizingMaskIntoConstraints = false
         tb.backgroundColor = .white
+        tb.allowsSelection = false
         tb.register(OrderHistoryTableViewCell.self, forCellReuseIdentifier: OrderHistoryTableViewCell.identifier)
         return tb
     }()

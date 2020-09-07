@@ -17,7 +17,7 @@ class SlideInMenuLauncher: NSObject {
     
     let menuHeight: CGFloat
     
-    var cornerRadius: CGFloat = 0
+    var cornerRadius: CGFloat = 4
     
     
     init(blackView: UIView, menuView: UIView, menuHeight height: CGFloat) {

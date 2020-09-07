@@ -14,10 +14,10 @@ class BlackButton: UIButton {
         didSet{
             
             let isWhite = self.backgroundColor!.isEqualToColor(.white)
-            let isLightGray = self.backgroundColor!.isEqualToColor(.lightGray)
+            let isLightGray = self.backgroundColor!.isEqualToColor(.starYellow)
             
             if isWhite || isLightGray {
-                 backgroundColor = isHighlighted ? .lightGray : .white
+                 backgroundColor = isHighlighted ? .starYellow : .white
             } else {
                 backgroundColor = isHighlighted ? .darkGray : .black
             }

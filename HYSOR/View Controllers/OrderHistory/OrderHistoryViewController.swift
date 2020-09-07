@@ -130,7 +130,6 @@ class OrderHistoryViewController: UIViewController {
     
     private func getClosedReceipts() {
         
-        
         DispatchQueue.global(qos: .background).async {
             let result = NetworkManager.shared.fetchCloseOrders()
             
@@ -209,6 +208,8 @@ class OrderHistoryViewController: UIViewController {
         activeReceipts.removeAll { (r) -> Bool in
             if r.status == status {
                 let timestamp = r.orderTimestamp
+                closedReceipts.append(r)
+                closedReceipts.sort { $0.orderTimestamp > $1.orderTimestamp }
                 NetworkManager.shared.closeOrder(id, status: status, timestamp: timestamp)
             }
             return r.status == status

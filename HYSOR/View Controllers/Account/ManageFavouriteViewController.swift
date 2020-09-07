@@ -44,8 +44,15 @@ class ManageFavouriteViewController: UIViewController {
         
         ])
         
+        navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "My Favourites"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(back))
+        let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(back))
+        navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.leftBarButtonItem = backButton
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
+        
         navigationItem.rightBarButtonItem = editButtonItem
    
         
@@ -53,7 +60,8 @@ class ManageFavouriteViewController: UIViewController {
     }
     
     @objc private func back() {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.popViewController(animated: true)
     }
     
 
