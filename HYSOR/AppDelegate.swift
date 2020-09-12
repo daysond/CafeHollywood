@@ -94,6 +94,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    //MARK: APNs
+    
+    
     func registerForPushNotifications() {
         UNUserNotificationCenter.current()
           .requestAuthorization(options: [.alert, .sound, .badge]) {

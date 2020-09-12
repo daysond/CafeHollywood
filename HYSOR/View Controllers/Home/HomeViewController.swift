@@ -117,11 +117,12 @@ class HomeViewController: UIViewController {
     @objc func didConfirmReservation() {
         
         let date = self.scheduelerView!.selectedDate
+        let time = self.scheduelerView!.selectedTime
         let pax = self.paxView!.paxSize
         menuLauncher?.dismissMenu()
         
         createLoadingView()
-        let reservation = Reservation(pax: pax, date: date)
+        let reservation = Reservation(pax: pax, date: date, time: time)
         //upload reservation
         
         NetworkManager.shared.sendReservation(reservation) { [self] (err) in

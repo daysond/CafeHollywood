@@ -106,7 +106,7 @@ class ReservationViewController: UIViewController {
         
         let calendarImage = UIImageView(image: UIImage(named: "calendar"))
 
-        dateLabel.text = reservation.date
+        dateLabel.text = "\(reservation.date.dropLast(6)) at \(reservation.time)"
         dateLabel.font = .systemFont(ofSize: 18, weight: .regular)
         
         calendarImage.frame = CGRect(x: paxLabel.frame.maxX + 16, y: paxImage.frame.minY, width: paxImage.frame.width, height: paxImage.frame.height)

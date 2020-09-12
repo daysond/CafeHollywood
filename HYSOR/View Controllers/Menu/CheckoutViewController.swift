@@ -135,7 +135,7 @@ class CheckoutViewController: UIViewController {
         print("sending order")
         NetworkManager.shared.placeOrder { (error) in
             guard error == nil else { return }
-            NetworkManager.shared.orderStatusDelegate = self
+//            NetworkManager.shared.orderStatusDelegate = self
             self.dismiss(animated: true, completion: nil)
             Cart.resetCart()
             self.tabBarController?.selectedIndex = 2
@@ -169,14 +169,14 @@ class CheckoutViewController: UIViewController {
     }
 
     
-    private func didFinishPayment() {
-
-            self.navigationController?.dismiss(animated: true)
-
-            Cart.shared.meals = []
-            
-        //then tell the res payment is made !
-    }
+//    private func didFinishPayment() {
+//
+//            self.navigationController?.dismiss(animated: true)
+//
+//            Cart.shared.meals = []
+//
+//        //then tell the res payment is made !
+//    }
     
 
 }
@@ -211,36 +211,36 @@ extension CheckoutViewController: UITableViewDelegate, UITableViewDataSource {
 
 
 //MARK: - UPDATE STATUS DELEGATE
-
-extension CheckoutViewController: OrderStatusUpdateDelegate {
-    
-    func didUpdateStatusOf(order: String, to status: OrderStatus) {
-        
-        // once status is confirmed , request a payment then notify the restaurant the payment status
-        switch status {
-            
-        case .confirmed:
-            print("order confirmed")
-            
-        case .cancelled:
-            
-            return
-            
-        case .ready:
-            
-            return
-            
-        default:
-            return
-        }
-        
-        
-        
-    }
-    
-    
-    
-    
-    
-    
-}
+//
+//extension CheckoutViewController: OrderStatusUpdateDelegate {
+//
+//    func didUpdateStatusOf(order: String, to status: OrderStatus) {
+//
+//        // once status is confirmed , request a payment then notify the restaurant the payment status
+//        switch status {
+//
+//        case .confirmed:
+//            print("order confirmed")
+//
+//        case .cancelled:
+//
+//            return
+//
+//        case .ready:
+//
+//            return
+//
+//        default:
+//            return
+//        }
+//
+//
+//
+//    }
+//
+//
+//
+//
+//
+//
+//}

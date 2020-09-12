@@ -97,11 +97,32 @@ class NetworkManager {
     
     // MARK: - Auth
     
+    func verifyPhoneNumber(_ phone: String, completion: @escaping (String?) -> Void) {
+        
+        
+        PhoneAuthProvider.provider().verifyPhoneNumber(phone, uiDelegate: nil) { (verificationID, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            completion(verificationID)
+        }
+        
+    }
+    
+    
     func signInWith(_ email: String, _ password: String, completion: @escaping (AuthDataResult?, Error?) -> Void) {
         
         Auth.auth().signIn(withEmail: email, password: password) { (authDataResult, error) in
             completion(authDataResult, error)
         }
+        
+        
+    }
+    
+    func singUp() {
+        
         
         
     }

@@ -68,6 +68,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
     private func handleScheduler() {
         let schedulerView = SchedulerView()
         self.scheduelerView = schedulerView
+        scheduelerView?.shouldOnlyShowToday = true
         schedulerView.donebutton.addTarget(self, action: #selector(schedulerViewDismiss), for: .touchUpInside)
         launchMenu(view: schedulerView, height: 300)
         
@@ -91,8 +92,11 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
     //MARK: - ACTIONS
     
     @objc func schedulerViewDismiss() {
-        let date = self.scheduelerView?.selectedDate ?? "Now"
-        updateOptionOfType(.scheduler, with: date)
+        let time = self.scheduelerView?.selectedTime ?? "Now"
+        
+        Cart.shared.pickupTime = time == "Now" ? nil : time
+        
+        updateOptionOfType(.scheduler, with: time)
         menuLauncher?.dismissMenu()
     }
 

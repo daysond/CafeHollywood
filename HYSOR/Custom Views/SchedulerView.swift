@@ -31,26 +31,39 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     private let dateFormatter = DateFormatter()
     private let timeFormatter = DateFormatter()
 
+    
+    private var currentTime:String {
+        get {
+            let hourMinuteFormatter = DateFormatter()
+            hourMinuteFormatter.setLocalizedDateFormatFromTemplate("HH:mm")
+            return hourMinuteFormatter.string(from: Date())
+        }
+    }
     var selectedDate: String {
         get {
             let dateIndex = datePicker.selectedRow(inComponent: 0)
-            let timeIndex = datePicker.selectedRow(inComponent: 1)
-            
             var selectedDate = dates[dateIndex]
-            var selectedTime = time[timeIndex]
-            
             if selectedDate == "Today" {
                 selectedDate = dateFormatter.string(from: Date())
             }
-            
-            if selectedTime == "Now" {
-                selectedTime = timeFormatter.string(from: Date())
-            }
-            
-            return "\(selectedDate), \(selectedTime)"
+            return selectedDate
 
         }
     }
+    
+    var selectedTime: String {
+        get {
+            let timeIndex = datePicker.selectedRow(inComponent: 1)
+            var selectedTime = time[timeIndex]
+            if selectedTime == "Now" && shouldOnlyShowToday == false {
+                selectedTime = timeFormatter.string(from: Date())
+            }
+            return selectedTime
+        }
+    }
+    
+    var shouldOnlyShowToday: Bool = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -100,14 +113,6 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
 
     }
     
-//    @objc
-//    private func doneTapped() {
-//
-//
-//        print(selectedDate)
-//
-//    }
-//
 
     
     
@@ -119,7 +124,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         switch component {
         case 0:
-            return dates.count
+            return shouldOnlyShowToday ? 1 : dates.count
         case 1:
             return time.count
         default:
@@ -129,8 +134,10 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
+
+        
         if component == 0 && row == 0 {
-            time = timeOfToday
+            time = currentTime > "21:30" ? timeOfAll : timeOfToday
         } else {
             let selectedRowInFirstComponent = pickerView.selectedRow(inComponent: 0)
             if selectedRowInFirstComponent != 0 {
@@ -159,9 +166,15 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     private func generateDates() {
         
         let now = Calendar.current.dateComponents(in: .current, from: Date())
+        var j = 13
         
-        for i in 1...13 {
-            let comingDay = DateComponents(year: now.year, month: now.month, day: now.day! + i)
+        if currentTime > "21:30" {
+            dates.removeFirst()
+            j = 14
+        }
+        
+        for i in 1...j {
+            let comingDay = DateComponents(year: now.year, month: now.month, day: now.day! + i )
             let dateOfComingDay = Calendar.current.date(from: comingDay)!
             dates.append(dateFormatter.string(from: dateOfComingDay))
         }
@@ -175,16 +188,17 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         }
         timeOfAll.removeLast()
         
-        let hourMinuteFormatter = DateFormatter()
-        hourMinuteFormatter.setLocalizedDateFormatFromTemplate("HH:mm")
-        let currentTime = hourMinuteFormatter.string(from: Date())
+        
+        
         timeOfToday = timeOfAll.filter { (time) -> Bool in
             time > currentTime
         }
+        
         if currentTime >= "11:00" {
             timeOfToday.insert("Now", at: 0)
         }
-        time = timeOfToday
+        
+        time = currentTime > "21:30" ? timeOfAll : timeOfToday
     }
     
     

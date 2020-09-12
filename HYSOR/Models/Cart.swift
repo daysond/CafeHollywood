@@ -99,6 +99,8 @@ class Cart {
     
     var orderNote: String = ""
     
+    var pickupTime: String?
+    
     var restaurantID: String?
     
     var isEmpty: Bool {
@@ -110,7 +112,7 @@ class Cart {
         
         Cart.shared.meals.removeAll()
         Cart.shared.orderNote = ""
-        
+        Cart.shared.pickupTime = nil
         
     }
     
@@ -133,7 +135,7 @@ extension Cart: JSONRepresentation {
             mealsInfo.append(meal.representation)
         }
         
-        let rep: [String: Any] = [
+        var rep: [String: Any] = [
 
             "customerID": APPSetting.customerUID,
             "customerName": APPSetting.customerName,
@@ -149,7 +151,8 @@ extension Cart: JSONRepresentation {
             "orderTimestamp": orderTimestamp,
 
             "restaurantName" :  "Cafe Hollywood",
-            "status": OrderStatus.unconfirmed.rawValue,
+            "status": pickupTime == nil ? OrderStatus.unconfirmed.rawValue : OrderStatus.scheduled.rawValue,
+            
             "mealsInfo": mealsInfo,
             
             /*
@@ -160,10 +163,15 @@ extension Cart: JSONRepresentation {
              case ready = 3
              case completed = 4
              case sent = 5
+             case
              
              */
             
         ]
+        
+        if self.pickupTime != nil {
+            rep["pickupTime"] = pickupTime!
+        }
             
 
         return rep

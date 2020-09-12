@@ -24,10 +24,10 @@ class ManageReservationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = false
-        let r1 = Reservation(pax: 2, date: "today")
-        let r2 = Reservation(pax: 3, date: "today")
-        
-        reservations = [r1, r2]
+//        let r1 = Reservation(pax: 2, date: "today", timestamp: "\(Date.timestampInInt())")
+//        let r2 = Reservation(pax: 3, date: "today", timestamp: "\(Date.timestampInInt())")
+//        
+//        reservations = [r1, r2]
         setupView()
     }
     

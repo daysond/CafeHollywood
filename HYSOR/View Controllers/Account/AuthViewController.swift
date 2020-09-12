@@ -139,8 +139,18 @@ class AuthViewController: UpdateProfileViewController {
             switchField(.phone)
             
         case .phone:
+            guard let phoneNumber = phoneNumber else { return }
+            NetworkManager.shared.verifyPhoneNumber(phoneNumber) { (verificationID) in
+                
+                print(verificationID)
+                UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+                
+                DispatchQueue.main.async {
+                    self.switchField(.password)
+                }
+                
+            }
             
-            switchField(.password)
             
         case .password:
             
@@ -206,9 +216,7 @@ class AuthViewController: UpdateProfileViewController {
     }
     
     private func signIn() {
-        
-        print(email)
-        print(password)
+
         
         guard let email = email, let password = password else { return }
         
@@ -227,7 +235,6 @@ class AuthViewController: UpdateProfileViewController {
                 return
             }
             
-            print(authResult?.user.email)
             self.navigationController?.dismiss(animated: true, completion: {
             
                 self.delegate?.didLogIn()
