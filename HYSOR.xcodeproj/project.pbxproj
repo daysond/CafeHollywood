@@ -37,7 +37,6 @@
 		ED3DD9982418B6B300A4A28E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3DD9972418B6B300A4A28E /* SceneDelegate.swift */; };
 		ED3DD99F2418B6B400A4A28E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD99E2418B6B400A4A28E /* Assets.xcassets */; };
 		ED3DD9A22418B6B400A4A28E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD9A02418B6B400A4A28E /* LaunchScreen.storyboard */; };
-		ED3DD9AA2418B72600A4A28E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED3DD9A92418B72600A4A28E /* GoogleService-Info.plist */; };
 		ED3DD9CE2418BB4E00A4A28E /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3DD9CD2418BB4E00A4A28E /* NetworkManager.swift */; };
 		ED412E0A2420842C00EBBA4C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED412E092420842C00EBBA4C /* Extensions.swift */; };
 		ED412E0C2420856400EBBA4C /* Cart.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED412E0B2420856400EBBA4C /* Cart.swift */; };
@@ -72,6 +71,7 @@
 		ED7D6CB124C00F8200D3583D /* OrderHistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CB024C00F8200D3583D /* OrderHistoryCollectionViewCell.swift */; };
 		ED86F6E424B7ACFB00895262 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */; };
 		ED8E8B2824A9D7D200C00FCA /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */; };
+		ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED9290CE250D5A9400277881 /* GoogleService-Info.plist */; };
 		EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */; };
 		EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416EF24BD8F9600501F0E /* AccountViewController.swift */; };
 		EDA857C124E11D3B00D15B88 /* SchedulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA857C024E11D3B00D15B88 /* SchedulerView.swift */; };
@@ -130,7 +130,6 @@
 		ED3DD99E2418B6B400A4A28E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ED3DD9A12418B6B400A4A28E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED3DD9A32418B6B400A4A28E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ED3DD9A92418B72600A4A28E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ED3DD9CD2418BB4E00A4A28E /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		ED412E092420842C00EBBA4C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		ED412E0B2420856400EBBA4C /* Cart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cart.swift; sourceTree = "<group>"; };
@@ -166,6 +165,7 @@
 		ED7D6CB024C00F8200D3583D /* OrderHistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
 		ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		ED9290CE250D5A9400277881 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		EDA416EF24BD8F9600501F0E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		EDA857C024E11D3B00D15B88 /* SchedulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerView.swift; sourceTree = "<group>"; };
@@ -242,7 +242,7 @@
 			children = (
 				ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */,
 				ED3710DA24E103DE00AD6DAF /* scanner.json */,
-				ED3DD9A92418B72600A4A28E /* GoogleService-Info.plist */,
+				ED9290CE250D5A9400277881 /* GoogleService-Info.plist */,
 				ED3DD9942418B6B300A4A28E /* HYSOR */,
 				ED3DD9932418B6B300A4A28E /* Products */,
 				CD7E8D03172B96292E07BBC3 /* Pods */,
@@ -512,8 +512,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED3DD9A22418B6B400A4A28E /* LaunchScreen.storyboard in Resources */,
-				ED3DD9AA2418B72600A4A28E /* GoogleService-Info.plist in Resources */,
 				ED3710DB24E103DE00AD6DAF /* scanner.json in Resources */,
+				ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */,
 				ED3DD99F2418B6B400A4A28E /* Assets.xcassets in Resources */,
 				ED46C73E24BFA5AD0089CF43 /* dotsLoading.json in Resources */,
 			);

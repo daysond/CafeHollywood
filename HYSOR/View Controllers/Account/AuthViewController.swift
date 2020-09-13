@@ -23,6 +23,7 @@ class AuthViewController: UpdateProfileViewController {
     private var name: String?
     private var phoneNumber: String?
     private var password: String?
+    private var code: String?
     
     var delegate: AuthStatusUpdateDelegate?
     
@@ -90,7 +91,8 @@ class AuthViewController: UpdateProfileViewController {
         case .phone:
             
             profileTextField.placeholder = "PHONE NUMBER"
-            profileTextField.keyboardType = .phonePad
+            profileTextField.text = "+1"
+            profileTextField.keyboardType = .numberPad
             if phoneNumber != nil {
                 profileTextField.text = phoneNumber!
             }
@@ -102,11 +104,26 @@ class AuthViewController: UpdateProfileViewController {
                 passwordTFHeightConstraint?.constant = 40
                 
             }
-          
+            
             profileTextField.isSecureTextEntry = true
             profileTextField.keyboardType = .alphabet
             profileTextField.placeholder =  isLogin ? "PASSWORD" : "Enter New Password"
             passwordTextField.placeholder = "Re-Enter New Password"
+            
+            if password != nil {
+                profileTextField.text = password!
+                passwordTextField.text = password!
+            }
+            
+            
+        case .verification:
+            
+            profileTextField.placeholder = "6-DIGIT VERIFICATION CODE"
+            profileTextField.keyboardType = .numberPad
+            if code != nil {
+                profileTextField.text = code!
+            }
+            
             
         default:
             return
@@ -136,25 +153,20 @@ class AuthViewController: UpdateProfileViewController {
 
         case .name:
            
-            switchField(.phone)
-            
-        case .phone:
-            guard let phoneNumber = phoneNumber else { return }
-            NetworkManager.shared.verifyPhoneNumber(phoneNumber) { (verificationID) in
-                
-                print(verificationID)
-                UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
-                
-                DispatchQueue.main.async {
-                    self.switchField(.password)
-                }
-                
-            }
-            
+            switchField(.password)
             
         case .password:
             
-            isLogin ? signIn() : signUp()
+//            isLogin ? signIn() : signUp()
+            isLogin ? signIn() : switchField(.phone)
+            
+        case .phone:
+            print(profileTextField.text)
+            verifyPhoneNumber()
+            
+        case .verification:
+            
+            signUp()
             
         default:
             return
@@ -172,11 +184,15 @@ class AuthViewController: UpdateProfileViewController {
         case .name:
             switchField(.email)
             
-        case .phone:
-            switchField(.name)
-            
         case .password:
-            switchField(isLogin ? .email : .phone)
+            switchField(isLogin ? .email : .name)
+            
+        case .phone:
+            switchField(.password)
+        
+        case .verification:
+            switchField(.phone)
+            
         default:
             return
         }
@@ -184,6 +200,37 @@ class AuthViewController: UpdateProfileViewController {
     }
     
     //MARK: - HELPERS
+    
+    private func verifyPhoneNumber() {
+        
+        guard let number = phoneNumber else {
+            displayMessage("Please enter a valid phone number.")
+            return
+            
+        }
+        
+        NetworkManager.shared.verifyPhoneNumber(number) { (verificationID, error) in
+            
+            
+            DispatchQueue.main.async {
+                
+                guard error == nil else {
+                    self.displayMessage(error!.localizedDescription)
+                    return
+                }
+                
+                guard let id = verificationID else {
+                    self.displayMessage("Unknow Error.")
+                    return
+                }
+                
+                APPSetting.storePhoneVerificationID(id)
+                
+                
+                self.switchField(.verification)
+            }
+        }
+    }
     
     private func switchField(_ field: AccountField) {
         
@@ -204,13 +251,17 @@ class AuthViewController: UpdateProfileViewController {
             password = profileTextField.text
         case .phone:
             phoneNumber = profileTextField.text
+        case .verification:
+            code = profileTextField.text
         default:
             break
         }
         
-        if field != .password {
-            profileTextField.text = nil
-        }
+        
+        profileTextField.text = nil
+//        if field != .password {
+//            profileTextField.text = nil
+//        }
         
         
     }
@@ -247,12 +298,12 @@ class AuthViewController: UpdateProfileViewController {
     
     @objc private func signUp() {
         
-        guard let email = email, let password = password, let name = name, let phoneNumber = phoneNumber else { return }
+        guard let email = email, let password = password, let name = name, let phoneNumber = phoneNumber, let code = code else { return }
         
         DispatchQueue.global(qos: .background).async {
             
             
-            let res = NetworkManager.shared.signUpWith(email, password, name, phoneNumber)
+            let res = NetworkManager.shared.signUpWith(email, password, name ,code)
             
             switch res {
             
@@ -278,6 +329,9 @@ class AuthViewController: UpdateProfileViewController {
         
         
     }
+    
+    
+    
     
     
 }

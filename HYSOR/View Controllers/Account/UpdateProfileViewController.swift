@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol UpdateProfileDisplayDelegate {
+    func didFinishUpdatingProfile()
+}
+
 class UpdateProfileViewController: UIViewController {
     
     
@@ -18,6 +22,8 @@ class UpdateProfileViewController: UIViewController {
     internal var shouldAnimateKeyboard: Bool = true
     
     private var tabBarHeight: CGFloat = 0
+    
+    var updateDisplayDelegate: UpdateProfileDisplayDelegate?
     
     internal let profileTextField: UITextField = {
         let tf = UITextField()
@@ -85,6 +91,8 @@ class UpdateProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profileTextField.delegate = self
+        
         tabBarHeight = tabBarController?.tabBar.frame.height ?? 0
         
         NotificationCenter.default.addObserver(self, selector: #selector(UpdateProfileViewController.keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -121,8 +129,9 @@ class UpdateProfileViewController: UIViewController {
             profileTextField.keyboardType = .emailAddress
             
         case .phone:
-            
-            profileTextField.text = APPSetting.customerPhoneNumber
+            profileTextField.placeholder = "PHONE NUMBER"
+            profileTextField.text = APPSetting.customerPhoneNumber == "" ?  "+1" : "\(APPSetting.customerPhoneNumber)"
+//            profileTextField.text = APPSetting.customerPhoneNumber
             profileTextField.keyboardType = .phonePad
             
         case .password:
@@ -133,6 +142,9 @@ class UpdateProfileViewController: UIViewController {
             passwordTextField.placeholder = "Re-Enter New Password"
             passwordTFHeightConstraint?.constant = 40
             
+        case .verification:
+            profileTextField.placeholder = "6-digit verification code"
+            profileTextField.keyboardType = .numberPad
         default:
             return
         }
@@ -209,6 +221,12 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
+    private func isCodeValid(_ code: String) -> Bool {
+        let codeRegEx = "^[0-9]{6}$"
+        let codePred = NSPredicate(format:"SELF MATCHES %@", codeRegEx)
+        return codePred.evaluate(with: code)
+    }
+    
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
@@ -223,7 +241,9 @@ class UpdateProfileViewController: UIViewController {
     }
     
     internal func isPasswordSame(_ text: String) -> Bool {
-        
+        if field == .phone {
+            return true
+        }
         guard let password = passwordTextField.text, password != "" else {
             displayMessage("Please re-enter your password.")
             return false
@@ -265,6 +285,11 @@ class UpdateProfileViewController: UIViewController {
                 displayMessage("Passwords do not match. Please try again.")
                 return false
             }
+        case .verification:
+            if !isCodeValid(text) {
+                displayMessage("Invalid Code.")
+                return false
+            }
             
         default:
             break
@@ -282,9 +307,33 @@ class UpdateProfileViewController: UIViewController {
             
             errorMessageLabel.text = ""
             
-            NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
+            switch field {
+            
+            case .phone:
                 
-                DispatchQueue.main.async {
+                NetworkManager.shared.verifyPhoneNumber(profileTextField.text!) { (id, error) in
+                    DispatchQueue.main.async { [self] in
+                        guard error == nil else {
+                            self.displayMessage(error!.localizedDescription)
+                            return
+                        }
+                        guard let id = id else {
+                            self.displayMessage("Unknow error.")
+                            return
+                        }
+                        
+                        APPSetting.storePhoneVerificationID(id)
+                        
+                        self.navigationController?.pushViewController(UpdateProfileViewController(field: .verification), animated: true)
+                        
+                    }
+                }
+                
+            case .verification:
+                
+        
+                
+                NetworkManager.shared.setAuthPhoneNumber(verificationCode: profileTextField.text!) { (error) in
                     guard error == nil else {
                         
                         print(error)
@@ -292,7 +341,23 @@ class UpdateProfileViewController: UIViewController {
                         return
                     }
                     
-                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
+                
+            default:
+                
+                NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
+                    
+                    DispatchQueue.main.async {
+                        guard error == nil else {
+                            
+                            print(error)
+                            self.displayMessage(error!.localizedDescription)
+                            return
+                        }
+                        
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
         }
@@ -343,4 +408,38 @@ class UpdateProfileViewController: UIViewController {
     }
     
 
+}
+
+extension UpdateProfileViewController: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if field == .phone {
+            
+            let currentText = textField.text ?? "+1"
+            
+            if currentText == "+1" && string == "" {
+                print(string)
+                return false
+            }
+            
+            guard let range = Range(range, in: currentText) else { return false }
+            
+            let updatedText = currentText.replacingCharacters(in: range, with: string)
+            
+            return updatedText.count < 13
+            
+        }
+        
+        if field == .verification {
+            let currentText = textField.text ?? ""
+            guard let range = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: range, with: string)
+            return updatedText.count < 7
+        }
+        
+        return true
+    }
+    
+    
 }

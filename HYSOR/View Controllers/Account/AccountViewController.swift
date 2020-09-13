@@ -17,6 +17,7 @@ enum AccountField: String {
     case reservation = "My Reservation"
     case favourite = "My Favourite"
     case about = "About"
+    case verification = "Verification Code"
     
 }
 
@@ -50,6 +51,7 @@ class AccountViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        myTableView.reloadData()
         self.navigationItem.title = "Hi, \(APPSetting.customerName)"
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
@@ -136,7 +138,7 @@ class AccountViewController: UIViewController {
         default:
             
             let updateProfileVC = UpdateProfileViewController(field: field)
-            
+            updateProfileVC.updateDisplayDelegate = self
             self.navigationController?.pushViewController(updateProfileVC, animated: true)
             
         }
@@ -255,12 +257,14 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
+
     
+}
+
+extension AccountViewController: UpdateProfileDisplayDelegate {
     
-    
-    
-    
-    
-    
+    func didFinishUpdatingProfile() {
+        myTableView.reloadData()
+    }
     
 }

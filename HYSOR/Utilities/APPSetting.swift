@@ -25,6 +25,7 @@ enum Constants {
     static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
     static let drinkMenuTypeRawValue = "drinkMenu"
     static let foodMenuTypeRawValue = "foodMenu"
+
 }
 
 
@@ -55,6 +56,8 @@ class APPSetting {
     static var customerPhoneNumber: String {
         return NetworkManager.shared.currentUser?.phoneNumber ?? ""
     }
+    
+    static var verificationID = UserDefaults.standard.string(forKey: "authVerificationID")
     
     static var favouriteMeals: [Meal] = []
     
@@ -96,6 +99,12 @@ class APPSetting {
         userDefaults.set(phoneNumber == nil ? "123456" : phoneNumber, forKey: "phoneNumber")
         
         print("didset info for \(UserDefaults.standard.string(forKey: "name"))")
+    }
+    
+    static func storePhoneVerificationID(_ verificationID: String) {
+        
+        UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+        
     }
     
     

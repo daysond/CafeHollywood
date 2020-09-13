@@ -17,6 +17,7 @@ enum NetworkError: Error {
     case jsonDataError
     case argumentError
     case invalidData
+    case unknowError
 }
 
 
@@ -97,16 +98,12 @@ class NetworkManager {
     
     // MARK: - Auth
     
-    func verifyPhoneNumber(_ phone: String, completion: @escaping (String?) -> Void) {
+    func verifyPhoneNumber(_ phone: String, completion: @escaping (String?, Error?) -> Void) {
         
         
         PhoneAuthProvider.provider().verifyPhoneNumber(phone, uiDelegate: nil) { (verificationID, error) in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
             
-            completion(verificationID)
+            completion(verificationID, error)
         }
         
     }
@@ -128,11 +125,14 @@ class NetworkManager {
     }
     
     
-    func signUpWith(_ email: String, _ password: String, _ name: String, _ phoneNumber: String) -> Result<AuthDataResult, Error> {
+    func signUpWith(_ email: String, _ password: String, _ name: String, _ code: String) -> Result<AuthDataResult, Error> {
         
         let semaphore = DispatchSemaphore(value: 0)
         
         var result: Result<AuthDataResult, Error>!
+        
+
+
         
         Auth.auth().createUser(withEmail: email, password: password) { (dataResult, err) in
             
@@ -150,9 +150,11 @@ class NetworkManager {
                 guard err == nil else { print(err!.localizedDescription ); return }
             }
             
-            self.updateProfileField(.phone, to: phoneNumber) { (err) in
+            
+            self.setAuthPhoneNumber(verificationCode: code) { (err) in
                 guard err == nil else { print(err!.localizedDescription ); return }
             }
+            
             
             semaphore.signal()
         }
@@ -749,19 +751,30 @@ class NetworkManager {
                 completion(error)
             })
             
-        case .phone:
-            
-            return
-//            let credential = PhoneAuthProvider.provider().credential(withVerificationID: APPSetting.customerUID, verificationCode: newProfile)
-//            Auth.auth().currentUser?.updatePhoneNumber(PhoneAuthCredential, completion: credential)
             
         default:
             return
         }
+
         
+    }
+    
+    func setAuthPhoneNumber(verificationCode code: String, completion: @escaping (Error?) -> Void ) {
         
+        guard let verificationID = APPSetting.verificationID else {
+            completion(NetworkError.unknowError)
+            return
+        }
         
+        let credential = PhoneAuthProvider.provider().credential(
+            withVerificationID: verificationID,
+            verificationCode: code)
+            
         
+        Auth.auth().currentUser?.updatePhoneNumber(credential, completion: { (error) in
+            completion(error)
+        })
+
         
     }
     
