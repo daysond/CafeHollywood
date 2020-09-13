@@ -143,25 +143,36 @@ class AuthViewController: UpdateProfileViewController {
             return
         }
         
-        setText()
+        
         
         switch field {
         
         case .email:
-         
+            setText()
             switchField(isLogin ? .password : .name)
 
         case .name:
-           
+            setText()
             switchField(.password)
             
         case .password:
             
-//            isLogin ? signIn() : signUp()
-            isLogin ? signIn() : switchField(.phone)
+            if isLogin {
+                signIn()
+            } else {
+                setText()
+                switchField(.phone)
+            }
             
         case .phone:
-            print(profileTextField.text)
+            
+            if phoneNumber != nil && phoneNumber == profileTextField.text {
+                profileTextField.text = nil
+                switchField(.verification)
+                return
+            }
+            // new phone number or first time
+            setText()
             verifyPhoneNumber()
             
         case .verification:
@@ -211,7 +222,7 @@ class AuthViewController: UpdateProfileViewController {
         
         NetworkManager.shared.verifyPhoneNumber(number) { (verificationID, error) in
             
-            
+            print("did dent soce")
             DispatchQueue.main.async {
                 
                 guard error == nil else {

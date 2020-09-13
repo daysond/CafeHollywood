@@ -135,10 +135,11 @@ class AuthHomeViewController: UIViewController {
         
         let authVC = AuthViewController(field: .email, isLogin: isLogin)
         authVC.delegate = self
-        self.navigationController?.pushViewController(authVC, animated: true)
-//        let navc = UINavigationController(rootViewController: authVC)
-//        navc.modalPresentationStyle = .popover
-//        present(navc, animated: true, completion: nil)
+        
+//        self.navigationController?.pushViewController(authVC, animated: true)
+        let navc = UINavigationController(rootViewController: authVC)
+        navc.modalPresentationStyle = .popover
+        present(navc, animated: true, completion: nil)
 
         
         
