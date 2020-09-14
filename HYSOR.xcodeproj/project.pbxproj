@@ -24,6 +24,7 @@
 		ED1989C724F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */; };
 		ED1FD80624B515C00016EBD2 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80524B515C00016EBD2 /* MenuViewController.swift */; };
 		ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */; };
+		ED2AE7C2250E9A5B00F36BF5 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2AE7C1250E9A5B00F36BF5 /* MenuButton.swift */; };
 		ED2C14A82500B57800F6BEB9 /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14A72500B57800F6BEB9 /* ReceiptView.swift */; };
 		ED2C14AA2500B9F100F6BEB9 /* RecepitTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */; };
 		ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */; };
@@ -115,6 +116,7 @@
 		ED1989C624F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavouriteListTableViewCell.swift; sourceTree = "<group>"; };
 		ED1FD80524B515C00016EBD2 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		ED1FD80724B517F50016EBD2 /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
+		ED2AE7C1250E9A5B00F36BF5 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		ED2C14A72500B57800F6BEB9 /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
 		ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecepitTableViewHeader.swift; sourceTree = "<group>"; };
 		ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileViewController.swift; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 		EDF8984124AAF18A00488FEF /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				ED2AE7C1250E9A5B00F36BF5 /* MenuButton.swift */,
 				EDB8EA6024B2F83B009DB3CF /* SubMenuHeaderView.swift */,
 				ED0C75F62425CB1D008B8174 /* CollapsibleTableViewHeader.swift */,
 				ED412E0E24208CB000EBBA4C /* BlackButton.swift */,
@@ -599,6 +602,7 @@
 				ED7D6CB124C00F8200D3583D /* OrderHistoryCollectionViewCell.swift in Sources */,
 				EDB1751F24C03D240054618C /* DimmedImageView.swift in Sources */,
 				ED47D58424BC41840044C116 /* LoginViewController.swift in Sources */,
+				ED2AE7C2250E9A5B00F36BF5 /* MenuButton.swift in Sources */,
 				ED49CCCA2505E6CC00274155 /* PreferenceItemManaged+CoreDataProperties.swift in Sources */,
 				ED48E8AB24FF4AE3004979A2 /* AuthHomeViewController.swift in Sources */,
 				ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */,

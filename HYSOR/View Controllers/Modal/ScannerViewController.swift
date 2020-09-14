@@ -11,7 +11,7 @@ import UIKit
 
 protocol QRCodeScannerDelegate: AnyObject {
     
-    func foundResturantDataFromQRCode(data: [String: Any])
+    func found(tableNumber: String)
     func failedReadingQRCode()
     
 }
@@ -106,8 +106,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     }
     
     @objc private func backButtonTapped() {
-        
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.dismiss(animated: true, completion: nil)
+//        self.navigationController?.popViewController(animated: true)
     }
 
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
@@ -123,36 +123,56 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         dismiss(animated: true)
     }
     
-
+    
     func found(code: String) {
-        /* Note: QR Code should be  { "table"  :  "01", "info", "info"}
-         code is of type String
-         1. convert code to data
-        */
-        guard let data = code.data(using: .utf8) else {
-            self.delegate?.failedReadingQRCode()
+        
+        let defaultURL = "http://www.enjoy2eat.ca/hollywood2/index.php?route=common/home&table="
+        let num = code.suffix(2)
+        let url = code.prefix(69)
+        
+        guard defaultURL == url, num.count == 2 else {
+            let alert = UIAlertController(title: "Error", message: "Unrecognizable QR Code.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true)
             return
         }
         
-        // 2.  data to dictionary with JSONSerialization
-        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-            
-           // print(json) // Output: ["table": 01, "info": info]
-            self.delegate?.foundResturantDataFromQRCode(data: json)
-//            NetworkManager.shared.getResturants(fromCode: json) { (resturantData) in
-//                guard resturantData != nil else {
-//                    print("no resturant found")
-//                    self.delegate?.failedReadingQRCode()
-//                    return
-//                }
-//                self.delegate?.foundResturantDataFromQRCode(data: resturantData!)
-//            }
-        } else {
-            self.delegate?.failedReadingQRCode()
-        }
-        
-        self.navigationController?.popViewController(animated: true)
+        self.delegate?.found(tableNumber: String(num))
+        self.navigationController?.dismiss(animated: true, completion: nil)
+
     }
+
+//    func found(code: String) {
+//        /* Note: QR Code should be  { "table"  :  "01", "info", "info"}
+//         code is of type String
+//         1. convert code to data
+//        */
+//        guard let data = code.data(using: .utf8) else {
+//            self.delegate?.failedReadingQRCode()
+//            return
+//        }
+//
+//        // 2.  data to dictionary with JSONSerialization
+//        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+//
+//           // print(json) // Output: ["table": 01, "info": info]
+//            self.delegate?.foundResturantDataFromQRCode(data: json)
+////            NetworkManager.shared.getResturants(fromCode: json) { (resturantData) in
+////                guard resturantData != nil else {
+////                    print("no resturant found")
+////                    self.delegate?.failedReadingQRCode()
+////                    return
+////                }
+////                self.delegate?.foundResturantDataFromQRCode(data: resturantData!)
+////            }
+//        } else {
+//            self.delegate?.failedReadingQRCode()
+//        }
+//
+//        self.navigationController?.popViewController(animated: true)
+//    }
 
     override var prefersStatusBarHidden: Bool {
         return true

@@ -112,8 +112,8 @@ class MenuViewController: UIViewController {
             self.navigationController?.pushViewController(scanneeVC, animated: true)
             
         case 1:
-            APPSetting.shared.isDineIn = false
-            APPSetting.shared.tableNumber = nil
+//            APPSetting.shared.isDineIn = false
+            APPSetting.shared.currentTable = nil
             selectButton.configureTitle(title: "Online Order & Pick Up")
         default:
             return
@@ -352,17 +352,9 @@ extension MenuViewController: UICollectionViewDelegateFlowLayout {
 
 extension MenuViewController: QRCodeScannerDelegate {
     
-    func foundResturantDataFromQRCode(data: [String : Any]) {
-        
-        guard let tableNumber = data["table"] as? String else {
-            print("no table data found")
-            return
-        }
-        APPSetting.shared.isDineIn = true
-        APPSetting.shared.tableNumber = tableNumber
-        selectButton.configureTitle(title: "Dine In at Table \(APPSetting.shared.tableNumber!)")
-        
-        
+    
+    func found(tableNumber: String) {
+        APPSetting.shared.currentTable = tableNumber
     }
     
     func failedReadingQRCode() {

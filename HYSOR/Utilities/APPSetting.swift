@@ -35,9 +35,11 @@ class APPSetting {
 
     var taxRate: Float = 0.13
     
-    var isDineIn = false
+    var isDineIn: Bool {
+        currentTable != nil
+    }
     
-    var tableNumber: String?
+    var currentTable: String?
     
     static var customerName: String {
         return NetworkManager.shared.currentUser?.displayName ?? ""

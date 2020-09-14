@@ -81,7 +81,8 @@ extension UIColor {
     static let offWhite = UIColor(red: 248, green: 238, blue: 255, alpha: 1)
     static let whiteSmoke =  UIColor(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1.0)
     static let ghostWhite = UIColor(red: 248/255.0, green: 248/255.0, blue: 248/255.0, alpha: 1)
-    static let black85 = UIColor(red: 0/255.0, green: 0/255.0, blue:  0/255.0, alpha: 0.85)
+    static let ghostWhite75 = UIColor(red: 248/255.0, green: 248/255.0, blue: 248/255.0, alpha: 0.75)
+    static let black85 = UIColor(red: 0/255.0, green: 0/255.0, blue:  0/255.0, alpha: 0.75)
     static let smokyBlack = UIColor(red: 18/255.0, green: 18/255.0, blue:  18/255.0, alpha: 1.0)
     static let starYellow = UIColor(red: 255.0/255.0, green: 149.0/255.0, blue:  15.0/255.0, alpha: 1.0)
     func isEqualToColor(_ color: UIColor) -> Bool {
