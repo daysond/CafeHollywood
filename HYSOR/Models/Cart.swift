@@ -77,6 +77,7 @@ class Cart {
     }
     
     var cartSubtotal: Money {
+        
         let total = meals.reduce(Money(amt: 0.0)) { (runningTotal, meal) in
              runningTotal + meal.totalPrice
         }
@@ -177,6 +178,57 @@ extension Cart: JSONRepresentation {
         return rep
     }
     
+    
+    var dineInRepresentation: [String : Any] {
+        
+        //TODO: how to restore drink combo..
+        
+        var mealsInfo: [[String: Any]] = []
+        
+        meals.forEach { (meal) in
+            mealsInfo.append(meal.representation)
+        }
+        
+        let rep: [String: Any] = [
+
+            "customerID": APPSetting.customerUID,
+//            "customerName": APPSetting.customerName,
+//            "customerPhoneNumber": APPSetting.customerPhoneNumber,
+            
+//            "subtotal": cartSubtotal.amount,
+//            "total": cartTotal.amount,
+//            "taxes": cartTaxes.amount,
+//            "discount": discountAmount?.amount ?? 0,
+//            "promotion": promotion?.amount ?? 0,
+            
+//            "orderNote": orderNote,
+            "orderTimestamp": orderTimestamp,
+
+//            "restaurantName" :  "Cafe Hollywood",
+            "status": OrderStatus.sent.rawValue,
+            
+            "mealsInfo": mealsInfo,
+            
+            "table": Table.shared.tableNumber ?? "Error Table"
+            /*
+             
+             case cancelled = 0
+             case unconfirmed = 1
+             case confirmed = 2
+             case ready = 3
+             case completed = 4
+             case sent = 5
+             case
+             
+             */
+            
+        ]
+        
+
+            
+
+        return rep
+    }
     
     
     

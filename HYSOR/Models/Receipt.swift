@@ -123,6 +123,47 @@ class Receipt {
     
 }
 
+class TableOrder {
+    
+    let orderID: String
+    let customerID: String
+    let orderTimestamp: String
+    let meals: [MealInfo]
+    var status: OrderStatus
+    
+    let table: String
+    
+    
+    init?(id: String, data: [String: Any]) {
+
+        guard let customerID = data["customerID"] as? String,
+        
+            let orderTimestamp = data["orderTimestamp"] as? String,
+
+            let orderStatusInt = data["status"] as? Int,
+            let table = data["table"] as? String,
+            let orderStatus = OrderStatus(rawValue: orderStatusInt),
+            let mealsInfo = data["mealsInfo"] as? [Dictionary<String,Any>]
+            else { return nil}
+
+        var mealsInfoObj: [MealInfo] = []
+        
+        for (index,info) in mealsInfo.enumerated() {
+            if let uid = info["uid"] as? String, let mealInfo = MealInfo(id: "\(index)-\(uid)", data: info) {
+                mealsInfoObj.append(mealInfo)
+            }
+        }
+
+        self.orderID = id
+        self.customerID = customerID
+        self.orderTimestamp = orderTimestamp
+        self.meals = mealsInfoObj
+        self.table = table
+        self.status = orderStatus
+
+    }
+    
+}
 
 struct MealInfo {
     
@@ -132,6 +173,8 @@ struct MealInfo {
     let totalPrice: Double
     let addOnInfo: String
     let instruction: String
+    let comboType: ComboType?
+    let comboTag: Int?
 //    let mealDescription: String
 //    let addOnDescription: String
 //
@@ -155,6 +198,18 @@ struct MealInfo {
         self.instruction = instruction
 //        self.addOnDescription = addOnDescription
 //        self.mealDescription = mealDescription
+        
+        if let comboTypeInt = data["comboType"] as? Int  {
+            self.comboType = ComboType(rawValue: comboTypeInt)
+        } else {
+            self.comboType = nil
+        }
+        
+        if let comboTag = data["comboTag"] as? Int {
+            self.comboTag = comboTag
+        } else {
+            self.comboTag = nil
+        }
         
     }
     

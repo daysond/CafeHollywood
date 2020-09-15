@@ -80,7 +80,15 @@ class UpdateProfileViewController: UIViewController {
         self.field = field
         
         super.init(nibName: nil, bundle: nil)
-        updateButton.configureTitle(title: "Update \(field.rawValue)")
+        switch field {
+        case .phone:
+            updateButton.configureTitle(title: "Send Verification Code")
+        case .verification:
+            updateButton.configureTitle(title: "Change Phone Number")
+        default:
+            updateButton.configureTitle(title: "Update \(field.rawValue)")
+        }
+        
         
 
     }

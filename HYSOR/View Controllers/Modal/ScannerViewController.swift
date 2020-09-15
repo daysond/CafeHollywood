@@ -11,7 +11,7 @@ import UIKit
 
 protocol QRCodeScannerDelegate: AnyObject {
     
-    func found(tableNumber: String)
+    func found()
     func failedReadingQRCode()
     
 }
@@ -25,6 +25,9 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NetworkManager.shared.removeTableOrderListener()
+        
         self.navigationController?.isNavigationBarHidden = false
         view.backgroundColor = UIColor.black
         let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(backButtonTapped))
@@ -139,8 +142,24 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             return
         }
         
-        self.delegate?.found(tableNumber: String(num))
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        Table.shared.tableNumber = String(num)
+        
+        NetworkManager.shared.addTableOrderListener { error in
+            
+            DispatchQueue.main.async {
+                
+                error == nil ? self.delegate?.found() : self.delegate?.failedReadingQRCode()
+               
+                if error != nil {
+                    Table.shared.tableNumber = nil
+                }
+                
+                self.navigationController?.dismiss(animated: true, completion: nil)
+            }
+
+            
+        }
+ 
 
     }
 

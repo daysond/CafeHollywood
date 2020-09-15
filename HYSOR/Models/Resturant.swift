@@ -10,20 +10,92 @@ import Foundation
 import CoreData
 
 
-//struct Resturant {
-//    
-//    let name: String
-//    let uid: String
-//    let imageURL: String
-//    let menu: [Meal]
-//    
-//}
 
-struct Table {
+
+class Table {
     
-    let uid: String
-    let id: String
-    var meals: [Meal]?
+    static let shared = Table()
+    
+    var tableNumber: String?
+    var orderIDs: [String] = []
+    var tableOrders: [TableOrder] = []
+    var shouldShowAllOrders: Bool = true
+    var timestamp: String?
+    
+    var meals: [MealInfo] {
+        shouldShowAllOrders ? tableOrders.flatMap { $0.meals } : tableOrders.filter { $0.customerID == APPSetting.customerUID }.flatMap{ $0.meals }
+    }
+    
+    var subTotal: Money {
+        
+    
+        let subtotal = meals.reduce(Money(amt: 0.0)) { (runningTotal, meal)  in
+            runningTotal + Money(amt: meal.totalPrice)
+        }
+        
+        
+        return subtotal - drinkCredit
+    }
+    
+    var taxes: Money {
+        return subTotal * APPSetting.shared.taxRate
+    }
+    
+    var total: Money {
+        return taxes + subTotal
+    }
+    
+    
+    var drinkCredit: Money {
+        
+        var discountAmount = Decimal(0)
+        var drinkComboCount = 0
+        var wingComboCount = 0
+        var drinkTagCount = 0
+        var wingTagCount = 0
+
+        meals.forEach { (meal) in
+            
+            for _ in 1...meal.quantity {
+                
+                if let type = meal.comboType {
+                    if type == .drink {
+                        drinkComboCount += 1
+                    } else {
+                        wingComboCount += 1
+                    }
+                }
+                
+                if let tag = meal.comboTag {
+                    if tag == 0 {
+                        drinkTagCount += 1
+                    } else {
+                        wingTagCount += 1
+                    }
+                }
+            }
+        }
+        
+        discountAmount +=  drinkComboCount < drinkTagCount ?
+                ComboType.drink.deductionAmount * Decimal(drinkComboCount) :
+                ComboType.drink.deductionAmount * Decimal(drinkTagCount)
+        
+        discountAmount +=  wingComboCount < wingTagCount ?
+                ComboType.wing.deductionAmount * Decimal(wingComboCount) :
+                ComboType.wing.deductionAmount * Decimal(wingTagCount)
+        
+        return Money(amt: discountAmount)
+    }
+    
+    static func reset() {
+        
+        Table.shared.tableNumber = nil
+        Table.shared.timestamp = nil
+        Table.shared.tableOrders = []
+        Table.shared.orderIDs = []
+        Table.shared.shouldShowAllOrders = true
+        
+    }
     
 }
 
@@ -56,7 +128,7 @@ struct Menu {
         self.menuDetail = menuDetail
         self.mealsInUID = mealUIDs
         self.imageURL = imageURL
-
+        
     }
     
     init?(menuManaged: MenuManaged){
@@ -73,12 +145,8 @@ struct Menu {
         self.imageURL = imageURL
         self.mealsInUID = meals.split(separator: ",").map({ String($0) })
     }
-    /*
-     let date = Date()
-     let calendar = Calendar.current
-     let hour = calendar.component(.hour, from: date)
-     let minutes = calendar.component(.minute, from: date)
-     */
+
+    
     
     var representation: [String : Any] {
         
@@ -92,11 +160,11 @@ struct Menu {
             "isSingleMealMenu": isSingleMealMenu,
             "mealsInUID": mealsInUID,
         ]
-            
-
+        
+        
         return rep
     }
-     
+    
     
 }
 

@@ -18,11 +18,11 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
     }()
     
-    private let addDietButton = ActionButton()
+    private let myOrderButton = ActionButton()
     private let refillWaterButton = ActionButton()
-    private let addPlanButton = ActionButton()
-    private let addWorkoutButton = ActionButton()
-    private let addWeightutton = ActionButton()
+    private let requestWaiterButton = ActionButton()
+    private let getBillButton = ActionButton()
+    private let noteButton = ActionButton()
     
     private var menuButtons = [ActionButton]()
     
@@ -53,17 +53,24 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        menuButtons = [addDietButton, refillWaterButton, addPlanButton, addWorkoutButton, addWeightutton]
+        menuButtons = [myOrderButton, refillWaterButton, requestWaiterButton, getBillButton, noteButton]
         self.delegate = self
         
         setupViewControllers()
         setupActionButton()
-        
+        networkSetup()
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         radius = view.bounds.maxX * 0.5 - 40.0
+    }
+    
+    private func networkSetup() {
+        
+        NetworkManager.shared.addActiveTableListener()
+        NetworkManager.shared.addActiveOrderListener()
     }
     
     private func setupActionButton() {
@@ -80,17 +87,17 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         refillWaterButton.button.setImage(UIImage(named: "water"), for: .normal)
         refillWaterButton.label.text = "Refill Water"
         
-        addPlanButton.button.setImage(UIImage(named: "waiter"), for: .normal)
-        addPlanButton.label.text = "Call Waiter"
+        requestWaiterButton.button.setImage(UIImage(named: "waiter"), for: .normal)
+        requestWaiterButton.label.text = "Call Waiter"
         
-        addDietButton.button.setImage(UIImage(named: "order"), for: .normal)
-        addDietButton.label.text = "My Order"
+        myOrderButton.button.setImage(UIImage(named: "order"), for: .normal)
+        myOrderButton.label.text = "My Order"
         
-        addWorkoutButton.button.setImage(UIImage(named: "receipt"), for: .normal)
-        addWorkoutButton.label.text = "Get Bill"
+        getBillButton.button.setImage(UIImage(named: "receipt"), for: .normal)
+        getBillButton.label.text = "Get Bill"
         
-        addWeightutton.button.setImage(UIImage(named: "note"), for: .normal)
-        addWeightutton.label.text = "Something Else"
+        noteButton.button.setImage(UIImage(named: "note"), for: .normal)
+        noteButton.label.text = "Something Else"
 
         
         for menuButton in menuButtons {
@@ -103,20 +110,20 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         }
         
 
-        addDietButtonTopAnchor = addDietButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
-        addDietButtonLeadingAnchor = addDietButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
+        addDietButtonTopAnchor = myOrderButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
+        addDietButtonLeadingAnchor = myOrderButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
         
         addWaterButtonTopAnchor = refillWaterButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
         addWaterButtonLeadingAnchor = refillWaterButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
         
-        menuButton2TopAnchor = addPlanButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
-        menuButton2LeadingAnchor = addPlanButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
+        menuButton2TopAnchor = requestWaiterButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
+        menuButton2LeadingAnchor = requestWaiterButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
         
-        addWorkoutButtonTopAnchor = addWorkoutButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
-        addWorkoutButtonLeadingAnchor = addWorkoutButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
+        addWorkoutButtonTopAnchor = getBillButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
+        addWorkoutButtonLeadingAnchor = getBillButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
         
-        addWeightButtonTopAnchor = addWeightutton.topAnchor.constraint(equalTo: mainButton.topAnchor)
-        addWeightButtonLeadingAnchor = addWeightutton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
+        addWeightButtonTopAnchor = noteButton.topAnchor.constraint(equalTo: mainButton.topAnchor)
+        addWeightButtonLeadingAnchor = noteButton.leadingAnchor.constraint(equalTo: mainButton.leadingAnchor)
         
         
         NSLayoutConstraint.activate([
@@ -165,7 +172,6 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         
         let pastOrdersViewController = OrderHistoryViewController()
-        NetworkManager.shared.addActiveOrderListener()
         NetworkManager.shared.activeOrderListenerDelegate = pastOrdersViewController
         pastOrdersViewController.tabBarItem = UITabBarItem(title: "ORDERS", image: UIImage(named: "invoice-1"), tag: 3)
         
@@ -185,15 +191,27 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         isMenuOpened = false
         
-        if sender === addDietButton.button {
-            print("add diet")
+        if sender === myOrderButton.button {
+            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height * 0.75))
+            containerView.backgroundColor = .white
+            let donebutton = BlackButton(frame: CGRect(x: 0, y: containerView.frame.maxY - 48, width: containerView.frame.width, height: 48))
+            let tableOrderView = TableOrderView(frame: CGRect(x: 0, y: 0, width: containerView.frame.width, height: containerView.frame.height - 48 - 8))
+            
+            donebutton.configureTitle(title: "Done")
+            donebutton.addTarget(self, action: #selector(dismissMenu), for: .touchUpInside)
+            donebutton.translatesAutoresizingMaskIntoConstraints = true
+            
+            containerView.addSubview(donebutton)
+            containerView.addSubview(tableOrderView)
+
+            launchMenu(view: containerView, height: containerView.frame.height)
         }
         
-        if sender === addWeightutton.button {
+        if sender === noteButton.button {
             print("add weight")
         }
         
-        if sender === addWorkoutButton.button {
+        if sender === getBillButton.button {
             print("add workout")
         }
         
@@ -202,13 +220,39 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
 //           present(AddWaterViewController(), animated: true, completion: nil)
         }
         
-        if sender === addPlanButton.button {
+        if sender === requestWaiterButton.button {
 //            showAddPlanAlert()
         }
     }
     
     @objc private func openMenu() {
         isMenuOpened = !isMenuOpened
+    }
+    
+    
+    //MARK:- HELPERS
+    
+    private var menuLauncher: SlideInMenuLauncher?
+
+    private func launchMenu(view: UIView, height: CGFloat) {
+        
+        let blackView = UIView()
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(dismissMenu))
+        blackView.addGestureRecognizer(tapGes)
+        blackView.isUserInteractionEnabled = true
+        
+        let menuLauncher = SlideInMenuLauncher(blackView: blackView, menuView: view, menuHeight: height, menuViewCornerRadius: 8)
+        self.menuLauncher = menuLauncher
+        menuLauncher.showMenu()
+        
+    }
+    
+    //MARK: - OBJC
+    
+    @objc private func dismissMenu() {
+        
+        menuLauncher?.dismissMenu()
+        
     }
     
     //MARK: - TABBAR DELEGATE
@@ -263,7 +307,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     private func handleMenu() {
         
-        if APPSetting.shared.currentTable == nil {
+        if Table.shared.tableNumber == nil {
             let scanVC = ScannerViewController()
             scanVC.delegate = self
             let nvc = UINavigationController(rootViewController: scanVC)
@@ -305,8 +349,8 @@ extension MainTabBarViewController: QRCodeScannerDelegate {
     
 
     
-    func found(tableNumber: String) {
-        APPSetting.shared.currentTable = tableNumber
+    func found() {
+        
     }
     
     func failedReadingQRCode() {

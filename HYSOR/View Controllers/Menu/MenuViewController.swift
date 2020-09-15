@@ -60,10 +60,10 @@ class MenuViewController: UIViewController {
         menuCollectionView.alwaysBounceVertical = true
         view.addSubview(menuCollectionView)
         
-        selectButton.configureTitle(title: "Online Order & Pick Up")
-        selectButton.addTarget(self, action: #selector(setupLaunchMenu), for: .touchUpInside)
-        view.addSubview(selectButton)
-        
+//        selectButton.configureTitle(title: "Online Order & Pick Up")
+//        selectButton.addTarget(self, action: #selector(setupLaunchMenu), for: .touchUpInside)
+//        view.addSubview(selectButton)
+//
         segmentControl = CustomSegmentedControl(frame: .zero, buttonTitle: ["Foods", "Drinks"])
         segmentControl.delegate = self
         view.addSubview(segmentControl)
@@ -84,15 +84,16 @@ class MenuViewController: UIViewController {
             menuCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             menuCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
             
-            selectButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-            selectButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            selectButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            selectButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+//            selectButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
+//            selectButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+//            selectButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+//            selectButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
             roundedCartButton.widthAnchor.constraint(equalToConstant: 64),
             roundedCartButton.heightAnchor.constraint(equalToConstant: 64),
             roundedCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            roundedCartButton.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -16),
+            roundedCartButton.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+//            roundedCartButton.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -16),
         ])
         
         
@@ -113,7 +114,7 @@ class MenuViewController: UIViewController {
             
         case 1:
 //            APPSetting.shared.isDineIn = false
-            APPSetting.shared.currentTable = nil
+            Table.shared.tableNumber = nil
             selectButton.configureTitle(title: "Online Order & Pick Up")
         default:
             return
@@ -353,8 +354,8 @@ extension MenuViewController: UICollectionViewDelegateFlowLayout {
 extension MenuViewController: QRCodeScannerDelegate {
     
     
-    func found(tableNumber: String) {
-        APPSetting.shared.currentTable = tableNumber
+    func found() {
+//        Table.shared.tableNumber = tableNumber
     }
     
     func failedReadingQRCode() {

@@ -88,7 +88,7 @@ class MealViewController: UIViewController {
             preferenceTableView.bottomAnchor.constraint(equalTo: addToCartButton.topAnchor),
             
             addToCartButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-            addToCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            addToCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             addToCartButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             addToCartButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -0),
         ])

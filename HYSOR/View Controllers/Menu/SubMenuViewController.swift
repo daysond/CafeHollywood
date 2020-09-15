@@ -111,7 +111,7 @@ class SubMenuViewController: UIViewController {
             subMenuCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
             viewCartButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-            viewCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            viewCartButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             viewCartButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             viewCartButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             

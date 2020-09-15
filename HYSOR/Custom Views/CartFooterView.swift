@@ -186,6 +186,17 @@ class CartFooterView: UIView {
         
     }
     
+    func setupFooterViewForCurrentTable() {
+        
+        subTotalAmountLabel.text = "$" + Table.shared.subTotal.amount.stringRepresentation
+        taxesAmountLabel.text = "$" + Table.shared.taxes.amount.stringRepresentation
+        totalAmountLabel.text = "$" + Table.shared.total.amount.stringRepresentation
+        promitionAmountLabel.text = "$0.00"
+        
+        discountAmountLabel.text = "-$" +  Table.shared.drinkCredit.amount.stringRepresentation
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

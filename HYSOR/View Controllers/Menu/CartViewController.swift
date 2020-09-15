@@ -99,7 +99,10 @@ class CartViewController: UIViewController {
         view.backgroundColor = .offWhite
         view.addSubview(cartTableView)
         
-        setupButtons()
+        view.addSubview(checkoutButton)
+        checkoutButton.addTarget(self, action: #selector(checkoutButtonTapped), for: .touchUpInside)
+        checkoutButton.configureTitle(title: APPSetting.shared.isDineIn ? "Send Order" : "Check Out")
+        
         setupFooterView()
         
         NSLayoutConstraint.activate([
@@ -109,47 +112,15 @@ class CartViewController: UIViewController {
             cartTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             cartTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             
+            checkoutButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
+            checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            checkoutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            checkoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -0),
+            
         ])
     }
     
-    private func setupButtons() {
-        
-        view.addSubview(checkoutButton)
-        checkoutButton.addTarget(self, action: #selector(checkoutButtonTapped), for: .touchUpInside)
-//        checkoutButton.totalLabel.text = "$\(Cart.shared.cartTotal.roundedAmount.stringRepresentation)"
-        switch APPSetting.shared.isDineIn {
-        
-        case true:
-            let sendOrderButton = BlackButton()
-            view.addSubview(sendOrderButton)
-            sendOrderButton.addTarget(self, action: #selector(orderButtonTapped), for: .touchUpInside)
-            checkoutButton.configureTitle(title: "Pay")
-            sendOrderButton.configureTitle(title: "Send Order")
-            
-            NSLayoutConstraint.activate([
-                
-                checkoutButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-                checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                checkoutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-                checkoutButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.49),
-                
-                sendOrderButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-                sendOrderButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                sendOrderButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.49),
-                sendOrderButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -0),
-            ])
-            
-        case false:
-            
-            checkoutButton.configureTitle(title: "Checkout")
-            NSLayoutConstraint.activate([
-                checkoutButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-                checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                checkoutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-                checkoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -0),
-            ])
-        }
-    }
+
     
     private func setupFooterView() {
         
@@ -162,65 +133,59 @@ class CartViewController: UIViewController {
     
     //MARK: - HELPERS
     
-    private func prepareForCheckout() {
+    private func onlineOrderCheckout() {
         
         let checkoutVC = CheckoutViewController()
-        dismissLoadingView()
         self.navigationController?.pushViewController(checkoutVC, animated: true)
         
     }
-
     
-    private func createLoadingView() {
+    private func dineInSendOrder() {
         
-        addChild(loadingView)
-        loadingView.view.frame = view.frame
-        view.addSubview(loadingView.view)
-        loadingView.didMove(toParent: self)
+        
+        NetworkManager.shared.sendOrder { error in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self.dismiss(animated: true, completion: nil)
+            Cart.resetCart()
+            
+            
+        }
+        
+    }
 
-    }
-    
-    private func dismissLoadingView() {
-        
-        
-        loadingView.willMove(toParent: nil)
-        loadingView.view.removeFromSuperview()
-        loadingView.removeFromParent()
-        
-    }
+//
+//    private func createLoadingView() {
+//
+//        addChild(loadingView)
+//        loadingView.view.frame = view.frame
+//        view.addSubview(loadingView.view)
+//        loadingView.didMove(toParent: self)
+//
+//    }
+//
+//    private func dismissLoadingView() {
+//
+//
+//        loadingView.willMove(toParent: nil)
+//        loadingView.view.removeFromSuperview()
+//        loadingView.removeFromParent()
+//
+//    }
     
     
     // MARK: - ACTIONS
     
-    @objc func orderButtonTapped() {
-        
-        NetworkManager.shared.placeOrder { (err) in
-            print("error \(err)")
-        }
-        dismiss(animated: true, completion: nil)
-        
-    }
+
     
     @objc func checkoutButtonTapped() {
         
-        /*
-         Show loading
-         IMPORTANT:
-         check if user has a stripeID, if not, create one !!!!
-         
-         StripeAPIClient.shared.createCustomer()
-         
-         1. preload customer context
-         let customerContext = STPCustomerContext(keyProvider: MyAPIClient())
-         2.assign customerContext to the CheckoutViewController
-    */
-        
-        createLoadingView()
-        prepareForCheckout()
-        
-//        let checkoutVC = CheckoutViewController()
-//        navigationController?.pushViewController(checkoutVC, animated: true)
-        
+        APPSetting.shared.isDineIn ? dineInSendOrder() : onlineOrderCheckout()
+    
     }
     
 }

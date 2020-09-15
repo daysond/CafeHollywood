@@ -11,9 +11,9 @@ import UIKit
 class ReceiptView: UIView {
     
     private let kCellHeightConstant: CGFloat = 64.0
-    private let kPriceLabelWidth: CGFloat = 76.0
+    internal let kPriceLabelWidth: CGFloat = 76.0
     
-    private let receiptTableView: UITableView = {
+    internal let receiptTableView: UITableView = {
         let tb = UITableView()
         tb.separatorStyle = .singleLine
 //        tb.translatesAutoresizingMaskIntoConstraints = false
@@ -23,9 +23,9 @@ class ReceiptView: UIView {
         return tb
     }()
     
-    private let receiptHeaderView = RecepitTableViewHeader()
+    internal let receiptHeaderView = RecepitTableViewHeader()
     
-    private let receiptFooterView = CartFooterView()
+    internal let receiptFooterView = CartFooterView()
     
     var receipt: Receipt? {
         
@@ -54,7 +54,7 @@ class ReceiptView: UIView {
         
     }
     
-    private func setupHeader() {
+    internal func setupHeader() {
         
         guard let receipt = self.receipt else { return }
         receiptTableView.tableHeaderView = receiptHeaderView
@@ -66,7 +66,7 @@ class ReceiptView: UIView {
     }
     
     
-    private func setupFooterView() {
+    internal func setupFooterView() {
         
         guard let receipt = self.receipt else { return }
         receiptTableView.tableFooterView = receiptFooterView
@@ -76,7 +76,7 @@ class ReceiptView: UIView {
         
     }
     
-    private func heightForCellDetailLabel(at indexPath: IndexPath) -> CGFloat{
+    internal func heightForCellDetailLabel(at indexPath: IndexPath) -> CGFloat{
         
         guard let receipt = self.receipt else { return 0 }
         let addonInfo = receipt.mealsInfo[indexPath.row].addOnInfo

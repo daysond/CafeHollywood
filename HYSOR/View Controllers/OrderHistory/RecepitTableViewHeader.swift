@@ -21,16 +21,6 @@ class RecepitTableViewHeader: UIView {
         return l
     }()
     
-//    private let dateLabel: UILabel = {
-//        let l = UILabel()
-//        l.translatesAutoresizingMaskIntoConstraints = false
-//        l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-//        l.text = "647-123-4678"
-//        l.numberOfLines = 1
-//        l.textColor = .darkGray
-//        l.textAlignment = .left
-//        return l
-//    }()
     
     private let orderIDLabel: UILabel = {
         let l = UILabel()
@@ -47,7 +37,7 @@ class RecepitTableViewHeader: UIView {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        l.text = "Note:"
+        l.text = ""
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
@@ -58,7 +48,6 @@ class RecepitTableViewHeader: UIView {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        l.text = "this is note"
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
@@ -114,6 +103,18 @@ class RecepitTableViewHeader: UIView {
         orderIDLabel.text = orderID
         noteDetailLabel.text = note
         dateLabel.text = Date.dateInYYYYMMddFromDate(Date.dateFromTimestamp(Double(timestamp)!))
+        
+    }
+    
+    func configureHeaderForCurrentTable() {
+        
+        restaurantNameLabel.text = "Cafe Hollywood"
+        orderIDLabel.text = "Table: \(Table.shared.tableNumber ?? "")"
+        if let timestamp = Table.shared.timestamp {
+            dateLabel.text = Date.dateInYYYYMMddFromDate(Date.dateFromTimestamp(Double(timestamp)!))
+        } else {
+            dateLabel.text = ""
+        }
         
     }
     

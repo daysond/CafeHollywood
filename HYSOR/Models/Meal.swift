@@ -287,7 +287,7 @@ extension Meal: JSONRepresentation {
     
     var representation: [String : Any] {
         
-        let rep: [String: Any] = [
+        var rep: [String: Any] = [
             "uid": uid,
             "name": name,
             "instruction" : instruction ?? "",
@@ -298,6 +298,14 @@ extension Meal: JSONRepresentation {
             "addOnDescription": addOnDescription,
             
         ]
+        
+        if comboTag != nil {
+            rep["comboTag"] = comboTag
+        }
+        
+        if comboType != nil {
+            rep["comboType"] = comboType?.rawValue
+        }
         
         return rep
     }
