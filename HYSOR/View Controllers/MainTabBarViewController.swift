@@ -266,7 +266,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        print("seleted")
+//        print("seleted")
     }
 
     

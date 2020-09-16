@@ -144,21 +144,25 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         Table.shared.tableNumber = String(num)
         
-        NetworkManager.shared.addTableOrderListener { error in
-            
-            DispatchQueue.main.async {
-                
-                error == nil ? self.delegate?.found() : self.delegate?.failedReadingQRCode()
-               
-                if error != nil {
-                    Table.shared.tableNumber = nil
-                }
-                
-                self.navigationController?.dismiss(animated: true, completion: nil)
-            }
-
-            
-        }
+        NetworkManager.shared.addTableOrderListener()
+        
+        self.delegate?.found()
+        
+//        NetworkManager.shared.addTableOrderListener { error in
+//            
+//            DispatchQueue.main.async {
+//                
+//                error == nil ? self.delegate?.found() : self.delegate?.failedReadingQRCode()
+//               
+//                if error != nil {
+//                    Table.shared.tableNumber = nil
+//                }
+//                
+//                self.navigationController?.dismiss(animated: true, completion: nil)
+//            }
+//
+//            
+//        }
  
 
     }

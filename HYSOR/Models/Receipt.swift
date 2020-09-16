@@ -127,6 +127,8 @@ class TableOrder {
     
     let orderID: String
     let customerID: String
+    let customerPhoneNumber: String
+    let customerName: String
     let orderTimestamp: String
     let meals: [MealInfo]
     var status: OrderStatus
@@ -137,6 +139,8 @@ class TableOrder {
     init?(id: String, data: [String: Any]) {
 
         guard let customerID = data["customerID"] as? String,
+              let customerName = data["customerName"] as? String,
+              let customerPhoneNumber = data["customerPhoneNumber"] as? String,
         
             let orderTimestamp = data["orderTimestamp"] as? String,
 
@@ -156,6 +160,8 @@ class TableOrder {
 
         self.orderID = id
         self.customerID = customerID
+        self.customerName = customerName
+        self.customerPhoneNumber = customerPhoneNumber
         self.orderTimestamp = orderTimestamp
         self.meals = mealsInfoObj
         self.table = table

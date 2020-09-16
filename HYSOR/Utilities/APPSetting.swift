@@ -25,6 +25,7 @@ enum Constants {
     static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
     static let drinkMenuTypeRawValue = "drinkMenu"
     static let foodMenuTypeRawValue = "foodMenu"
+    static let checkoutNoteHolder = "(ANY FOOD ALLERGY?)"
 
 }
 

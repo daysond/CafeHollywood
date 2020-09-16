@@ -35,7 +35,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("init view")
+//        print("init view")
         
         //        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: .updateFavouriteListTableView, object: nil)
         
@@ -207,7 +207,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
 extension FavouriteView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("reloaded with \(APPSetting.favouriteMeals.count)")
+//        print("reloaded with \(APPSetting.favouriteMeals.count)")
         return APPSetting.favouriteMeals.count
     }
     

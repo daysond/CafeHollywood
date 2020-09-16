@@ -17,22 +17,21 @@ class Table {
     static let shared = Table()
     
     var tableNumber: String?
+//    var tableID: String?
     var orderIDs: [String] = []
     var tableOrders: [TableOrder] = []
     var shouldShowAllOrders: Bool = true
     var timestamp: String?
     
     var meals: [MealInfo] {
-        shouldShowAllOrders ? tableOrders.flatMap { $0.meals } : tableOrders.filter { $0.customerID == APPSetting.customerUID }.flatMap{ $0.meals }
+        shouldShowAllOrders ? tableOrders.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap { $0.meals } : tableOrders.filter { $0.customerID == APPSetting.customerUID }.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap{ $0.meals }
     }
     
     var subTotal: Money {
-        
     
         let subtotal = meals.reduce(Money(amt: 0.0)) { (runningTotal, meal)  in
             runningTotal + Money(amt: meal.totalPrice)
         }
-        
         
         return subtotal - drinkCredit
     }
@@ -95,6 +94,16 @@ class Table {
         Table.shared.orderIDs = []
         Table.shared.shouldShowAllOrders = true
         
+    }
+    
+    var representation: [String : Any] {
+        
+        let rep: [String: Any] = [
+            "tableNumber": tableNumber ?? "Error Table",
+            "timestamp": "\(Date.timestampInInt())",
+        ]
+        
+        return rep
     }
     
 }

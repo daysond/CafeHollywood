@@ -209,7 +209,7 @@ class SubMenuViewController: UIViewController {
             group.enter()
             
             if let meal = DBManager.shared.readMeal(uid: uid) {
-                print("got \(uid) from DB")
+//                print("got \(uid) from DB")
                 tempMeals.append(meal)
                 group.leave()
                 
@@ -220,7 +220,7 @@ class SubMenuViewController: UIViewController {
                         group.leave()
                         return
                     }
-                    print("got \(meal.uid) from FB")
+//                    print("got \(meal.uid) from FB")
                     DBManager.shared.writeMeal(meal)
                     tempMeals.append(meal)
                     group.leave()

@@ -41,6 +41,36 @@ class Reservation {
         self.timestamp = "\(Date.timestampInInt())"
     }
     
+    init? (id: String, data: [String: Any]) {
+        
+        guard let customerID = data["customerID"] as? String,
+              let customerName = data["customerName"] as? String,
+              let customerPhoneNumber = data["customerPhoneNumber"] as? String,
+              let date = data["date"] as? String,
+              let pax = data["pax"] as? Int,
+              let statusCode = data["status"] as? Int,
+              let time = data["time"] as? String,
+              let timestamp = data["timestamp"] as? String else {
+            print("CAN NOT INTIILIZE RESERVATION \(id)")
+            return nil
+        }
+        
+        self.uid = id
+        self.customerID = customerID
+        self.customerName = customerName
+        self.customerPhoneNumber = customerPhoneNumber
+        self.pax = pax
+        self.date = date
+        self.time = time
+        self.timestamp = timestamp
+        self.status = ReservationStatus(rawValue: statusCode)!
+        
+        if let note = data["note"] as? String {
+            self.note = note
+        }
+        
+    }
+    
     var representation: [String : Any] {
         
         

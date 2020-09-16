@@ -301,7 +301,7 @@ class MenuViewController: UIViewController {
                     } else {
                         NetworkManager.shared.fetchMealWithMealUID(uid) { (meal) in
                             guard let meal = meal else { return }
-                            print("got \(meal.uid) from FB")
+//                            print("got \(meal.uid) from FB")
                             DBManager.shared.writeMeal(meal)
                             DispatchQueue.main.async {
                                 self.pushMealVC(meal: meal)

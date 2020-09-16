@@ -27,11 +27,11 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
 //            handlePayment()
             
         case .note:
+            
             let instructionVC = InstructionsInputViewController()
             instructionVC.delegate = self
+            instructionVC.textView.text = option.subTitle == Constants.checkoutNoteHolder ? "" : option.subTitle
             
-            instructionVC.textView.text = option.subTitle
-        
             let nav = UINavigationController(rootViewController: instructionVC)
             present(nav, animated: true, completion: nil)
         default:
@@ -138,7 +138,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
     func didInputInstructions(_ instructions: String) {
         
         Cart.shared.orderNote = instructions
-        updateOptionOfType(.note, with: instructions)
+        updateOptionOfType(.note, with: instructions == "" ? Constants.checkoutNoteHolder : instructions)
 
     }
     

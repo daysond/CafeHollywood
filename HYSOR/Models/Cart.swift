@@ -192,19 +192,11 @@ extension Cart: JSONRepresentation {
         let rep: [String: Any] = [
 
             "customerID": APPSetting.customerUID,
-//            "customerName": APPSetting.customerName,
-//            "customerPhoneNumber": APPSetting.customerPhoneNumber,
-            
-//            "subtotal": cartSubtotal.amount,
-//            "total": cartTotal.amount,
-//            "taxes": cartTaxes.amount,
-//            "discount": discountAmount?.amount ?? 0,
-//            "promotion": promotion?.amount ?? 0,
-            
-//            "orderNote": orderNote,
+            "customerName": APPSetting.customerName,
+            "customerPhoneNumber": APPSetting.customerPhoneNumber,
+
             "orderTimestamp": orderTimestamp,
 
-//            "restaurantName" :  "Cafe Hollywood",
             "status": OrderStatus.sent.rawValue,
             
             "mealsInfo": mealsInfo,

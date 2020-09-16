@@ -37,9 +37,15 @@ class NetworkManager {
     
     private let databaseRef = Firestore.firestore()
     
-    private var ordersRef: CollectionReference  {
+    private var onlineOrdersRef: CollectionReference  {
         let db = Firestore.firestore()
-        let ref = db.collection("orders")
+        let ref = db.collection("onlineOrders")
+        return ref
+    }
+    
+    private var dineInOrdersRef: CollectionReference  {
+        let db = Firestore.firestore()
+        let ref = db.collection("dineInOrders")
         return ref
     }
     
@@ -100,7 +106,7 @@ class NetworkManager {
     }
     
     func addActiveTableListener() {
-//        completion: @escaping (String?) -> Void
+        //        completion: @escaping (String?) -> Void
         guard let myID = currentUserUid else { return }
         
         activeTableListener?.remove()
@@ -111,11 +117,11 @@ class NetworkManager {
         activeOrderListener = myActiveTableRef.addSnapshotListener({ (snapshot, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
-//                completion(nil)
+                //                completion(nil)
                 return
             }
             guard let snapshot = snapshot else {
-//                completion(nil)
+                //                completion(nil)
                 return
             }
             
@@ -134,12 +140,7 @@ class NetworkManager {
                         Table.shared.timestamp = timestamp
                     }
                     
-                    self.addTableOrderListener { (error) in
-                        guard error == nil else {
-                            print(error!.localizedDescription)
-                            return
-                        }
-                    }
+                    self.addTableOrderListener()
 //                    completion(chage.document.documentID)
                     
                 case .modified:
@@ -149,10 +150,10 @@ class NetworkManager {
                     print("cloase table \(id)")
                     Table.reset()
                     self.removeTableOrderListener()
-                return
+                    return
                 }
                 
-               
+                
             }
             
         })
@@ -195,8 +196,8 @@ class NetworkManager {
         
         var result: Result<AuthDataResult, Error>!
         
-
-
+        
+        
         
         Auth.auth().createUser(withEmail: email, password: password) { (dataResult, err) in
             
@@ -261,7 +262,7 @@ class NetworkManager {
     }
     
     
-
+    
     
     
     
@@ -441,13 +442,12 @@ class NetworkManager {
     
     func sendOrder(completion: @escaping (Error?) -> Void) {
         
-        guard let customerID = currentUser?.uid, let table = Table.shared.tableNumber else { return }
-
-        let activeTableDocRef = databaseRef.collection("activeTables").document(table)
+        guard let table = Table.shared.tableNumber else { return }
         
-        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables").document(table)
+        let activeTableRef = databaseRef.collection("activeTables").document(table)
         
-        activeTableDocRef.getDocument { (doc, err) in
+        
+        activeTableRef.getDocument { (doc, err) in
             guard err == nil else {
                 completion(err)
                 print(err! .localizedDescription)
@@ -456,79 +456,91 @@ class NetworkManager {
             if let doc = doc {
                 
                 if doc.data() == nil {
-                    let timestamp = "\(Date.timestampInInt())"
-                    let data = ["timestamp": timestamp]
-                    //first order: set timestamp
-                    activeTableDocRef.setData(data)
-                    customerActiveTableRef.setData(data)
+                    
+                    activeTableRef.setData(Table.shared.representation)
+                    
                 }
                 
-                self.sendTableOrder(table: table) { (error) in
+                self.sendTableOrder(table){ (error) in
                     if let error = error {
                         completion(error)
                     }
                     
                     completion(nil)
                 }
-                    
+                
             }
         }
         
-
-
-
         
-
+        
+        
+        
+        
     }
     
-    private func sendTableOrder(table: String, completion: @escaping (Error?) -> Void) {
+    private func sendTableOrder(_ table: String, completion: @escaping (Error?) -> Void) {
+        
+        guard let customerID = currentUser?.uid else { return }
         
         let orderID = String.randomString(length: 6)
         
-        let ordersRef = databaseRef.collection("orders").document(orderID)
+        let ordersRef = dineInOrdersRef.document(orderID)
         
-        let activeTableRef = databaseRef.collection("activeTables").document(table).collection("orders")
+        let activeTableRef = databaseRef.collection("activeTables").document(table)
+        
+        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables").document(table)
         
         ordersRef.setData(Cart.shared.dineInRepresentation) { (error) in
             
             guard error == nil else {
-                ordersRef.delete()
                 completion(error)
                 return
             }
-            activeTableRef.document(orderID).setData([:])
+            
+            Table.shared.orderIDs.append(orderID)
+            activeTableRef.collection("orderIDs").document(orderID).setData([:])
+            customerActiveTableRef.setData([:])
             completion(nil)
+            
+            if self.tableOrderListener == nil {
+                print("adding listener")
+                self.addTableOrderListener()
+            } else {
+                print("did not add listener ")
+            }
+            
         }
         
     }
     
-
-    
-    func addTableOrderListener(completion: @escaping (Error?) -> Void) {
+    func addTableOrderListener() {
         
         guard let table = Table.shared.tableNumber else { return }
         
-        let activeTableRef = databaseRef.collection("activeTables").document(table).collection("orders")
+        let activeTableRef = databaseRef.collection("activeTables").document(table).collection("orderIDs")
+        
+        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
         
         tableOrderListener = activeTableRef.addSnapshotListener({ (snapshot, error) in
             
             guard error == nil else {
                 print("Error adding listener to channel \(error.debugDescription)")
-                completion(error)
+//                completion(error)
                 return
             }
             guard let snapshot = snapshot else {
                 print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
-                completion(error)
+//                completion(error)
                 return
             }
             
-            completion(nil)
+//            completion(nil)
             
             snapshot.documentChanges.forEach { (change) in
                 
                 if change.type == .added {
-                    if Table.shared.orderIDs.firstIndex(of: change.document.documentID) == nil {
+                    if currentTableOrderID.firstIndex(of: change.document.documentID) == nil {
                         
                         self.fetchTableOrder(change.document.documentID) { (order) in
                             guard let order = order else { return }
@@ -538,27 +550,97 @@ class NetworkManager {
                     }
                 }
                 
-//                if change.type == .modified {
-//
-//                    print("modified \(change.document.documentID)")
-//                }
-//
-//                if change.type == .removed {
-//
-//                    print("removed \(change.document.documentID)")
-//
-//                }
+                //                if change.type == .modified {
+                //
+                //                    print("modified \(change.document.documentID)")
+                //                }
+                //
+                //                if change.type == .removed {
+                //
+                //                    print("removed \(change.document.documentID)")
+                //
+                //                }
             }
-
+            
         })
         
     }
     
+    
+//    func addOrderListenerForTable(tableID: String) {
+//
+//        guard let customerID = currentUser?.uid else { return }
+//
+//        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables")
+//
+//        tableOrderListener = customerActiveTableRef.addSnapshotListener({ (snapshot, error) in
+//
+//            guard error == nil else {
+//                print("Error adding listener to channel \(error.debugDescription)")
+//                //                completion(error)
+//                return
+//            }
+//            guard let snapshot = snapshot else {
+//                print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
+//                //                completion(error)
+//                return
+//            }
+//
+//            //            completion(nil)
+//
+//            snapshot.documentChanges.forEach { (change) in
+//
+//                guard let orderIDs = change.document.data()["orderIDs"] as? [String] else { return }
+//
+//                if change.type == .added {
+//                    self.populateOrderIDs(orderIDs)
+//                }
+//
+//                if change.type == .modified {
+//                    print("mofidied \(change.document.documentID)")
+//                    self.populateOrderIDs(orderIDs)
+//                }
+//
+//                //
+//                //                if change.type == .removed {
+//                //
+//                //                    print("removed \(change.document.documentID)")
+//                //
+//                //                }
+//            }
+//
+//        })
+//
+//
+//    }
+//
+//    private func populateOrderIDs(_ orderIDs: [String]) {
+//
+//
+//        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
+//
+//        orderIDs.forEach { (orderID) in
+//
+//            if currentTableOrderID.firstIndex(of: orderID) == nil {
+//
+//                self.fetchTableOrder(orderID) { (order) in
+//                    guard let order = order else {
+//                        print("order did not initialized")
+//                        return }
+//                    Table.shared.orderIDs.append(order.orderID)
+//                    Table.shared.tableOrders.append(order)
+//                }
+//
+//            }
+//        }
+//
+//    }
+    
     private func fetchTableOrder(_ orderID: String, completion: @escaping (TableOrder?) -> Void ) {
         
-        let orderRef = databaseRef.collection("orders")
         
-        orderRef.document(orderID).getDocument { (snapshot, error) in
+        print("fetching table order \(orderID)")
+        dineInOrdersRef.document(orderID).getDocument { (snapshot, error) in
             
             guard error == nil else { return }
             
@@ -572,15 +654,20 @@ class NetworkManager {
         }
     }
     
+    
+
+    
+    
+    
     func removeTableOrderListener() {
         
         tableOrderListener?.remove()
     }
     
-
+    
     
     //MARK: - Online ORDERS
-
+    
     func placeOrder(completion: @escaping (Error?) -> Void) {
         //DATA
         let orderID = String.randomString(length: 6)
@@ -590,19 +677,19 @@ class NetworkManager {
         let group = DispatchGroup()
         
         var err: Error?
-    
+        
         // send order
-        let ordersRef = databaseRef.collection("orders").document(orderID)
+        let ordersRef = onlineOrdersRef.document(orderID)
         
         let activeOrderRef = databaseRef.collection("activeOrders").document(orderID)
-
+        
         let customerActiveOrderRef = databaseRef.collection("customers").document(customerID).collection("activeOrders").document(orderID)
-
+        
         group.enter()
         
         //        databaseRef.collection("orders").order(by: "timestamp").limit(to: 5)
         
-
+        
         
         ordersRef.setData(Cart.shared.representation) { (error) in
             guard error == nil else {
@@ -648,8 +735,8 @@ class NetworkManager {
     
     func fetchCloseOrders() -> Result<[Receipt], Error> {
         
-        let customerOrdersRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("orders").order(by: "timestamp", descending: true).limit(to: 5)
-//        customerOrdersRef.limit(to: 5)
+        let customerOrdersRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("orders").order(by: "timestamp", descending: true).limit(to: 10)
+        //        customerOrdersRef.limit(to: 5)
         
         let semaphore = DispatchSemaphore(value: 0)
         
@@ -669,9 +756,6 @@ class NetworkManager {
                 return
             }
             
-            print(snapshot?.count)
-            
-           
             docs.forEach { (doc) in
                 
                 group.enter()
@@ -680,7 +764,6 @@ class NetworkManager {
                     if let receipt = receipt {
                         recepits.append(receipt)
                     }
-                    print(receipt?.orderID)
                     group.leave()
                 }
             }
@@ -688,31 +771,30 @@ class NetworkManager {
             group.leave()
         }
         
-
+        
         group.notify(queue: .main) {
-
+            
             semaphore.signal()
         }
-
+        
         
         semaphore.wait(timeout: .distantFuture)
-
+        
         recepits.sort { $0.orderTimestamp > $1.orderTimestamp }
         result = .success(recepits)
         
- 
+        
         
         return result
-
+        
     }
     
     
     // GET Single Order
     private func fetchOrderDetails(_ orderID: String, completion: @escaping (Receipt?) -> Void ) {
         
-        let orderRef = databaseRef.collection("orders")
         
-        orderRef.document(orderID).getDocument { (snapshot, error) in
+        onlineOrdersRef.document(orderID).getDocument { (snapshot, error) in
             
             guard error == nil else { return }
             
@@ -727,7 +809,7 @@ class NetworkManager {
     }
     
     
-
+    
     
     
     func addActiveOrderListener() {
@@ -797,60 +879,60 @@ class NetworkManager {
         activeOrderRef.document(id).delete()
         
         orderRef.document(id).setData(["status": status.rawValue, "timestamp": timestamp])
-
+        
         
     }
     
     
-//    func trackStatusOfOrder(_ orderID: String) {
-//
-//        print("TAG: about to track \(orderID)")
-//
-//        orderStatusListener = ordersRef.document(orderID).addSnapshotListener({ (snapshot, error) in
-//
-//            guard error == nil else {
-//                print("Error adding listener to channel \(snapshot.debugDescription)")
-//                return
-//            }
-//
-//            guard let data = snapshot?.data(), let statusCode = data["orderStatus"] as? Int else { return }
-//
-//
-//            print("TAG: tracking \(orderID)")
-//
-//            let info = ["orderID": orderID, "status": statusCode] as [String : Any]
-//
-//            NotificationCenter.default.post(name: .didUpdateOrderStatus, object: self, userInfo: info)
-//
-//            if let newStatus = OrderStatus(rawValue: statusCode) {
-//
-//                switch newStatus {
-//
-//                case .confirmed:
-//                    //                self.databaseRef.collection("customer_order").document(APPSetting.shared.user.uid).collection("orders").document(orderID).setData(["timestamp": Date.timestampInInt()])
-//                    return
-//
-//                case .completed:
-//                    print("shoud delete")
-//                    self.databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders").document(orderID).delete()
-//                    return
-//
-//                default:
-//                    return
-//
-//                }
-//
-//
-//            }
-//
-//
-//        })
-//
-//    }
-//
-//    func removeStatusTracker() {
-//        orderStatusListener?.remove()
-//    }
+    //    func trackStatusOfOrder(_ orderID: String) {
+    //
+    //        print("TAG: about to track \(orderID)")
+    //
+    //        orderStatusListener = ordersRef.document(orderID).addSnapshotListener({ (snapshot, error) in
+    //
+    //            guard error == nil else {
+    //                print("Error adding listener to channel \(snapshot.debugDescription)")
+    //                return
+    //            }
+    //
+    //            guard let data = snapshot?.data(), let statusCode = data["orderStatus"] as? Int else { return }
+    //
+    //
+    //            print("TAG: tracking \(orderID)")
+    //
+    //            let info = ["orderID": orderID, "status": statusCode] as [String : Any]
+    //
+    //            NotificationCenter.default.post(name: .didUpdateOrderStatus, object: self, userInfo: info)
+    //
+    //            if let newStatus = OrderStatus(rawValue: statusCode) {
+    //
+    //                switch newStatus {
+    //
+    //                case .confirmed:
+    //                    //                self.databaseRef.collection("customer_order").document(APPSetting.shared.user.uid).collection("orders").document(orderID).setData(["timestamp": Date.timestampInInt()])
+    //                    return
+    //
+    //                case .completed:
+    //                    print("shoud delete")
+    //                    self.databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders").document(orderID).delete()
+    //                    return
+    //
+    //                default:
+    //                    return
+    //
+    //                }
+    //
+    //
+    //            }
+    //
+    //
+    //        })
+    //
+    //    }
+    //
+    //    func removeStatusTracker() {
+    //        orderStatusListener?.remove()
+    //    }
     
     //MARK: - RESERVATIONS
     
@@ -901,9 +983,59 @@ class NetworkManager {
         
     }
     
-    func getReservations() {
+    func getMyReservations(completion:@escaping ([Reservation]) -> Void ) {
         
+        guard let myID = currentUserUid else { return }
         
+        let group = DispatchGroup()
+        
+        var reservations = [Reservation]()
+        
+        let customerReservationRef = databaseRef.collection("customers").document(myID).collection("reservations")
+        
+        let reservationRef = databaseRef.collection("reservations")
+        
+        group.enter()
+        
+        customerReservationRef.getDocuments { (snapshot, error) in
+            
+            guard error == nil else {
+                group.leave()
+                return
+            }
+            
+            if let snapshot = snapshot {
+                
+                snapshot.documents.forEach { (doc) in
+                    group.enter()
+                    reservationRef.document(doc.documentID).getDocument { (document, error) in
+                        guard error == nil else {
+                            group.leave()
+                            return
+                        }
+                        
+                        if let document = document, let data = document.data(), let reservation = Reservation(id: document.documentID, data: data)  {
+                            
+                            reservations.append(reservation)
+                            group.leave()
+                            
+                        } else {
+                            group.leave()
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            group.leave()
+            
+            
+        }
+        
+        group.notify(queue: .main) {
+            completion(reservations)
+        }
         
     }
     
@@ -937,7 +1069,7 @@ class NetworkManager {
         default:
             return
         }
-
+        
         
     }
     
@@ -951,12 +1083,12 @@ class NetworkManager {
         let credential = PhoneAuthProvider.provider().credential(
             withVerificationID: verificationID,
             verificationCode: code)
-            
+        
         
         Auth.auth().currentUser?.updatePhoneNumber(credential, completion: { (error) in
             completion(error)
         })
-
+        
         
     }
     

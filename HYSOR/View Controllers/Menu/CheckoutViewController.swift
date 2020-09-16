@@ -59,7 +59,7 @@ class CheckoutViewController: UIViewController {
         let cutlery = CustomOption(mainImageNmae: "cutlery", mainTitle: "UTENSILS, STRAWS, ETC", subTitle: "No, thank you.", subImageName: nil, optionType: .utensil)
         let pickupTime = CustomOption(mainImageNmae: "clock", mainTitle: "PICK UP TIME", subTitle: "Now", subImageName: nil, optionType: .scheduler)
 //        let paymentMethod = CustomOption(mainImageNmae: "creditCard", mainTitle: "PAYMENT METHOD", subTitle: "Visa", subImageName: nil, optionType: .payment)
-        let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: "", subImageName: nil, optionType: .note)
+        let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: Constants.checkoutNoteHolder , subImageName: nil, optionType: .note)
         
         options = [cutlery, pickupTime, note]
    

@@ -176,7 +176,7 @@ class AuthViewController: UpdateProfileViewController {
             verifyPhoneNumber()
             
         case .verification:
-            
+            setText()
             signUp()
             
         default:
@@ -268,11 +268,9 @@ class AuthViewController: UpdateProfileViewController {
             break
         }
         
-        
-        profileTextField.text = nil
-//        if field != .password {
-//            profileTextField.text = nil
-//        }
+        if field != .verification {
+            profileTextField.text = nil
+        }
         
         
     }

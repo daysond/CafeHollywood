@@ -57,7 +57,7 @@ class DBManager {
             
             let items = try context.fetch(request)
             
-            print("got \(type.rawValue) count \(items.count)")
+//            print("got \(type.rawValue) count \(items.count)")
             
             return items.filter {Menu(menuManaged: $0) != nil }.map{Menu(menuManaged: $0)!}
             
