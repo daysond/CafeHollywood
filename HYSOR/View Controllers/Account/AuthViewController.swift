@@ -158,6 +158,7 @@ class AuthViewController: UpdateProfileViewController {
         case .password:
             
             if isLogin {
+                setText()
                 signIn()
             } else {
                 setText()
@@ -268,10 +269,12 @@ class AuthViewController: UpdateProfileViewController {
             break
         }
         
-        if field != .verification {
+        let shouldEmptyField = isLogin ? AccountField.password : AccountField.verification
+        
+        if field != shouldEmptyField {
+            //empty text field for next
             profileTextField.text = nil
         }
-        
         
     }
     
