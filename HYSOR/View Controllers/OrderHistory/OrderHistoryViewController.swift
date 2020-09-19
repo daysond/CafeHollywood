@@ -189,8 +189,8 @@ class OrderHistoryViewController: UIViewController {
                 closeOrder(orderID, for: newStatus)
             case .completed:
                 closeOrder(orderID, for: newStatus)
-            case .sent:
-                return
+//            case .sent:
+//                return
                 
             default:
                 

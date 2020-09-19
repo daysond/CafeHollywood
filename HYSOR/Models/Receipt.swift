@@ -15,7 +15,7 @@ enum OrderStatus: Int {
     case confirmed = 2
     case ready = 3
     case completed = 4
-    case sent = 5
+//    case sent = 5
     case scheduled = 6
     
     var status: String {
@@ -30,8 +30,8 @@ enum OrderStatus: Int {
             return "Completed"
         case .cancelled:
             return "Cancelled"
-        case .sent:
-            return "Sent"
+//        case .sent:
+//            return "Sent"
         case .scheduled:
             return "Scheduled:"
         
@@ -51,8 +51,8 @@ enum OrderStatus: Int {
             return UIImage(named: "completed")!
         case .cancelled:
             return UIImage(named: "cancel")!
-        case .sent:
-            return UIImage(named: "comfirmed")!
+//        case .sent:
+//            return UIImage(named: "comfirmed")!
         case .scheduled:
             return UIImage(named: "unconfirmed")!
         

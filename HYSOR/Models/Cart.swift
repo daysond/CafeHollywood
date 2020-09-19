@@ -197,7 +197,7 @@ extension Cart: JSONRepresentation {
 
             "orderTimestamp": orderTimestamp,
 
-            "status": OrderStatus.sent.rawValue,
+            "status": OrderStatus.unconfirmed.rawValue,
             
             "mealsInfo": mealsInfo,
             

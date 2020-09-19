@@ -105,6 +105,8 @@ class NetworkManager {
         }
     }
     
+    
+    
     func addActiveTableListener() {
         //        completion: @escaping (String?) -> Void
         guard let myID = currentUserUid else { return }
@@ -446,7 +448,6 @@ class NetworkManager {
         
         let activeTableRef = databaseRef.collection("activeTables").document(table)
         
-        
         activeTableRef.getDocument { (doc, err) in
             guard err == nil else {
                 completion(err)
@@ -472,11 +473,6 @@ class NetworkManager {
             }
         }
         
-        
-        
-        
-        
-        
     }
     
     private func sendTableOrder(_ table: String, completion: @escaping (Error?) -> Void) {
@@ -499,7 +495,8 @@ class NetworkManager {
             }
             
             Table.shared.orderIDs.append(orderID)
-            activeTableRef.collection("orderIDs").document(orderID).setData([:])
+            let data = ["status": OrderStatus.unconfirmed.rawValue]
+            activeTableRef.collection("orderIDs").document(orderID).setData(data)
             customerActiveTableRef.setData([:])
             completion(nil)
             
@@ -566,75 +563,6 @@ class NetworkManager {
         
     }
     
-    
-//    func addOrderListenerForTable(tableID: String) {
-//
-//        guard let customerID = currentUser?.uid else { return }
-//
-//        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables")
-//
-//        tableOrderListener = customerActiveTableRef.addSnapshotListener({ (snapshot, error) in
-//
-//            guard error == nil else {
-//                print("Error adding listener to channel \(error.debugDescription)")
-//                //                completion(error)
-//                return
-//            }
-//            guard let snapshot = snapshot else {
-//                print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
-//                //                completion(error)
-//                return
-//            }
-//
-//            //            completion(nil)
-//
-//            snapshot.documentChanges.forEach { (change) in
-//
-//                guard let orderIDs = change.document.data()["orderIDs"] as? [String] else { return }
-//
-//                if change.type == .added {
-//                    self.populateOrderIDs(orderIDs)
-//                }
-//
-//                if change.type == .modified {
-//                    print("mofidied \(change.document.documentID)")
-//                    self.populateOrderIDs(orderIDs)
-//                }
-//
-//                //
-//                //                if change.type == .removed {
-//                //
-//                //                    print("removed \(change.document.documentID)")
-//                //
-//                //                }
-//            }
-//
-//        })
-//
-//
-//    }
-//
-//    private func populateOrderIDs(_ orderIDs: [String]) {
-//
-//
-//        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
-//
-//        orderIDs.forEach { (orderID) in
-//
-//            if currentTableOrderID.firstIndex(of: orderID) == nil {
-//
-//                self.fetchTableOrder(orderID) { (order) in
-//                    guard let order = order else {
-//                        print("order did not initialized")
-//                        return }
-//                    Table.shared.orderIDs.append(order.orderID)
-//                    Table.shared.tableOrders.append(order)
-//                }
-//
-//            }
-//        }
-//
-//    }
     
     private func fetchTableOrder(_ orderID: String, completion: @escaping (TableOrder?) -> Void ) {
         
