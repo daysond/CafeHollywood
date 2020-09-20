@@ -69,7 +69,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     private func networkSetup() {
         
-        NetworkManager.shared.addActiveTableListener()
+        NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
     }
     
