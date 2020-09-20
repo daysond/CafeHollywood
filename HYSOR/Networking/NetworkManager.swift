@@ -59,7 +59,7 @@ class NetworkManager {
     
     private var orderStatusListener: ListenerRegistration?
     
-    private var tableOrderListener: ListenerRegistration?
+    private var dineInOrderListener: ListenerRegistration?
     
     private var activeTableListener: ListenerRegistration?
     
@@ -142,7 +142,7 @@ class NetworkManager {
                         Table.shared.timestamp = timestamp
                     }
                     
-                    self.addTableOrderListener()
+                    self.addDineInOrderListener()
 //                    completion(chage.document.documentID)
                     
                 case .modified:
@@ -493,24 +493,21 @@ class NetworkManager {
             customerActiveTableRef.setData([:])
             completion(nil)
             
-            if self.tableOrderListener == nil {
-                print("adding listener")
-                self.addTableOrderListener()
-            } else {
-                print("did not add listener ")
+         
+            if self.dineInOrderListener == nil {
+                self.addDineInOrderListener()
             }
+           
             
         }
         
     }
     
-    func addTableOrderListener() {
+    func addDineInOrderListener() {
         
         //TODO: Dulpicated orders ...
         
-        if tableOrderListener != nil {
-            tableOrderListener?.remove()
-        }
+
         
         guard let table = Table.shared.tableNumber else { return }
         
@@ -518,7 +515,7 @@ class NetworkManager {
         
 //        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
         
-        tableOrderListener = activeTableRef.addSnapshotListener({ (snapshot, error) in
+        dineInOrderListener = activeTableRef.addSnapshotListener({ (snapshot, error) in
             
             guard error == nil else {
                 print("Error adding listener to channel \(error.debugDescription)")
@@ -589,7 +586,7 @@ class NetworkManager {
     
     func removeTableOrderListener() {
         
-        tableOrderListener?.remove()
+        dineInOrderListener?.remove()
     }
     
     

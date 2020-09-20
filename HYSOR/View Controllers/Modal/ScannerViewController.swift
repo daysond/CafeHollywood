@@ -144,7 +144,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         Table.shared.tableNumber = String(num)
         
-        NetworkManager.shared.addTableOrderListener()
+        NetworkManager.shared.addDineInOrderListener()
         
         self.delegate?.found()
         
