@@ -18,7 +18,9 @@ class Table {
     
     var tableNumber: String?
 //    var tableID: String?
-    var orderIDs: [String] = []
+    var orderIDs: [String] {
+        tableOrders.compactMap { $0.orderID }
+    }
     var tableOrders: [TableOrder] = []
     var shouldShowAllOrders: Bool = true
     var timestamp: String?
@@ -91,7 +93,7 @@ class Table {
         Table.shared.tableNumber = nil
         Table.shared.timestamp = nil
         Table.shared.tableOrders = []
-        Table.shared.orderIDs = []
+//        Table.shared.orderIDs = []
         Table.shared.shouldShowAllOrders = true
         
     }

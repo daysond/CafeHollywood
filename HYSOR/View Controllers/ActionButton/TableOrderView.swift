@@ -39,6 +39,7 @@ class TableOrderView: ReceiptView {
     
    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(Table.shared.meals.count)
         return table.meals.count
     }
     

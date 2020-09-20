@@ -116,7 +116,7 @@ class NetworkManager {
         
         let myActiveTableRef = databaseRef.collection("customers").document(myID).collection("activeTables")
         
-        activeOrderListener = myActiveTableRef.addSnapshotListener({ (snapshot, error) in
+        activeTableListener = myActiveTableRef.addSnapshotListener({ (snapshot, error) in
             guard error == nil else {
                 print(error!.localizedDescription)
                 //                completion(nil)
@@ -181,13 +181,6 @@ class NetworkManager {
         Auth.auth().signIn(withEmail: email, password: password) { (authDataResult, error) in
             completion(authDataResult, error)
         }
-        
-        
-    }
-    
-    func singUp() {
-        
-        
         
     }
     
@@ -494,7 +487,7 @@ class NetworkManager {
                 return
             }
             
-            Table.shared.orderIDs.append(orderID)
+//            Table.shared.orderIDs.append(orderID)
             let data = ["status": OrderStatus.unconfirmed.rawValue]
             activeTableRef.collection("orderIDs").document(orderID).setData(data)
             customerActiveTableRef.setData([:])
@@ -513,11 +506,17 @@ class NetworkManager {
     
     func addTableOrderListener() {
         
+        //TODO: Dulpicated orders ...
+        
+        if tableOrderListener != nil {
+            tableOrderListener?.remove()
+        }
+        
         guard let table = Table.shared.tableNumber else { return }
         
         let activeTableRef = databaseRef.collection("activeTables").document(table).collection("orderIDs")
         
-        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
+//        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
         
         tableOrderListener = activeTableRef.addSnapshotListener({ (snapshot, error) in
             
@@ -537,11 +536,12 @@ class NetworkManager {
             snapshot.documentChanges.forEach { (change) in
                 
                 if change.type == .added {
-                    if currentTableOrderID.firstIndex(of: change.document.documentID) == nil {
+                    if Table.shared.orderIDs.firstIndex(of: change.document.documentID) == nil {
                         
                         self.fetchTableOrder(change.document.documentID) { (order) in
                             guard let order = order else { return }
-                            Table.shared.orderIDs.append(order.orderID)
+//                            Table.shared.orderIDs.append(order.orderID)
+                            
                             Table.shared.tableOrders.append(order)
                         }
                     }
@@ -741,6 +741,10 @@ class NetworkManager {
     
     
     func addActiveOrderListener() {
+        
+        if activeOrderListener != nil {
+            activeOrderListener?.remove()
+        }
         
         let activeOrderRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("activeOrders")
         
