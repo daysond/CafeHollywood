@@ -541,28 +541,49 @@ class NetworkManager {
             print(snapshot.data())
             
             for (key, value) in data {
-                // check if order exists, if nil, then it's a new order, then we fetch it
-                if Table.shared.orderIDs.firstIndex(of: key) == nil {
+                
+                switch key {
+                case "isTableActive":
                     
-                    self.fetchTableOrder(key) { (order) in
-                        guard let order = order else { return }
-                        Table.shared.tableOrders.append(order)
-
-                    }
-                } else {
-                    // if order exists, check status
-                    if let statusCode = value as? Int, let status = OrderStatus(rawValue: statusCode) {
-                        // if status changed, update status
-                        Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
-                        // TODO: UPDATE UI
+                    if let isTableActive = value as? Bool, isTableActive == false {
+                        
+                        self.closeTable()
                     }
                     
+                    return
+                    
+                default:
+                    // check if order exists, if nil, then it's a new order, then we fetch it
+                    if Table.shared.orderIDs.firstIndex(of: key) == nil {
+                        
+                        self.fetchTableOrder(key) { (order) in
+                            guard let order = order else { return }
+                            Table.shared.tableOrders.append(order)
+                        }
+                    } else {
+                        // if order exists, check status
+                        if let statusCode = value as? Int, let status = OrderStatus(rawValue: statusCode) {
+                            // if status changed, update status
+                            Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
+                            // TODO: UPDATE UI
+                        }
+                    }
                 }
             }
-            
-            
         })
    
+    }
+    
+    private func closeTable() {
+        
+        guard let table = Table.shared.tableNumber, let customerID = currentUser?.uid else { return }
+        
+        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables").document(table)
+        
+        customerActiveTableRef.delete()
+        activeTableListener?.remove()
+        Table.reset()
+
     }
     
     
