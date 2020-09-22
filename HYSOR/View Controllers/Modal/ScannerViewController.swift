@@ -26,7 +26,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.removeTableOrderListener()
+//        NetworkManager.shared.removeTableOrderListener()
         
         self.navigationController?.isNavigationBarHidden = false
         view.backgroundColor = UIColor.black
@@ -144,9 +144,35 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         Table.shared.tableNumber = String(num)
         
-        NetworkManager.shared.addTableListener()
+        NetworkManager.shared.checkIfTableDoesExist(completion: { (error, tableExists) in
+            
+            guard error == nil else {
+                print(error!.localizedDescription)
+                self.delegate?.failedReadingQRCode()
+                return
+            }
+            
+            if let tableExists = tableExists {
+                
+                switch tableExists {
+                case true:
+                    
+                    NetworkManager.shared.addTableListener()
+                    
+                    self.delegate?.found()
+                    
+                    
+                default:
+                    
+                    self.delegate?.found()
+                    
+                }
+
+            }
+
+        })
         
-        self.delegate?.found()
+
         
 //        NetworkManager.shared.addTableOrderListener { error in
 //            

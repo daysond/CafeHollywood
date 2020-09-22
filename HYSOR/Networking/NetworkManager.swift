@@ -59,7 +59,7 @@ class NetworkManager {
     
     private var orderStatusListener: ListenerRegistration?
     
-    private var dineInOrderListener: ListenerRegistration?
+//    private var dineInOrderListener: ListenerRegistration?
     
     private var activeTableListener: ListenerRegistration?
     
@@ -105,6 +105,7 @@ class NetworkManager {
         }
     }
     
+    //On start, check self active table
     
     func checkActiveTable() {
         
@@ -470,6 +471,8 @@ class NetworkManager {
         
         guard let table = Table.shared.tableNumber, let customerID = currentUser?.uid else { return }
         
+        addTableListener()
+        
         let activeTableRef = databaseRef.collection("activeTables").document(table)
         
         let orderID = String.randomString(length: 6)
@@ -485,7 +488,8 @@ class NetworkManager {
                 return
             }
             
-            activeTableRef.updateData([orderID: OrderStatus.unconfirmed.rawValue])
+            activeTableRef.setData([orderID: OrderStatus.unconfirmed.rawValue], merge: true)
+          
             customerActiveTableRef.setData([:])
             completion(nil)
         }
@@ -494,75 +498,33 @@ class NetworkManager {
         
     }
     
-//    func sendOrder(completion: @escaping (Error?) -> Void) {
-//
-//        guard let table = Table.shared.tableNumber else { return }
-//
-//        let activeTableRef = databaseRef.collection("activeTables").document(table)
-//
-//        activeTableRef.getDocument { (doc, err) in
-//            guard err == nil else {
-//                completion(err)
-//                print(err! .localizedDescription)
-//                return
-//            }
-//            if let doc = doc {
-//
-//                if doc.data() == nil {
-//
-//                    activeTableRef.setData(Table.shared.representation)
-//
-//                }
-//
-//                self.sendTableOrder(table){ (error) in
-//                    if let error = error {
-//                        completion(error)
-//                    }
-//
-//                    completion(nil)
-//                }
-//
-//            }
-//        }
-//
-//    }
-    
-//    private func sendTableOrder(_ table: String, completion: @escaping (Error?) -> Void) {
-//
-//        guard let customerID = currentUser?.uid else { return }
-//
-//        let orderID = String.randomString(length: 6)
-//
-//        let ordersRef = dineInOrdersRef.document(orderID)
-//
-//        let activeTableRef = databaseRef.collection("activeTables").document(table)
-//
-//        let customerActiveTableRef = databaseRef.collection("customers").document(customerID).collection("activeTables").document(table)
-//
-//        ordersRef.setData(Cart.shared.dineInRepresentation) { (error) in
-//
-//            guard error == nil else {
-//                completion(error)
-//                return
-//            }
-//
-////            Table.shared.orderIDs.append(orderID)
-//            let data = ["status": OrderStatus.unconfirmed.rawValue]
-//            activeTableRef.collection("orderIDs").document(orderID).setData(data)
-//            customerActiveTableRef.setData([:])
-//            completion(nil)
-//
-//
-////            if self.dineInOrderListener == nil {
-////                self.addDineInOrderListener()
-////            }
-//
-//
-//        }
-//
-//    }
+    func checkIfTableDoesExist(completion: @escaping (Error?, Bool?) -> Void) {
+
+        guard let table = Table.shared.tableNumber else { return }
+
+        let activeTableRef = databaseRef.collection("activeTables").document(table)
+
+        activeTableRef.getDocument { (doc, err) in
+            guard err == nil else {
+                completion(err, nil)
+                print(err! .localizedDescription)
+                return
+            }
+            if let doc = doc {
+
+                doc.data() == nil ? completion(nil, false) : completion(nil, true)
+
+            }
+        }
+
+    }
+
     
     func addTableListener() {
+        
+        if activeTableListener != nil {
+            return
+        }
         
         guard let table = Table.shared.tableNumber else { return }
         let activeTableRef = databaseRef.collection("activeTables").document(table)
@@ -596,70 +558,12 @@ class NetworkManager {
                     }
                     
                 }
-                
             }
             
             
         })
    
     }
-    
-//    func addDineInOrderListener() {
-//
-//        //TODO: Dulpicated orders ...
-//
-//
-//
-//        guard let table = Table.shared.tableNumber else { return }
-//
-//        let activeTableRef = databaseRef.collection("activeTables").document(table).collection("orderIDs")
-//
-////        let currentTableOrderID = Table.shared.tableOrders.compactMap{$0.orderID} as [String]
-//
-//        dineInOrderListener = activeTableRef.addSnapshotListener({ (snapshot, error) in
-//
-//            guard error == nil else {
-//                print("Error adding listener to channel \(error.debugDescription)")
-////                completion(error)
-//                return
-//            }
-//            guard let snapshot = snapshot else {
-//                print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
-////                completion(error)
-//                return
-//            }
-//
-////            completion(nil)
-//
-//            snapshot.documentChanges.forEach { (change) in
-//
-//                if change.type == .added {
-//                    if Table.shared.orderIDs.firstIndex(of: change.document.documentID) == nil {
-//
-//                        self.fetchTableOrder(change.document.documentID) { (order) in
-//                            guard let order = order else { return }
-////                            Table.shared.orderIDs.append(order.orderID)
-//
-//                            Table.shared.tableOrders.append(order)
-//                        }
-//                    }
-//                }
-//
-//                //                if change.type == .modified {
-//                //
-//                //                    print("modified \(change.document.documentID)")
-//                //                }
-//                //
-//                //                if change.type == .removed {
-//                //
-//                //                    print("removed \(change.document.documentID)")
-//                //
-//                //                }
-//            }
-//
-//        })
-//
-//    }
     
     
     private func fetchTableOrder(_ orderID: String, completion: @escaping (TableOrder?) -> Void ) {
@@ -684,12 +588,7 @@ class NetworkManager {
 
     
     
-    
-    func removeTableOrderListener() {
-        
-        dineInOrderListener?.remove()
-    }
-    
+
     
     
     //MARK: - Online ORDERS
