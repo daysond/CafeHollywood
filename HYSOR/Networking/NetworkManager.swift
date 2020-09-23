@@ -523,6 +523,7 @@ class NetworkManager {
     func addTableListener() {
         
         if activeTableListener != nil {
+            print("returned")
             return
         }
         
@@ -535,43 +536,40 @@ class NetworkManager {
                 return
             }
             
-            guard let snapshot = snapshot, let data = snapshot.data() else { return }
+            guard let snapshot = snapshot, let data = snapshot.data() as? [String: Int] else { return }
             
             print("did change doc")
             print(snapshot.data())
             
             for (key, value) in data {
                 
-                switch key {
-                case "isTableActive":
-                    
-                    if let isTableActive = value as? Bool, isTableActive == false {
-                        
+                if key == "isTableActive" {
+                    if value == 0 {
                         self.closeTable()
+                        continue
+                    }
+                }
+                
+                // check if order exists, if nil, then it's a new order, then we fetch it
+                if Table.shared.orderIDs.firstIndex(of: key) == nil {
+                    
+                    self.fetchTableOrder(key) { (order) in
+                        guard let order = order else { return }
+                        Table.shared.tableOrders.append(order)
                     }
                     
-                    return
-                    
-                default:
-                    // check if order exists, if nil, then it's a new order, then we fetch it
-                    if Table.shared.orderIDs.firstIndex(of: key) == nil {
-                        
-                        self.fetchTableOrder(key) { (order) in
-                            guard let order = order else { return }
-                            Table.shared.tableOrders.append(order)
-                        }
-                    } else {
-                        // if order exists, check status
-                        if let statusCode = value as? Int, let status = OrderStatus(rawValue: statusCode) {
-                            // if status changed, update status
-                            Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
-                            // TODO: UPDATE UI
-                        }
+                } else {
+                    // if order exists, check status
+                    if let status = OrderStatus(rawValue: value) {
+                        // if status changed, update status
+                        Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
+                        // TODO: UPDATE UI
                     }
+                    
                 }
             }
         })
-   
+        
     }
     
     private func closeTable() {
@@ -582,6 +580,7 @@ class NetworkManager {
         
         customerActiveTableRef.delete()
         activeTableListener?.remove()
+        activeTableListener = nil
         Table.reset()
 
     }

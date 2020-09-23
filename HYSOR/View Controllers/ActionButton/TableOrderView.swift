@@ -37,18 +37,39 @@ class TableOrderView: ReceiptView {
         receiptFooterView.setupFooterViewForCurrentTable()
     }
     
-   
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(Table.shared.meals.count)
-        return table.meals.count
+        switch section {
+        case 0:
+            return table.unconfirmedMeals.count
+        case 1:
+            return table.confirmedMeals.count
+        case 2:
+            return table.cancelledMeals.count
+        default:
+            return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: CartTableViewCell.identifier, for: indexPath) as? CartTableViewCell {
         
-            cell.configureCellWithMealInfo(table.meals[indexPath.row])
+        if let cell = tableView.dequeueReusableCell(withIdentifier: CartTableViewCell.identifier, for: indexPath) as? CartTableViewCell {
             
+            switch indexPath.section {
+            case 0:
+                cell.configureCellWithMealInfo(table.unconfirmedMeals[indexPath.row], status: .unconfirmed)
+            case 1:
+                cell.configureCellWithMealInfo(table.confirmedMeals[indexPath.row], status: .confirmed)
+            case 2:
+                cell.configureCellWithMealInfo(table.cancelledMeals[indexPath.row], status: .cancelled)
+            default:
+                break
+            }
+
             return cell
         }
         
@@ -56,12 +77,55 @@ class TableOrderView: ReceiptView {
         
     }
     
+     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        switch section {
+        case 0:
+            return "Unconfirmed"
+        case 1:
+            return "Confirmed"
+        case 2:
+            return "Cancelled"
+        default:
+            return nil
+        }
+        
+    }
+    
+     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        switch section {
+        case 0:
+            return table.unconfirmedMeals.count == 0 ? 0 : 24
+        case 1:
+            return table.confirmedMeals.count == 0 ? 0 : 24
+        case 2:
+            return table.cancelledMeals.count == 0 ? 0 : 24
+        default:
+            return 0
+        }
+        
+        
+    }
+    
     override func heightForCellDetailLabel(at indexPath: IndexPath) -> CGFloat{
         
+        var meals: [MealInfo] = []
         
-        let addonInfo = table.meals[indexPath.row].addOnInfo
+        switch indexPath.section {
+        case 0:
+            meals = table.unconfirmedMeals
+        case 1:
+            meals = table.confirmedMeals
+        case 2:
+            meals = table.cancelledMeals
+        default:
+            return 0
+        }
+        
+        let addonInfo = meals[indexPath.row].addOnInfo
         var text = addonInfo
-        let instruction = table.meals[indexPath.row].instruction
+        let instruction = meals[indexPath.row].instruction
         if instruction != "" {
             text =  text == "" ?  "Note: \(instruction)" :  text + "\n\nNote: \(instruction)"
             print(text)

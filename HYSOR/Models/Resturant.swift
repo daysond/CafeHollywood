@@ -22,16 +22,38 @@ class Table {
         tableOrders.compactMap { $0.orderID }
     }
     var tableOrders: [TableOrder] = []
+    
+    var unconfirmedOrders: [TableOrder] {
+        tableOrders.filter{ $0.status == .unconfirmed }
+    }
+    
+    var confirmedOrders: [TableOrder] {
+        tableOrders.filter{ $0.status == .confirmed }
+    }
+    
+    var cancelledOrders: [TableOrder] {
+        tableOrders.filter{ $0.status == .cancelled }
+    }
+    
+    
     var shouldShowAllOrders: Bool = true
     var timestamp: String?
     
-    var meals: [MealInfo] {
-        shouldShowAllOrders ? tableOrders.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap { $0.meals } : tableOrders.filter { $0.customerID == APPSetting.customerUID }.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap{ $0.meals }
+    var unconfirmedMeals: [MealInfo] {
+        shouldShowAllOrders ? unconfirmedOrders.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap { $0.meals } : unconfirmedOrders.filter { $0.customerID == APPSetting.customerUID }.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap{ $0.meals }
+    }
+    
+    var confirmedMeals: [MealInfo] {
+        shouldShowAllOrders ? confirmedOrders.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap { $0.meals } : confirmedOrders.filter { $0.customerID == APPSetting.customerUID }.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap{ $0.meals }
+    }
+    
+    var cancelledMeals: [MealInfo] {
+        shouldShowAllOrders ? cancelledOrders.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap { $0.meals } : cancelledOrders.filter { $0.customerID == APPSetting.customerUID }.sorted{ $0.orderTimestamp < $1.orderTimestamp }.flatMap{ $0.meals }
     }
     
     var subTotal: Money {
     
-        let subtotal = meals.reduce(Money(amt: 0.0)) { (runningTotal, meal)  in
+        let subtotal = confirmedMeals.reduce(Money(amt: 0.0)) { (runningTotal, meal)  in
             runningTotal + Money(amt: meal.totalPrice)
         }
         
@@ -55,7 +77,7 @@ class Table {
         var drinkTagCount = 0
         var wingTagCount = 0
 
-        meals.forEach { (meal) in
+        confirmedMeals.forEach { (meal) in
             
             for _ in 1...meal.quantity {
                 

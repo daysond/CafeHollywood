@@ -137,6 +137,29 @@ class CartTableViewCell: UITableViewCell {
         
     }
     
+    func configureCellWithMealInfo(_ info: MealInfo, status: OrderStatus) {
+        
+        titleLabel.text = info.name
+        
+        quantityLabel.text = "\(info.quantity)"
+        
+        priceLabel.text =  status == .cancelled ? "$0.00" : "$" + Money(amt: info.totalPrice).amount.stringRepresentation 
+        
+        var details = ""
+        
+        if info.instruction != "" {
+            
+            details = info.addOnInfo == "" ? "Note: \(info.instruction)" : info.addOnInfo + "\n\nNote: \(info.instruction)"
+            
+        } else {
+            details = info.addOnInfo
+        }
+        
+        detailLabel.text = details
+        
+        
+    }
+    
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
