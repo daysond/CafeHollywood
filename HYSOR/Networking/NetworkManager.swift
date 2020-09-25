@@ -92,15 +92,14 @@ class NetworkManager {
     
     func getCurrentVersion(completion: @escaping (String?) -> Void) {
         
-        
-        databaseRef.collection("version").document("versionNumber").getDocument { (snapshot, error) in
+        databaseRef.collection("restaurantInfo").document("versions").getDocument { (snapshot, error) in
             guard error == nil else {
                 print("error")
                 return
             }
             
-            if let data = snapshot?.data(), let version = data["menuVersion"] as? String {
-                completion(version)
+            if let data = snapshot?.data(), let menuVersion = data["menuVersion"] as? String {
+                completion(menuVersion)
             }
         }
     }
@@ -224,7 +223,6 @@ class NetworkManager {
         
         
         
-        
         Auth.auth().createUser(withEmail: email, password: password) { (dataResult, err) in
             
             guard err == nil else {
@@ -239,11 +237,13 @@ class NetworkManager {
             
             self.updateProfileField(.name, to: name) { (err) in
                 guard err == nil else { print(err!.localizedDescription ); return }
+                print("did set name \(name)")
             }
             
             
             self.setAuthPhoneNumber(verificationCode: code) { (err) in
                 guard err == nil else { print(err!.localizedDescription ); return }
+                print("did set phone \(code)")
             }
             
             
@@ -604,7 +604,26 @@ class NetworkManager {
         }
     }
     
-    
+     func sendRequest(_ request: String, completion: @escaping (Error?) -> Void) {
+        
+        let ref = databaseRef.collection("requests")
+        
+        let uid = String.randomString(length: 4)
+        
+        let data = ["request": request]
+        
+        ref.document(uid).setData(data) { (error) in
+            guard error == nil else {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+        }
+        
+        
+        
+    }
 
     
     

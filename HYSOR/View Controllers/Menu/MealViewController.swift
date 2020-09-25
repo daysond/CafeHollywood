@@ -297,7 +297,7 @@ class MealViewController: UIViewController {
     
     @objc func instructionLabelTapped(){
         
-        let instructionVC = InstructionsInputViewController()
+        let instructionVC = InstructionsInputViewController(title: "Special Instruction")
         instructionVC.delegate = self
         
         if meal.instruction != nil {

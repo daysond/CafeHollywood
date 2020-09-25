@@ -28,6 +28,17 @@ class InstructionsInputViewController: UIViewController {
 
     var delegate: InstructionInputDelegate?
     
+    let navTitle: String
+    
+    init(title: String) {
+        self.navTitle = title
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -49,7 +60,7 @@ class InstructionsInputViewController: UIViewController {
         backBarItem.customView?.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
         self.navigationItem.leftBarButtonItem = backBarItem
-        self.navigationItem.title = "Special Instructions"
+        self.navigationItem.title = navTitle
         
         let doneButton = UIButton(type: .custom)
         doneButton.frame = CGRect(x: 0.0, y: 0.0, width: 32, height: 32)

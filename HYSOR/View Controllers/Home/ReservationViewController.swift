@@ -427,7 +427,7 @@ class ReservationViewController: UIViewController {
     @objc
     private func requestButtonTapped() {
         
-        let instructionVC = InstructionsInputViewController()
+        let instructionVC = InstructionsInputViewController(title: "Special Request")
         instructionVC.delegate = self
         instructionVC.textView.text = reservation.note ?? ""
         let nav = UINavigationController(rootViewController: instructionVC)

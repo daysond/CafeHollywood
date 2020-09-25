@@ -28,7 +28,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
             
         case .note:
             
-            let instructionVC = InstructionsInputViewController()
+            let instructionVC = InstructionsInputViewController(title: "Note")
             instructionVC.delegate = self
             instructionVC.textView.text = option.subTitle == Constants.checkoutNoteHolder ? "" : option.subTitle
             

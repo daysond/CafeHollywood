@@ -208,26 +208,51 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         }
         
         if sender === noteButton.button {
-            print("add weight")
+            let ivc = InstructionsInputViewController(title: "Message")
+            ivc.delegate = self
+            let nav = UINavigationController(rootViewController: ivc)
+            nav.modalPresentationStyle = .popover
+            self.present(nav, animated: true, completion: nil)
         }
         
         if sender === getBillButton.button {
-            print("add workout")
+            sendRequest("bill")
         }
         
         if sender === refillWaterButton.button {
             
-//           present(AddWaterViewController(), animated: true, completion: nil)
+            sendRequest("water refill")
         }
         
         if sender === requestWaiterButton.button {
-//            showAddPlanAlert()
+            sendRequest("waiter")
         }
     }
     
     @objc private func openMenu() {
         isMenuOpened = !isMenuOpened
     }
+    
+    
+    private func sendRequest(_ text: String) {
+        
+        guard let table = Table.shared.tableNumber else {
+            return
+        }
+        
+        let request = "Table \(table) request \(text)."
+        
+        NetworkManager.shared.sendRequest(request) { (error) in
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            
+        }
+        
+        
+    }
+
     
     
     //MARK:- HELPERS
@@ -345,9 +370,14 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
 
 }
 
-extension MainTabBarViewController: QRCodeScannerDelegate {
+extension MainTabBarViewController: QRCodeScannerDelegate, InstructionInputDelegate {
     
-
+    
+    func didInputInstructions(_ instructions: String) {
+        
+        sendRequest(instructions)
+        
+    }
     
     func found() {
         
