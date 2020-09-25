@@ -90,8 +90,8 @@ class HomeViewController: UIViewController {
     
     @objc private func onlineOrderTapped() {
         
-//        self.tabBarController?.selectedIndex = 1
-        NetworkManager.shared.checkActiveTable()
+        self.tabBarController?.selectedIndex = 1
+//        NetworkManager.shared.checkActiveTable()
     }
     
     @objc

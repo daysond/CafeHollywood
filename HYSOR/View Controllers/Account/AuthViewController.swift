@@ -191,8 +191,7 @@ class AuthViewController: UpdateProfileViewController {
         
         switch field {
         case .email:
-            self.navigationController?.popViewController(animated: true)
-            
+            self.navigationController?.dismiss(animated: true, completion: nil)
         case .name:
             switchField(.email)
             
