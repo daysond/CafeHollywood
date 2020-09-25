@@ -212,6 +212,7 @@ class AuthViewController: UpdateProfileViewController {
     
     //MARK: - HELPERS
     
+    
     private func verifyPhoneNumber() {
         
         guard let number = phoneNumber else {
@@ -220,9 +221,16 @@ class AuthViewController: UpdateProfileViewController {
             
         }
         
+        // Creat spinner view
+        
+        let child = SpinnerViewController()
+        addChild(child)
+        child.view.frame = view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+        
         NetworkManager.shared.verifyPhoneNumber(number) { (verificationID, error) in
             
-            print("did dent soce")
             DispatchQueue.main.async {
                 
                 guard error == nil else {
@@ -235,9 +243,11 @@ class AuthViewController: UpdateProfileViewController {
                     return
                 }
                 
+                child.willMove(toParent: nil)
+                child.view.removeFromSuperview()
+                child.removeFromParent()
+                
                 APPSetting.storePhoneVerificationID(id)
-                
-                
                 self.switchField(.verification)
             }
         }
