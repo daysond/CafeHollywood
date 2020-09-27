@@ -202,7 +202,7 @@ class MenuViewController: UIViewController {
         
         createLoadingView()
         
-        NetworkManager.shared.getCurrentVersion { (newVersion) in
+        NetworkManager.shared.checkMenuUpdate { (newVersion) in
             guard let newVersion = newVersion else { print("returned")
                 return }
             

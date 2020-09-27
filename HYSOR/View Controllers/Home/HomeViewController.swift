@@ -90,8 +90,29 @@ class HomeViewController: UIViewController {
     
     @objc private func onlineOrderTapped() {
         
-        self.tabBarController?.selectedIndex = 1
+//        self.tabBarController?.selectedIndex = 1
 //        NetworkManager.shared.checkActiveTable()
+        
+        NetworkManager.shared.getBusinessHours { (hours, error) in
+            
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            if let hours = hours {
+                
+                for (day, hours) in hours {
+                    
+                    print("\(day) - \(hours.split(separator: "-"))")
+                    
+                }
+                
+                
+            }
+            
+        }
+        
     }
     
     @objc

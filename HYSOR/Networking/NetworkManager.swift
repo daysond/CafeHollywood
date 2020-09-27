@@ -49,9 +49,9 @@ class NetworkManager {
         return ref
     }
     
-    private var resturantsRef: CollectionReference  {
+    private var resturantInfoRef: CollectionReference  {
         let db = Firestore.firestore()
-        let ref = db.collection("resturants")
+        let ref = db.collection("restaurantInfo")
         return ref
     }
     
@@ -90,15 +90,29 @@ class NetworkManager {
     
     // MARK: - ON START CHECKING
     
-    func getCurrentVersion(completion: @escaping (String?) -> Void) {
+    func checkMenuUpdate(completion: @escaping (String?) -> Void) {
         
-        databaseRef.collection("restaurantInfo").document("versions").getDocument { (snapshot, error) in
+        databaseRef.collection("restaurantInfo").document("menuVersion").getDocument { (snapshot, error) in
             guard error == nil else {
                 print("error")
                 return
             }
             
-            if let data = snapshot?.data(), let menuVersion = data["menuVersion"] as? String {
+            if let data = snapshot?.data(), let menuVersion = data["version"] as? String {
+                completion(menuVersion)
+            }
+        }
+    }
+    // businessHoursVersion
+    func checkBusinessHoursUpdate(completion: @escaping (String?) -> Void) {
+        
+        databaseRef.collection("restaurantInfo").document("businessHoursVersion").getDocument { (snapshot, error) in
+            guard error == nil else {
+                print("error")
+                return
+            }
+            
+            if let data = snapshot?.data(), let menuVersion = data["version"] as? String {
                 completion(menuVersion)
             }
         }
@@ -134,6 +148,27 @@ class NetworkManager {
                 
             }
         }
+    }
+    
+    func getBusinessHours(completion: @escaping ([String: String]?, Error?) -> Void) {
+        
+        resturantInfoRef.document("businessHours").getDocument { (snapshot, error) in
+            
+            guard error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            guard let snapshot = snapshot,  let data = snapshot.data() as? [String: String]  else {
+                completion(nil, NetworkError.unknowError)
+                return
+            }
+            
+            print(data)
+            completion(data, nil)
+           
+        }
+
     }
     
     

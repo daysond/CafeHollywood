@@ -30,6 +30,10 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     private let dateFormatter = DateFormatter()
     private let timeFormatter = DateFormatter()
+    
+    private let startTimes: [Weekdays : String]
+    private let endTimes: [Weekdays: String]
+
 
     
     private var currentTime:String {
@@ -65,8 +69,25 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var shouldOnlyShowToday: Bool = false
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
         
+        let businessHours = APPSetting.businessHours
+        var tempStartTimes = [Weekdays : String]()
+        var tempEndTimes = [Weekdays: String]()
+        
+        businessHours.forEach { (day, hours) in
+            
+            let weekday = Weekdays(rawValue: Int(day)!)!
+            let splitedHours = hours.split(separator: "-")
+            
+            tempStartTimes[weekday] = "\(splitedHours[0])"
+            tempEndTimes[weekday] = "\(splitedHours[1])"
+
+        }
+        
+        self.startTimes = tempStartTimes
+        self.endTimes = tempEndTimes
+
+        super.init(frame: frame)
         dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
         timeFormatter.setLocalizedDateFormatFromTemplate("HH mm")
         generateDates()
@@ -176,6 +197,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         for i in 1...j {
             let comingDay = DateComponents(year: now.year, month: now.month, day: now.day! + i )
             let dateOfComingDay = Calendar.current.date(from: comingDay)!
+            print( " day is \(dateOfComingDay.getDayOfWeek())")
             dates.append(dateFormatter.string(from: dateOfComingDay))
         }
         

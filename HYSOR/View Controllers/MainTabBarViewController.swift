@@ -67,10 +67,60 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         radius = view.bounds.maxX * 0.5 - 40.0
     }
     
+    
+    
     private func networkSetup() {
         
         NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
+        
+        NetworkManager.shared.checkBusinessHoursUpdate { (newVersion) in
+            
+            guard let newVersion = newVersion else { print("returned")
+                return }
+            
+            
+            self.compareCurrentVersion(with: newVersion)
+        }
+
+    }
+    
+    private func compareCurrentVersion(with newVersion: String) {
+
+        func setKeyAndHours() {
+            userDefaults.set(newVersion, forKey: "businessHoursVersion")
+            setBusinessHours()
+        }
+        
+        guard let currentMenuVersion = userDefaults.string(forKey: "businessHoursVersion") else {
+            // first time: set key and hours
+            setKeyAndHours()
+            return
+        }
+        
+        // got updates: set hours and reset key
+        if newVersion != currentMenuVersion {
+            setKeyAndHours()
+        }
+
+    }
+    
+    private func setBusinessHours() {
+        NetworkManager.shared.getBusinessHours { (data, error) in
+            
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            if let hours = data {
+                userDefaults.setValue(hours, forKey: Constants.businessHoursKey)
+                
+                let new = userDefaults.dictionary(forKey: Constants.businessHoursKey)
+                print("new hours \(new)")
+                
+            }
+        }
     }
     
     private func setupActionButton() {

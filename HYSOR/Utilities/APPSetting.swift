@@ -23,10 +23,23 @@ enum Constants {
     static let kReceiptFooterHeight: CGFloat = 50
     static let kReceiptCellHeight: CGFloat = 35
     static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
+    static let businessHoursKey: String = "businessHours"
     static let drinkMenuTypeRawValue = "drinkMenu"
     static let foodMenuTypeRawValue = "foodMenu"
     static let checkoutNoteHolder = "(ANY FOOD ALLERGY?)"
 
+}
+
+enum Weekdays: Int {
+    
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+    
 }
 
 
@@ -68,6 +81,13 @@ class APPSetting {
         
         let list = userDefaults.array(forKey: Constants.favouriteListKey) as? [String]
         return list ?? [String]()
+    
+    }
+    
+    static var businessHours: [String: String] {
+        
+        let hours = userDefaults.dictionary(forKey: Constants.businessHoursKey) as? [String: String]
+        return hours ?? ["1": "11:00-22:00", "2": "11:00-22:00", "3": "11:00-22:00", "4": "11:00-22:00", "5": "11:00-22:00", "6": "11:00-24:00", "7": "11:00-24:00"]
     
     }
     
