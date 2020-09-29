@@ -19,10 +19,21 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
         return tb
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.text = "Quick Order From Favourite"
+        l.numberOfLines = 0
+        l.textColor = .black
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return l
+    }()
+    
+    private let hintLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Uh-oh, your favourite list is empty."
         l.numberOfLines = 0
         l.textColor = .black
         l.textAlignment = .left
@@ -58,6 +69,7 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
         favouriteMealTableView.delegate = self
         favouriteMealTableView.backgroundColor = .whiteSmoke
         favouriteMealTableView.layer.cornerRadius = 8
+        favouriteMealTableView.separatorStyle = .none
         
         addSubview(favouriteMealTableView)
         addSubview(titleLabel)
@@ -83,6 +95,15 @@ class FavouriteView: UIView, UpdateFavouriteTableViewDelegate {
             cancelButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
             
         ])
+        
+        if APPSetting.favouriteList.isEmpty {
+            
+            addSubview(hintLabel)
+            
+            hintLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+            hintLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+            
+        }
         
     }
     

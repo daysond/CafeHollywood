@@ -79,15 +79,17 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             guard let newVersion = newVersion else { print("returned")
                 return }
             
+            print("TAG  hours \(newVersion)")
             
-            self.compareCurrentVersion(with: newVersion)
+            self.compareBusinessHoursVersion(with: newVersion)
         }
 
     }
     
-    private func compareCurrentVersion(with newVersion: String) {
+    private func compareBusinessHoursVersion(with newVersion: String) {
 
         func setKeyAndHours() {
+            print("TAG  hours \(newVersion) did set key")
             userDefaults.set(newVersion, forKey: "businessHoursVersion")
             setBusinessHours()
         }
@@ -106,6 +108,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private func setBusinessHours() {
+        
         NetworkManager.shared.getBusinessHours { (data, error) in
             
             guard error == nil else {
@@ -115,10 +118,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             
             if let hours = data {
                 userDefaults.setValue(hours, forKey: Constants.businessHoursKey)
-                
-                let new = userDefaults.dictionary(forKey: Constants.businessHoursKey)
-                print("new hours \(new)")
-                
+                print("TAG  hours \(hours)")
             }
         }
     }

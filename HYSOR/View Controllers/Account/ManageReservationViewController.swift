@@ -19,8 +19,20 @@ class ManageReservationViewController: UIViewController {
         return tb
     }()
     
+    let hintLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "You have no upcoming reservation."
+        l.numberOfLines = 0
+        l.textColor = .black
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return l
+    }()
+    
     var reservations: [Reservation] = [] {
         didSet {
+            setupTableView()
             reservationListTableView.reloadData()
         }
     }
@@ -28,6 +40,7 @@ class ManageReservationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = false
+        
         setupView()
         
         NetworkManager.shared.getMyReservations { (reservations) in
@@ -41,10 +54,17 @@ class ManageReservationViewController: UIViewController {
     }
     
  
-
-    private func setupView() {
+    private func setupTableView() {
         
-        view.backgroundColor = .white
+        if reservations.isEmpty {
+            
+            view.addSubview(hintLabel)
+            
+            hintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            hintLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+            return
+        }
+        
         view.addSubview(reservationListTableView)
         reservationListTableView.delegate = self
         reservationListTableView.dataSource = self
@@ -58,6 +78,12 @@ class ManageReservationViewController: UIViewController {
         
         ])
         
+    }
+
+    private func setupView() {
+        
+        view.backgroundColor = .white
+
         navigationItem.title = "Upcoming Reservations"
         
         let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(back))
@@ -66,10 +92,7 @@ class ManageReservationViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = .clear
         self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
-
-   
-        
-        
+  
     }
     
     @objc private func back() {

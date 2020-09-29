@@ -71,8 +71,10 @@ class CheckoutViewController: UIViewController {
         setupNavigationBar()
         view.backgroundColor = .white
         view.addSubview(placeOrderButton)
-        placeOrderButton.configureTitle(title: "Place order")
+        placeOrderButton.configureTitle(title: APPSetting.shared.isRestaurantOpen ? "Place order" : "Restaurant Closed")
+        placeOrderButton.backgroundColor = APPSetting.shared.isRestaurantOpen ? .black : .lightGray
         placeOrderButton.addTarget(self, action: #selector(placeOrder), for: .touchUpInside)
+        placeOrderButton.isEnabled = APPSetting.shared.isRestaurantOpen
         
         NSLayoutConstraint.activate([
             

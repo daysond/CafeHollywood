@@ -76,7 +76,7 @@ class LoadingViewController: UIViewController {
  */
 
 class SpinnerViewController: UIViewController {
-    var spinner = UIActivityIndicatorView(style: .medium)
+    var spinner = UIActivityIndicatorView(style: .large)
 
     override func loadView() {
         view = UIView()

@@ -91,6 +91,46 @@ class APPSetting {
     
     }
     
+    var openHours: [Weekdays: String] {
+        
+        let businessHours = APPSetting.businessHours
+        var tempOpenHours = [Weekdays : String]()
+        
+        businessHours.forEach { (day, hours) in
+            let weekday = Weekdays(rawValue: Int(day)!)!
+            let splitedHours = hours.split(separator: "-")
+            tempOpenHours[weekday] = "\(splitedHours[0])"
+        }
+        
+     return tempOpenHours
+    }
+    
+    var closedHours: [Weekdays: String] {
+        
+        let businessHours = APPSetting.businessHours
+        var tempClosedHours = [Weekdays : String]()
+        
+        businessHours.forEach { (day, hours) in
+            let weekday = Weekdays(rawValue: Int(day)!)!
+            let splitedHours = hours.split(separator: "-")
+            tempClosedHours[weekday] = "\(splitedHours[1])"
+        }
+        
+     return tempClosedHours
+    }
+    
+    var isRestaurantOpen: Bool {
+        
+        let dow = Date().getDayOfWeek()
+        
+        let open = openHours[Weekdays(rawValue: dow)!]!
+        let close = closedHours[Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
+        let closeddd = Date.currentTime() <= "\(close):30"
+        print("\(Date.currentTime()>open) > open \(open) ")
+        print("\(closeddd) > close \(close):30 ")
+        return Date.currentTime() >= open && Date.currentTime() <= "\(close):30"
+    }
+    
     
 
     

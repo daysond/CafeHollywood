@@ -66,6 +66,14 @@ extension Date {
         
     }
     
+    static func isWeekDay() -> Bool {
+        
+        let day = Date().getDayOfWeek()
+        
+        return day < 6
+        
+    }
+    
     static func covertCurrentTimeToIntInhhmm() -> Int {
         
         let date = Date()
@@ -73,6 +81,13 @@ extension Date {
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
         return hour * 100 + minute
+    }
+    
+    static func currentTime() -> String {
+        
+        let hourMinuteFormatter = DateFormatter()
+        hourMinuteFormatter.setLocalizedDateFormatFromTemplate("HH mm")
+        return hourMinuteFormatter.string(from: Date())
     }
     
     
@@ -84,6 +99,8 @@ extension Date {
         let weekDay = myCalendar.component(.weekday, from: self)
         return weekDay
     }
+    
+
     
 }
 

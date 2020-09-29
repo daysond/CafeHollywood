@@ -19,30 +19,28 @@ class ManageFavouriteViewController: UIViewController {
         return tb
     }()
     
+    private let hintLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "Uh-oh, your favourite list is empty."
+        l.numberOfLines = 0
+        l.textColor = .black
+        l.textAlignment = .left
+        l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return l
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
-        downloadData()
+        
         
     }
     
     private func setupView() {
         
         view.backgroundColor = .white
-        view.addSubview(favouriteListTableView)
-        favouriteListTableView.delegate = self
-        favouriteListTableView.dataSource = self
-        
-        
-        NSLayoutConstraint.activate([
-        
-            favouriteListTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            favouriteListTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            favouriteListTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            favouriteListTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        
-        ])
         
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationItem.title = "My Favourites"
@@ -53,10 +51,32 @@ class ManageFavouriteViewController: UIViewController {
         self.navigationController?.view.backgroundColor = .clear
         self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
         
+        if APPSetting.favouriteList.isEmpty {
+            
+            view.addSubview(hintLabel)
+            
+            hintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            hintLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+            return
+        }
+        
+        
+        view.addSubview(favouriteListTableView)
+        favouriteListTableView.delegate = self
+        favouriteListTableView.dataSource = self
+        
+        NSLayoutConstraint.activate([
+        
+            favouriteListTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            favouriteListTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            favouriteListTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            favouriteListTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        
+        ])
+        
         navigationItem.rightBarButtonItem = editButtonItem
-   
-        
-        
+
+        downloadData()
     }
     
     @objc private func back() {

@@ -18,7 +18,7 @@ protocol AuthStatusUpdateDelegate {
 class AuthViewController: UpdateProfileViewController {
     
     let isLogin: Bool
-    
+    let logInMethod: AccountField
     private var email: String?
     private var name: String?
     private var phoneNumber: String?
@@ -29,6 +29,7 @@ class AuthViewController: UpdateProfileViewController {
     
     init(field: AccountField, isLogin: Bool) {
         self.isLogin = isLogin
+        self.logInMethod = field
         super.init(field: field)
         shouldAnimateKeyboard = false
         
@@ -143,8 +144,6 @@ class AuthViewController: UpdateProfileViewController {
             return
         }
         
-        
-        
         switch field {
         
         case .email:
@@ -178,7 +177,7 @@ class AuthViewController: UpdateProfileViewController {
             
         case .verification:
             setText()
-            signUp()
+            isLogin ? signIn() : signUp()
             
         default:
             return
@@ -289,10 +288,16 @@ class AuthViewController: UpdateProfileViewController {
     
     private func signIn() {
 
+        logInMethod == .email ? emailSignIn() : phoneSignIn()
+
+    }
+    
+    private func emailSignIn() {
         
         guard let email = email, let password = password else { return }
         
         NetworkManager.shared.signInWith(email, password) { (authResult, error) in
+
             guard error ==  nil else {
                 DispatchQueue.main.async {
                     self.displayMessage(error!.localizedDescription)
@@ -312,10 +317,43 @@ class AuthViewController: UpdateProfileViewController {
                 self.delegate?.didLogIn()
             
             })
-           
             
         }
     }
+    
+    private func phoneSignIn() {
+        
+        guard let code = code else {
+            return
+        }
+        
+        NetworkManager.shared.signInWithPhoneNumber(verificationCode: code) { (authResult, error) in
+            
+            guard error ==  nil else {
+                DispatchQueue.main.async {
+                    self.displayMessage(error!.localizedDescription)
+                }
+                return
+            }
+            
+            guard authResult != nil else {
+                DispatchQueue.main.async {
+                    self.displayMessage("Unknow error.")
+                }
+                return
+            }
+            
+            self.navigationController?.dismiss(animated: true, completion: {
+            
+                self.delegate?.didLogIn()
+            
+            })
+            
+            
+        }
+        
+    }
+    
     
     @objc private func signUp() {
         
@@ -335,9 +373,6 @@ class AuthViewController: UpdateProfileViewController {
                     
                         self.delegate?.didSignUp()
                     })
-                    
-                    
-                    
                 }
                 
             case .failure(let err):
@@ -346,9 +381,6 @@ class AuthViewController: UpdateProfileViewController {
                 }
             }
         }
-        
-        
-        
     }
     
     

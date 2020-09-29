@@ -26,6 +26,8 @@ class AuthHomeViewController: UIViewController {
     
     private let signupButton = BlackButton()
     
+    private var loginMethod: AccountField?
+    
     private let titleLable: UILabel = {
        let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -120,7 +122,24 @@ class AuthHomeViewController: UIViewController {
     
     @objc private func handleLogin() {
         
-        presentAuthVC(isLogin: true)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        alert.view.tintColor = .black
+        
+        alert.addAction(UIAlertAction(title: "Log In with Email", style: .default, handler: { [self] (_) in
+            self.loginMethod = .email
+            self.presentAuthVC(isLogin: true)
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Log In with Phone", style: .default, handler: { (_) in
+            self.loginMethod = .phone
+            self.presentAuthVC(isLogin: true)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+        
+        self.present(alert, animated: true)
 
         
     }
@@ -133,7 +152,15 @@ class AuthHomeViewController: UIViewController {
     
     private func presentAuthVC(isLogin: Bool) {
         
-        let authVC = AuthViewController(field: .email, isLogin: isLogin)
+        var field: AccountField = .email
+        
+        if isLogin {
+            
+            guard let method = loginMethod else { return }
+            field = method
+        }
+        
+        let authVC = AuthViewController(field: field, isLogin: isLogin)
         authVC.delegate = self
         
 //        self.navigationController?.pushViewController(authVC, animated: true)

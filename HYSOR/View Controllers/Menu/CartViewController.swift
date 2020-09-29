@@ -47,13 +47,6 @@ class CartViewController: UIViewController {
 
     }
 
-    
-//    override func viewDidLayoutSubviews() {
-//        let footerLabelHeight = cartFooterView.totalLabel.frame.height
-//        cartFooterView.frame.size.height = (footerLabelHeight + 8 ) * 5 + 32
-//    }
-    
-    
     // MARK: - VIEW SET UP
     
     private func setupEmptyCartView() {
@@ -103,6 +96,12 @@ class CartViewController: UIViewController {
         checkoutButton.addTarget(self, action: #selector(checkoutButtonTapped), for: .touchUpInside)
         checkoutButton.configureTitle(title: APPSetting.shared.isDineIn ? "Send Order" : "Check Out")
         
+        if APPSetting.shared.isRestaurantOpen == false {
+            checkoutButton.isEnabled = false
+            checkoutButton.backgroundColor = .lightGray
+            checkoutButton.configureTitle(title: "Kitchen Closed")
+        }
+        
         setupFooterView()
         
         NSLayoutConstraint.activate([
@@ -142,7 +141,6 @@ class CartViewController: UIViewController {
     
     private func dineInSendOrder() {
         
-        
         NetworkManager.shared.sendOrder { error in
             
             if let error = error {
@@ -152,40 +150,15 @@ class CartViewController: UIViewController {
             
             self.dismiss(animated: true, completion: nil)
             Cart.resetCart()
-            
-            
+
         }
-        
     }
 
-//
-//    private func createLoadingView() {
-//
-//        addChild(loadingView)
-//        loadingView.view.frame = view.frame
-//        view.addSubview(loadingView.view)
-//        loadingView.didMove(toParent: self)
-//
-//    }
-//
-//    private func dismissLoadingView() {
-//
-//
-//        loadingView.willMove(toParent: nil)
-//        loadingView.view.removeFromSuperview()
-//        loadingView.removeFromParent()
-//
-//    }
-    
     
     // MARK: - ACTIONS
-    
 
-    
     @objc func checkoutButtonTapped() {
-        
         APPSetting.shared.isDineIn ? dineInSendOrder() : onlineOrderCheckout()
-    
     }
     
 }
