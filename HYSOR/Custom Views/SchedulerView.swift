@@ -9,7 +9,7 @@
 import UIKit
 
 class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
-
+    
     private let datePicker = UIPickerView()
     let donebutton = BlackButton()
     private let titleLabel: UILabel = {
@@ -23,22 +23,18 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         return l
     }()
     
-    private var dates: [String] = ["Today"]
-    private var time: [String] = []
-    private var timeOfToday: [String] = []
-    private var timeOfAll: [String] = []
+    private var dates: [String] = []
+    private var times: [String] = []
+
     
-    private let dateFormatter = DateFormatter()
     private let timeFormatter = DateFormatter()
     
-    private let startTimes: [Weekdays : String]
-    private let endTimes: [Weekdays: String]
+    private let dayOfTheWeek = Date().getDayOfWeek()
     
-    private let weekendOpenHour: String
-    private let weekendClosedHour: String
-    private let weekdayOpenHour: String
-    private let weekdayClosedHour: String
-
+    private let openTimes: [Weekdays : String]
+    private let closeTimes: [Weekdays: String]
+    
+    
     
     private var currentTime:String {
         get {
@@ -51,23 +47,14 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     var selectedDate: String {
         get {
             let dateIndex = datePicker.selectedRow(inComponent: 0)
-            var selectedDate = dates[dateIndex]
-            if selectedDate == "Today" {
-                selectedDate = dateFormatter.string(from: Date())
-            }
-            return selectedDate
-
+           return dates[dateIndex]
         }
     }
     
     var selectedTime: String {
         get {
             let timeIndex = datePicker.selectedRow(inComponent: 1)
-            var selectedTime = time[timeIndex]
-            if selectedTime == "Now" && shouldOnlyShowToday == false {
-                selectedTime = timeFormatter.string(from: Date())
-            }
-            return selectedTime
+            return times[timeIndex]
         }
     }
     
@@ -75,25 +62,23 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     override init(frame: CGRect) {
         
-        self.startTimes = APPSetting.shared.openHours
-        self.endTimes = APPSetting.shared.closedHours
-        self.weekendOpenHour = startTimes[.friday]!
-        self.weekendClosedHour = endTimes[.friday]!
-        self.weekdayOpenHour = startTimes[.monday]!
-        self.weekdayClosedHour = endTimes[.monday]!
-
+        self.openTimes = APPSetting.shared.openHours
+        self.closeTimes = APPSetting.shared.closedHours
+        
         super.init(frame: frame)
-        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
+        //        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
         timeFormatter.setLocalizedDateFormatFromTemplate("HH mm")
         generateDates()
+        let day = Date().getDayOfWeek()
+        generateTime(of: Weekdays(rawValue: day)!)
         setupView()
-
+        
     }
     
     
     private func setupView() {
         
-//        translatesAutoresizingMaskIntoConstraints = false
+        //        translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .white
         layer.cornerRadius = 8
         datePicker.translatesAutoresizingMaskIntoConstraints = false
@@ -124,12 +109,12 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             donebutton.trailingAnchor.constraint(equalTo: datePicker.trailingAnchor),
             donebutton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             donebutton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-        
+            
         ])
-
+        
     }
     
-
+    
     
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -142,7 +127,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         case 0:
             return shouldOnlyShowToday ? 1 : dates.count
         case 1:
-            return time.count
+            return times.count
         default:
             return 0
         }
@@ -150,43 +135,40 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         
-        if component == 0 && row == 0 {
-//            time = currentTime > "\(weekendClosedHour):30" ? timeOfAll : timeOfToday
-            let closedTimeToday = Date.isWeekDay() ? weekdayClosedHour : weekendClosedHour
-            time = currentTime > closedTimeToday ? timeOfAll : timeOfToday
-            
-        } else {
-            
-            let selectedRowInFirstComponent = pickerView.selectedRow(inComponent: 0)
-            
-            if selectedRowInFirstComponent != 0 {
-                
-                let date = dateFormatter.date(from: dates[selectedRowInFirstComponent])
-                
-                if let weekday = date?.getDayOfWeek() {
-                    // is weekday or weekend ?
-                    time = weekday > 5 ? timeOfAll : timeOfAll.filter { $0 < weekdayClosedHour }.dropLast()
-                } else {
-                    time = timeOfAll
-                }
-                
-            } else {
-                time = Date.isWeekDay() ? timeOfAll.filter { $0 < weekdayClosedHour }.dropLast() : timeOfAll
-            }
+        if component != 0 { return }
+        
+        let date =  Date.dateOfStringEEEMMddyyyy(dates[row])
+        
+        guard let day = date?.getDayOfWeek(), let weekday = Weekdays(rawValue: day) else {
+            return
         }
         
+        generateTime(of: weekday)
+        
+        if  row == 0 { filterTimesOfToday() }
+        
         pickerView.reloadComponent(1)
-
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         
         switch component {
         case 0:
-            let date = dates[row]
-            return date == "Today" ? date : String(date.dropLast(6))
+            if row == 0 {
+                if dates[row] == Date.dateOfDayEEEMMddyyyy() {
+                    filterTimesOfToday()
+                    return "Today"
+                }
+            }
+            
+            
+            return String(dates[row].dropLast(6))
+            
         case 1:
-            return time[row]
+            guard row < times.count else { return nil }
+            return times[row]
+            
         default:
             return nil
         }
@@ -194,57 +176,59 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     
     private func generateDates() {
-        // generate dates for 14 days
         
-        //date of today
-        let now = Calendar.current.dateComponents(in: .current, from: Date())
+        // generate dates for 14 days
         var j = 13
         
-        // see if today is closed/done ...
-        let dayOfWeek = Date().getDayOfWeek()
-        if let closedHourOfToday = endTimes[Weekdays(rawValue: dayOfWeek)!] {
+        // Check if today is already closed
+        if let closedHourOfToday = closeTimes[Weekdays(rawValue: dayOfTheWeek)!] {
+            //If today is closed, remove today from dates,
             let time = closedHourOfToday.split(separator: ":")
-            let lastCallHour = time[0]
+            let lastCallHour = Int(time[0])! - 1
             if currentTime > "\(lastCallHour):30" {
                 dates.removeFirst()
                 j = 14
             }
         }
         
-        for i in 1...j {
-            let comingDay = DateComponents(year: now.year, month: now.month, day: now.day! + i )
-            let dateOfComingDay = Calendar.current.date(from: comingDay)!
-            dates.append(dateFormatter.string(from: dateOfComingDay))
+        for i in 0...j {
+            dates.append(Date.dateOfDayEEEMMddyyyy(after: i))
+        }
+    }
+    
+    private func generateTime(of weekday: Weekdays) {
+        
+        
+        guard let open = openTimes[weekday], let close = closeTimes[weekday] else { return }
+        
+        var tempTimes: [String] = []
+        
+        var starHour = Int(open.split(separator: ":")[0])!
+        let closeHour = Int(close.split(separator: ":")[0])!
+        
+        if starHour == 24 {
+            starHour = 0
         }
         
-        //8:00 - 23:45
-        let starHour = Int(weekendOpenHour.split(separator: ":")[0])!
-        let closeHour = Int(weekendClosedHour.split(separator: ":")[0])!
-        
-        for i in starHour...closeHour-1 {
-            
+        for i in starHour...closeHour - 1 {
+            //Generates time for each 15 mins from open - close (last call)
             let minutes = ["00", "15", "30", "45"]
             minutes.forEach { (minute) in
-                timeOfAll.append("\(i):\(minute)")
+                tempTimes.append("\(i):\(minute)")
             }
         }
-        timeOfAll.removeLast()
+        tempTimes.removeLast()
         
-        let closedTimeToday = Date.isWeekDay() ? weekdayClosedHour : weekendClosedHour
+        times = tempTimes
+
+    }
+    
+    private func filterTimesOfToday() {
         
-        timeOfToday = timeOfAll.filter { (time) -> Bool in
+        times = times.filter { (time) -> Bool in
             time > currentTime
         }
         
-        timeOfToday = timeOfToday.filter { $0 < closedTimeToday }.dropLast()
-        
-        if currentTime >= weekendOpenHour {
-            timeOfToday.insert("Now", at: 0)
-        }
-        //model time
-       
-        time = currentTime > closedTimeToday ? timeOfAll : timeOfToday
-
     }
     
     

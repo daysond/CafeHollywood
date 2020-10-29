@@ -16,6 +16,8 @@ class TableOrderView: ReceiptView {
         
         receiptTableView.delegate = self
         receiptTableView.dataSource = self
+        NotificationCenter.default.addObserver(self, selector: #selector(handleOrderUpdates), name: .didUpdateDineInOrderStatus, object: nil)
+        
     }
     
     private let table = Table.shared
@@ -35,6 +37,11 @@ class TableOrderView: ReceiptView {
         receiptFooterView.frame.size.height = 200
         receiptFooterView.backgroundColor = .white
         receiptFooterView.setupFooterViewForCurrentTable()
+    }
+    
+    @objc private func handleOrderUpdates() {
+        
+        receiptTableView.reloadData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

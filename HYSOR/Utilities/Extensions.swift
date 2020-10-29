@@ -45,6 +45,27 @@ extension String {
 
 extension Date {
     
+    static func dateOfDayEEEMMddyyyy(after day: Int = 0) -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
+        let now = Calendar.current.dateComponents(in: .current, from: Date())
+        let today = DateComponents(year: now.year, month: now.month, day: now.day! + day )
+        let dateOfToday = Calendar.current.date(from: today)!
+        let date = dateFormatter.string(from: dateOfToday)
+        
+        return date
+    }
+    
+    static func dateOfStringEEEMMddyyyy(_ str: String) -> Date? {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
+        let date = dateFormatter.date(from: str)
+        
+        return date
+    }
+    
     static func dateFromTimestamp(_ timestamp: Double) -> Date  {
         let timeInterval = timestamp/1000
         return Date(timeIntervalSince1970: timeInterval)
@@ -92,9 +113,7 @@ extension Date {
     
     
     func getDayOfWeek() -> Int {
-//        let formatter  = DateFormatter()
-//        formatter.dateFormat = "yyyy-MM-dd"
-//        guard let todayDate = formatter.date(from: today) else { return nil }
+
         let myCalendar = Calendar(identifier: .gregorian)
         let weekDay = myCalendar.component(.weekday, from: self)
         return weekDay
@@ -141,6 +160,8 @@ extension Notification.Name {
     static let updateFavouriteListTableView = Notification.Name("updateFavouriteListTableView")
     static let didUpdateOrderStatus = Notification.Name("didUpdateOrderStatus")
     static let authStateDidChange = Notification.Name("authStateDidChange")
+    static let didCloseTable = Notification.Name("didCloseTable")
+    static let didUpdateDineInOrderStatus = Notification.Name("didUpdateDineInOrderStatus")
     
 }
 

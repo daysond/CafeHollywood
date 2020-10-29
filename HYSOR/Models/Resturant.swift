@@ -111,12 +111,13 @@ class Table {
     }
     
     static func reset() {
-        
+        NotificationCenter.default.post(name: .didCloseTable, object: nil)
         Table.shared.tableNumber = nil
         Table.shared.timestamp = nil
         Table.shared.tableOrders = []
 //        Table.shared.orderIDs = []
         Table.shared.shouldShowAllOrders = true
+
         
     }
     

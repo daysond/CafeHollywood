@@ -500,7 +500,6 @@ class NetworkManager {
     func addTableListener() {
         
         if activeTableListener != nil {
-            print("returned")
             return
         }
         
@@ -514,9 +513,6 @@ class NetworkManager {
             }
             
             guard let snapshot = snapshot, let data = snapshot.data() as? [String: Int] else { return }
-            
-            print("did change doc")
-            print(snapshot.data())
             
             for (key, value) in data {
                 
@@ -540,7 +536,7 @@ class NetworkManager {
                     if let status = OrderStatus(rawValue: value) {
                         // if status changed, update status
                         Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
-                        // TODO: UPDATE UI
+                        NotificationCenter.default.post(name: .didUpdateDineInOrderStatus, object: nil)
                     }
                     
                 }
@@ -564,7 +560,6 @@ class NetworkManager {
     
     
     private func fetchTableOrder(_ orderID: String, completion: @escaping (TableOrder?) -> Void ) {
-        
         
         print("fetching table order \(orderID)")
         dineInOrdersRef.document(orderID).getDocument { (snapshot, error) in
@@ -773,7 +768,7 @@ class NetworkManager {
             }
             snapshot.documentChanges.forEach { (change) in
                 if change.type == .added {
-                    print("added order")
+
                     self.fetchOrderDetails(change.document.documentID) { (receipt) in
                         guard let receipt = receipt else { return }
                         self.activeOrderListenerDelegate?.didReceiveActiveOrder(receipt)
@@ -788,8 +783,6 @@ class NetworkManager {
                     
                     let info = ["orderID": orderID, "status": statusCode] as [String : Any]
                     
-                    print("tag \(info)")
-                    
                     NotificationCenter.default.post(name: .didUpdateOrderStatus, object: self, userInfo: info)
                 }
                 
@@ -801,8 +794,6 @@ class NetworkManager {
                     
                     let info = ["orderID": orderID, "status": statusCode] as [String : Any]
                     
-                    print("tag \(info)")
-                    
                     NotificationCenter.default.post(name: .didUpdateOrderStatus, object: self, userInfo: info)
                     
                 }
@@ -812,7 +803,6 @@ class NetworkManager {
     
     func removeOrderListener() {
         activeOrderListener?.remove()
-        print("did remove listener")
     }
     
     func closeOrder(_ id: String, status: OrderStatus, timestamp: String) {

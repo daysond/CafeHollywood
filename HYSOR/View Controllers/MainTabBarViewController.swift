@@ -59,6 +59,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         setupViewControllers()
         setupActionButton()
         networkSetup()
+        observerSetup()
 
     }
     
@@ -67,6 +68,12 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         radius = view.bounds.maxX * 0.5 - 40.0
     }
     
+    
+    private func observerSetup() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(MainTabBarViewController.handleTableClosed), name: .didCloseTable, object: nil)
+        
+    }
     
     
     private func networkSetup() {
@@ -283,6 +290,10 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         isMenuOpened = !isMenuOpened
     }
     
+    @objc private func handleTableClosed() {
+        isMenuOpened = false 
+    }
+    
     
     private func sendRequest(_ text: String) {
         
@@ -297,10 +308,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
                 print(error!.localizedDescription)
                 return
             }
-            
         }
-        
-        
     }
 
     
