@@ -91,36 +91,21 @@ class HomeViewController: UIViewController {
     @objc private func onlineOrderTapped() {
         
         self.tabBarController?.selectedIndex = 1
-//        NetworkManager.shared.checkActiveTable()
-//
-//        NetworkManager.shared.getBusinessHours { (hours, error) in
-//
-//            guard error == nil else {
-//                print(error!.localizedDescription)
-//                return
-//            }
-//
-//            if let hours = hours {
-//
-//                for (day, hours) in hours {
-//
-//                    print("\(day) - \(hours.split(separator: "-"))")
-//
-//                }
-//
-//
-//            }
-//
-//        }
         
     }
     
     @objc
     private func reservationTapped() {
         
+        guard let openHours = APPSetting.shared.openHours, let closeHours = APPSetting.shared.closedHours else {
+            showError(message: "Network Error. Can not fetch business hour information.")
+            return
+        }
+        
         let width = view.frame.width
         let paxView = PaxView(frame: CGRect(x: 0, y: 0, width: width, height: 120))
-        let schedulerView = SchedulerView(frame: CGRect(x: 0, y: 120, width: width, height: 300))
+        let schedulerView = SchedulerView(openHours: openHours, closeHours: closeHours)
+        schedulerView.frame = CGRect(x: 0, y: 120, width: width, height: 300)
         
         let containerView = UIView()
         containerView.backgroundColor = .white
@@ -159,8 +144,6 @@ class HomeViewController: UIViewController {
                 
             }
         }
-        
-
     }
 
     @objc private func quickOrderButtonTapped() {

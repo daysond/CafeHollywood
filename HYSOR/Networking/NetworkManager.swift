@@ -90,34 +90,25 @@ class NetworkManager {
     
     // MARK: - ON START CHECKING
     
-    func checkMenuUpdate(completion: @escaping (String?) -> Void) {
+    func getCurrentVersions(completion: @escaping (Error?) -> Void) {
         
-        databaseRef.collection("restaurantInfo").document("menuVersion").getDocument { (snapshot, error) in
+        databaseRef.collection("restaurantInfo").document("versions").getDocument { (snapshot, error) in
+            
             guard error == nil else {
-                print("error")
+                completion(error)
                 return
             }
-            
-            if let data = snapshot?.data(), let menuVersion = data["version"] as? String {
-                completion(menuVersion)
-            }
-        }
-    }
-    // businessHoursVersion
-    func checkBusinessHoursUpdate(completion: @escaping (String?) -> Void) {
-        
-        databaseRef.collection("restaurantInfo").document("businessHoursVersion").getDocument { (snapshot, error) in
-            guard error == nil else {
-                print("error")
-                return
-            }
-            
-            if let data = snapshot?.data(), let menuVersion = data["version"] as? String {
-                completion(menuVersion)
+         
+            if let data = snapshot?.data() as? [String: String] {
+                APPSetting.shared.versions = data
+                completion(nil)
+            } else {
+                completion(NetworkError.unknowError)
             }
         }
     }
     
+
     //On start, check self active table
     
     func checkActiveTable() {
@@ -169,6 +160,42 @@ class NetworkManager {
            
         }
 
+    }
+    
+    func getTaxRates(completion: @escaping ([String: Int]?) -> Void ) {
+        
+        databaseRef.collection("restaurantInfo").document("taxRate").getDocument { (snapshot, error) in
+            
+            guard error == nil else {
+                completion(nil)
+                return
+            }
+            
+            if let data = snapshot?.data() as? [String : Int] {
+                completion(data)
+            } else {
+                completion(nil)
+            }
+            
+        }
+    }
+    
+    func getCredits(completion: @escaping ([String: Int]?) -> Void ) {
+        
+        databaseRef.collection("restaurantInfo").document("creditAmounts").getDocument { (snapshot, error) in
+            
+            guard error == nil else {
+                completion(nil)
+                return
+            }
+            
+            if let data = snapshot?.data() as? [String : Int] {
+                completion(data)
+            } else {
+                completion(nil)
+            }
+        }
+  
     }
     
     
@@ -593,8 +620,6 @@ class NetworkManager {
             completion(nil)
         }
         
-        
-        
     }
 
     
@@ -771,7 +796,15 @@ class NetworkManager {
 
                     self.fetchOrderDetails(change.document.documentID) { (receipt) in
                         guard let receipt = receipt else { return }
-                        self.activeOrderListenerDelegate?.didReceiveActiveOrder(receipt)
+                        
+                        if receipt.status == .completed || receipt.status == .cancelled {
+                            self.closeOrder(receipt.orderID, status: receipt.status, timestamp: receipt.orderTimestamp)
+                        } else {
+                            self.activeOrderListenerDelegate?.didReceiveActiveOrder(receipt)
+                        }
+                        
+                        
+                        
                     }
                 }
                 
@@ -856,7 +889,8 @@ class NetworkManager {
         
         let reservationRef = databaseRef.collection("reservations").document(reservation.uid)
         
-        reservationRef.updateData(["pax": reservation.pax, "date" : reservation.date ])
+        reservationRef.updateData(["pax": reservation.pax, "date" : reservation.date, "time" : reservation.time ])
+   
         
     }
     

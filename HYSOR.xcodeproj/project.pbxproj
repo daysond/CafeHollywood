@@ -92,6 +92,7 @@
 		EDE038F124E2738F00189264 /* PaxSizeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE038F024E2738F00189264 /* PaxSizeCollectionViewCell.swift */; };
 		EDEA350124B6ABBB00F3AB21 /* CartFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEA350024B6ABBB00F3AB21 /* CartFooterView.swift */; };
 		EDEA350324B6D9FD00F3AB21 /* CustomBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEA350224B6D9FD00F3AB21 /* CustomBarButtonItem.swift */; };
+		EDF0120B254BE47B00D22B57 /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF0120A254BE47B00D22B57 /* Key.swift */; };
 		EDF8983F24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF8983E24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift */; };
 		EDF8984324AAF1BC00488FEF /* PreferenceFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF8984224AAF1BC00488FEF /* PreferenceFooterView.swift */; };
 /* End PBXBuildFile section */
@@ -187,6 +188,7 @@
 		EDE038F024E2738F00189264 /* PaxSizeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxSizeCollectionViewCell.swift; sourceTree = "<group>"; };
 		EDEA350024B6ABBB00F3AB21 /* CartFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartFooterView.swift; sourceTree = "<group>"; };
 		EDEA350224B6D9FD00F3AB21 /* CustomBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomBarButtonItem.swift; sourceTree = "<group>"; };
+		EDF0120A254BE47B00D22B57 /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
 		EDF8983E24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiQuantityPreferenceTableViewCell.swift; sourceTree = "<group>"; };
 		EDF8984224AAF1BC00488FEF /* PreferenceFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceFooterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -291,6 +293,7 @@
 				ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */,
 				EDB1751C24C0347B0054618C /* Receipt.swift */,
 				ED3710DE24E1191200AD6DAF /* CustomOption.swift */,
+				EDF0120A254BE47B00D22B57 /* Key.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				ED0C75F72425CB1D008B8174 /* CollapsibleTableViewHeader.swift in Sources */,
 				EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */,
 				ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */,
+				EDF0120B254BE47B00D22B57 /* Key.swift in Sources */,
 				ED5A9B0D25109417006B56C9 /* TableOrderView.swift in Sources */,
 				ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */,
 				EDEA350324B6D9FD00F3AB21 /* CustomBarButtonItem.swift in Sources */,

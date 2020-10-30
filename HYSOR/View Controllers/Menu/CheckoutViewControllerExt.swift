@@ -66,7 +66,11 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
 //    }
     
     private func handleScheduler() {
-        let schedulerView = SchedulerView()
+        guard let openHours = APPSetting.shared.openHours, let closeHours = APPSetting.shared.closedHours else {
+            showError(message: "Network Error. Can not fetch business hour information.")
+            return
+        }
+        let schedulerView = SchedulerView(openHours: openHours, closeHours: closeHours)
         self.scheduelerView = schedulerView
         scheduelerView?.shouldOnlyShowToday = true
         schedulerView.donebutton.addTarget(self, action: #selector(schedulerViewDismiss), for: .touchUpInside)

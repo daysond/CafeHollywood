@@ -233,3 +233,22 @@ extension UILabel {
     }
     
 }
+
+extension UIViewController {
+    
+    func showError(title: String = "Error", message: String) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+            return
+        }))
+        
+        
+        self.present(alert, animated: true)
+
+    }
+    
+    
+    
+}

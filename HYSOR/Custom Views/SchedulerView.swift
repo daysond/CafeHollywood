@@ -60,13 +60,12 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
     var shouldOnlyShowToday: Bool = false
     
-    override init(frame: CGRect) {
+    init(openHours: [Weekdays : String], closeHours: [Weekdays : String]) {
         
-        self.openTimes = APPSetting.shared.openHours
-        self.closeTimes = APPSetting.shared.closedHours
+        self.openTimes = openHours
+        self.closeTimes = closeHours
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         
-        super.init(frame: frame)
-        //        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
         timeFormatter.setLocalizedDateFormatFromTemplate("HH mm")
         generateDates()
         let day = Date().getDayOfWeek()
@@ -74,6 +73,21 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         setupView()
         
     }
+    
+//    override init(frame: CGRect) {
+//        
+//        self.openTimes = APPSetting.shared.openHours
+//        self.closeTimes = APPSetting.shared.closedHours
+//        
+//        super.init(frame: frame)
+//        //        dateFormatter.setLocalizedDateFormatFromTemplate("EEE MMM dd yyyy")
+//        timeFormatter.setLocalizedDateFormatFromTemplate("HH mm")
+//        generateDates()
+//        let day = Date().getDayOfWeek()
+//        generateTime(of: Weekdays(rawValue: day)!)
+//        setupView()
+//        
+//    }
     
     
     private func setupView() {

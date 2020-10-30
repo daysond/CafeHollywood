@@ -202,13 +202,24 @@ class MenuViewController: UIViewController {
         
         createLoadingView()
         
-        NetworkManager.shared.checkMenuUpdate { (newVersion) in
-            guard let newVersion = newVersion else { print("returned")
-                return }
+        guard let menuVersion = APPSetting.shared.versions["menu"] else {
             
-            
-            self.compareCurrentVersion(with: newVersion)
+            NetworkManager.shared.getCurrentVersions { (error) in
+                guard error == nil else {
+                    self.showError(message: error!.localizedDescription)
+                    return
+                }
+                
+                if let menuVersion = APPSetting.shared.versions["menu"] {
+                    self.compareCurrentVersion(with: menuVersion)
+                } else {
+                    self.showError(message: "Fail checking menu updates.")
+                }
+            }
+            return
         }
+        
+        compareCurrentVersion(with: menuVersion)
         
     }
     
@@ -216,11 +227,11 @@ class MenuViewController: UIViewController {
 
         func deleteAndSet() {
             DBManager.shared.deleteAllData()
-            userDefaults.set(newVersion, forKey: "menuVersion")
+            userDefaults.set(newVersion, forKey: Key.menuVersion)
             getMenuData()
         }
         
-        guard let currentMenuVersion = userDefaults.string(forKey: "menuVersion") else {
+        guard let currentMenuVersion = userDefaults.string(forKey: Key.menuVersion) else {
             deleteAndSet()
             return
         }

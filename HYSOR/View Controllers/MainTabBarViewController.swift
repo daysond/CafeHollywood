@@ -75,46 +75,50 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
     }
     
+    //MARK: NETWORKING
     
     private func networkSetup() {
         
         NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
         
-        NetworkManager.shared.checkBusinessHoursUpdate { (newVersion) in
+        NetworkManager.shared.getCurrentVersions { (error) in
+            guard error == nil else {
+                self.showError(message: error!.localizedDescription)
+                return
+            }
             
-            guard let newVersion = newVersion else { print("returned")
-                return }
+            if let businessHoursVersion = APPSetting.shared.versions["businessHours"] {
+                self.compareBusinessHoursVersion(with: businessHoursVersion)
+            }
             
-            print("TAG  hours \(newVersion)")
+            if let creditAmountVersion = APPSetting.shared.versions["creditAmount"] {
+                self.compareCreditAmountVersion(with: creditAmountVersion)
+            }
             
-            self.compareBusinessHoursVersion(with: newVersion)
-        }
+            if let taxRateVersion = APPSetting.shared.versions["taxRate"] {
+                self.compareTaxRateVersion(with: taxRateVersion)
+            }
 
+        }
     }
     
     private func compareBusinessHoursVersion(with newVersion: String) {
-
-        func setKeyAndHours() {
-            print("TAG  hours \(newVersion) did set key")
-            userDefaults.set(newVersion, forKey: "businessHoursVersion")
-            setBusinessHours()
-        }
         
-        guard let currentMenuVersion = userDefaults.string(forKey: "businessHoursVersion") else {
+        guard let currentVersion = userDefaults.string(forKey: Key.businessHoursVersion) else {
             // first time: set key and hours
-            setKeyAndHours()
+            setBusinessHours(with: newVersion)
             return
         }
         
         // got updates: set hours and reset key
-        if newVersion != currentMenuVersion {
-            setKeyAndHours()
+        if newVersion != currentVersion || userDefaults.dictionary(forKey: Key.businessHours) == nil {
+            setBusinessHours(with: newVersion)
         }
 
     }
     
-    private func setBusinessHours() {
+    private func setBusinessHours(with version: String) {
         
         NetworkManager.shared.getBusinessHours { (data, error) in
             
@@ -124,11 +128,104 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             }
             
             if let hours = data {
-                userDefaults.setValue(hours, forKey: Constants.businessHoursKey)
-                print("TAG  hours \(hours)")
+                userDefaults.setValue(hours, forKey: Key.businessHours)
+                userDefaults.set(version, forKey: Key.businessHoursVersion)
             }
+            
+            self.check(key: Key.businessHoursVersion)
         }
     }
+    
+    private func compareCreditAmountVersion(with newVersion: String) {
+        
+        guard let currentVersion = userDefaults.string(forKey: Key.creditAmountVersion) else {
+            // first time: set key and hours
+            setCreditAmout(with: newVersion)
+            return
+        }
+        
+        // got updates: set hours and reset key
+        if newVersion != currentVersion ||  userDefaults.value(forKey: Key.wingCredit) == nil || userDefaults.value(forKey: Key.drinkCredit) == nil  {
+            setCreditAmout(with: newVersion)
+        }
+
+    }
+    
+    private func setCreditAmout(with version: String) {
+        
+        NetworkManager.shared.getCredits { (data) in
+            guard let data = data else {
+                //show alert
+                return
+            }
+            
+            if let drinkCredit = data[Key.drinkCredit] {
+                userDefaults.setValue(drinkCredit, forKey: Key.drinkCredit)
+            }
+            if let wingCredit = data[Key.wingCredit] {
+                userDefaults.setValue(wingCredit, forKey: Key.wingCredit)
+            }
+            
+            userDefaults.set(version, forKey: Key.creditAmountVersion)
+            
+            self.check(key: Key.creditAmountVersion)
+        }
+        
+    }
+    
+    private func compareTaxRateVersion(with newVersion: String) {
+        
+        guard let currentVersion = userDefaults.string(forKey: Key.taxRateVersion) else {
+            // first time: set key and hours
+            setTaxRate(with: newVersion)
+            return
+        }
+        
+        // got updates: set hours and reset key
+        if newVersion != currentVersion ||  userDefaults.value(forKey: Key.federalTaxRate) == nil || userDefaults.value(forKey: Key.provincialTaxRate) == nil || userDefaults.value(forKey: Key.miniPurchase) == nil {
+            
+            setTaxRate(with: newVersion)
+        }
+        
+        
+    }
+    
+    private func setTaxRate(with version: String) {
+        
+        
+        NetworkManager.shared.getTaxRates { (data) in
+            guard let data = data else {
+                //show alert
+                return
+            }
+            
+            if let fedTR = data[Key.federalTaxRate] {
+                userDefaults.setValue(fedTR, forKey: Key.federalTaxRate)
+            }
+            if let proTR = data[Key.provincialTaxRate] {
+                userDefaults.setValue(proTR, forKey: Key.provincialTaxRate)
+            }
+            if let miniPur = data[Key.miniPurchase] {
+                userDefaults.setValue(miniPur, forKey: Key.miniPurchase)
+            }
+            
+            userDefaults.set(version, forKey: Key.taxRateVersion)
+            
+            self.check(key: Key.taxRateVersion)
+        }
+        
+
+    }
+    
+    func check(key: String) {
+        
+        let res = userDefaults.value(forKey: key)
+        print("did get res \(res)")
+        
+    }
+    
+    
+    //MARK: - SET UP
     
     private func setupActionButton() {
         

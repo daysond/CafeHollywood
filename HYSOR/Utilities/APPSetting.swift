@@ -23,7 +23,6 @@ enum Constants {
     static let kReceiptFooterHeight: CGFloat = 50
     static let kReceiptCellHeight: CGFloat = 35
     static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
-    static let businessHoursKey: String = "businessHours"
     static let drinkMenuTypeRawValue = "drinkMenu"
     static let foodMenuTypeRawValue = "foodMenu"
     static let checkoutNoteHolder = "(ANY FOOD ALLERGY?)"
@@ -47,7 +46,33 @@ class APPSetting {
     // should be fetched from server
     static let shared = APPSetting()
 
-    var taxRate: Float = 0.13
+    var versions = [String: String]()
+    
+    var hstRate: Decimal {
+        return federalTaxRate + provincialTaxRate
+    }
+    
+    var federalTaxRate: Decimal {
+        if let fedTRInt = userDefaults.value(forKey: Key.federalTaxRate) as? Int {
+            return Decimal(fedTRInt)/100
+        }
+        return Decimal(0.05)
+    }
+    
+    var provincialTaxRate: Decimal {
+        if let proTRInt = userDefaults.value(forKey: Key.provincialTaxRate) as? Int {
+            return Decimal(proTRInt)/100
+        }
+        return Decimal(0.08)
+    }
+    
+    var miniPurchase: Decimal {
+        if let miniPurInt = userDefaults.value(forKey: Key.miniPurchase) as? Int {
+            return Decimal(miniPurInt)/100
+        }
+        return Decimal(4.00)
+    }
+    
     
     var isDineIn: Bool {
         Table.shared.tableNumber != nil
@@ -84,18 +109,15 @@ class APPSetting {
     
     }
     
-    static var businessHours: [String: String] {
-        
-        let hours = userDefaults.dictionary(forKey: Constants.businessHoursKey) as? [String: String]
-        return hours ?? ["1": "11:00-22:00", "2": "11:00-22:00", "3": "11:00-22:00", "4": "11:00-22:00", "5": "11:00-22:00", "6": "11:00-24:00", "7": "11:00-24:00"]
-    
+    static var businessHours: [String: String]? {
+        return userDefaults.dictionary(forKey: Key.businessHours) as? [String: String]
     }
     
-    var openHours: [Weekdays: String] {
+    var openHours: [Weekdays: String]? {
         
-        let businessHours = APPSetting.businessHours
+        guard let businessHours = APPSetting.businessHours else { return nil}
+
         var tempOpenHours = [Weekdays : String]()
-        
         businessHours.forEach { (day, hours) in
             let weekday = Weekdays(rawValue: Int(day)!)!
             let splitedHours = hours.split(separator: "-")
@@ -105,11 +127,10 @@ class APPSetting {
      return tempOpenHours
     }
     
-    var closedHours: [Weekdays: String] {
+    var closedHours: [Weekdays: String]? {
         
-        let businessHours = APPSetting.businessHours
+        guard let businessHours = APPSetting.businessHours else { return nil}
         var tempClosedHours = [Weekdays : String]()
-        
         businessHours.forEach { (day, hours) in
             let weekday = Weekdays(rawValue: Int(day)!)!
             let splitedHours = hours.split(separator: "-")
@@ -121,14 +142,12 @@ class APPSetting {
     
     var isRestaurantOpen: Bool {
         
+        guard openHours != nil , closedHours != nil else { return false }
         let dow = Date().getDayOfWeek()
-        
-        let open = openHours[Weekdays(rawValue: dow)!]!
-        let close = closedHours[Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
-        let closeddd = Date.currentTime() <= "\(close):30"
-        print("\(Date.currentTime()>open) > open \(open) ")
-        print("\(closeddd) > close \(close):30 ")
-        return Date.currentTime() >= open && Date.currentTime() <= "\(close):30"
+        let open = openHours![Weekdays(rawValue: dow)!]!
+        let close = closedHours![Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
+        let lastCallHour = Int("\(close)")! - 1
+        return Date.currentTime() >= open && Date.currentTime() <= "\(lastCallHour):30"
     }
     
     
@@ -161,7 +180,6 @@ class APPSetting {
         userDefaults.set(name, forKey: "name")
         userDefaults.set(phoneNumber == nil ? "123456" : phoneNumber, forKey: "phoneNumber")
         
-        print("didset info for \(UserDefaults.standard.string(forKey: "name"))")
     }
     
     static func storePhoneVerificationID(_ verificationID: String) {

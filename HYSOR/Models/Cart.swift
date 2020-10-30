@@ -86,7 +86,7 @@ class Cart {
     }
     
     var cartTaxes: Money {
-        return cartSubtotal * APPSetting.shared.taxRate
+        return cartSubtotal > Money(amt: APPSetting.shared.miniPurchase) ? cartSubtotal * Money(amt: APPSetting.shared.hstRate) : cartSubtotal * Money(amt: APPSetting.shared.federalTaxRate)
     }
     
     var cartTotal: Money {

@@ -61,7 +61,7 @@ class Table {
     }
     
     var taxes: Money {
-        return subTotal * APPSetting.shared.taxRate
+        return subTotal > Money(amt: APPSetting.shared.miniPurchase) ? subTotal * Money(amt: APPSetting.shared.hstRate) : subTotal * Money(amt: APPSetting.shared.federalTaxRate)
     }
     
     var total: Money {

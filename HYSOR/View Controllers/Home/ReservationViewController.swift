@@ -362,12 +362,18 @@ class ReservationViewController: UIViewController {
     @objc
     private func managedReservationButtonTapped() {
         
+        guard let openHours = APPSetting.shared.openHours, let closeHours = APPSetting.shared.closedHours else {
+            showError(message: "Network Error. Can not fetch business hour information.")
+            return
+        }
+        
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Modify Reservation", style: .default, handler: { (_) in
             let width = self.view.frame.width
             let paxView = PaxView(frame: CGRect(x: 0, y: 0, width: width, height: 120))
-            let schedulerView = SchedulerView(frame: CGRect(x: 0, y: 120, width: width, height: 300))
+            let schedulerView = SchedulerView(openHours: openHours, closeHours: closeHours)
+            schedulerView.frame = CGRect(x: 0, y: 120, width: width, height: 300)
             
             let containerView = UIView()
             containerView.backgroundColor = .white
@@ -414,12 +420,14 @@ class ReservationViewController: UIViewController {
     @objc private func updateReservation() {
         
         let date = self.scheduelerView!.selectedDate
+        let time = self.scheduelerView!.selectedTime
         let pax = self.paxView!.paxSize
         reservation.date = date
         reservation.pax = pax
+        reservation.time = time
         NetworkManager.shared.updateReservation(reservation)
-        paxLabel.text = "\(pax)"
-        dateLabel.text = date
+        paxLabel.text = "\(reservation.pax)"
+        dateLabel.text =  "\(reservation.date.dropLast(6)) at \(reservation.time)"
         menuLauncher?.dismissMenu()
         
     }

@@ -129,6 +129,8 @@ class TableOrderView: ReceiptView {
         default:
             return 0
         }
+
+        guard indexPath.row < meals.count else { return 0}
         
         let addonInfo = meals[indexPath.row].addOnInfo
         var text = addonInfo
