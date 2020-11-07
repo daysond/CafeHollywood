@@ -21,7 +21,14 @@ class UpdateProfileViewController: UIViewController {
     
     internal var shouldAnimateKeyboard: Bool = true
     
+    internal var phoneNumber: String?
+    
     private var tabBarHeight: CGFloat = 0
+    
+    private var timerCount = 60  // 60sec
+    private var resendTimer = Timer()
+    
+    private var spinner = SpinnerViewController()
     
     var updateDisplayDelegate: UpdateProfileDisplayDelegate?
     
@@ -71,6 +78,16 @@ class UpdateProfileViewController: UIViewController {
         return l
     }()
     
+    internal let resendButton: UIButton = {
+        let b = UIButton()
+        b.setTitle("Re-send verification code.", for: .normal)
+        b.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        b.setTitleColor(.systemBlue, for: .normal)
+        b.setTitleColor(.gray, for: .disabled)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        return b
+    }()
+    
     private var updateButtonBottomAnchorConstraint: NSLayoutConstraint?
     
     var passwordTFHeightConstraint: NSLayoutConstraint?
@@ -90,12 +107,12 @@ class UpdateProfileViewController: UIViewController {
         }
         
         
-
+        
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -139,7 +156,7 @@ class UpdateProfileViewController: UIViewController {
         case .phone:
             profileTextField.placeholder = "PHONE NUMBER"
             profileTextField.text = APPSetting.customerPhoneNumber == "" ?  "+1" : "\(APPSetting.customerPhoneNumber)"
-//            profileTextField.text = APPSetting.customerPhoneNumber
+            //            profileTextField.text = APPSetting.customerPhoneNumber
             profileTextField.keyboardType = .phonePad
             
         case .password:
@@ -156,7 +173,7 @@ class UpdateProfileViewController: UIViewController {
         default:
             return
         }
-
+        
     }
     
     private func setupView() {
@@ -171,9 +188,12 @@ class UpdateProfileViewController: UIViewController {
         view.addSubview(updateButton)
         view.addSubview(errorMessageLabel)
         view.addSubview(passwordTextField)
-        
+        view.addSubview(resendButton)
+        resendButton.isHidden = (field != .verification)
         updateButtonBottomAnchorConstraint = updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         passwordTFHeightConstraint = passwordTextField.heightAnchor.constraint(equalToConstant: 0)
+        
+        resendButton.addTarget(self, action: #selector(resendCode), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             
@@ -198,17 +218,19 @@ class UpdateProfileViewController: UIViewController {
             passwordTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             passwordTFHeightConstraint!,
             passwordTextField.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 8),
-
+            
             errorMessageLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 8),
-        
-        
+            
+            resendButton.leadingAnchor.constraint(equalTo: profileTextField.leadingAnchor),
+            resendButton.topAnchor.constraint(equalTo: errorMessageLabel.bottomAnchor, constant: 8),
+            
         ])
-
+        
         
     }
     
     private func setupNavigationBar() {
-
+        
         let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(handleBackButton))
         self.navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.tintColor = .black
@@ -221,13 +243,8 @@ class UpdateProfileViewController: UIViewController {
     }
     
     
-    //MARK: - HELPERS
-    
-    internal func displayMessage(_ text: String) {
-        
-        self.errorMessageLabel.text = text
-        
-    }
+ 
+    //MARK: - VALIDATION
     
     private func isCodeValid(_ code: String) -> Bool {
         let codeRegEx = "^[0-9]{6}$"
@@ -307,6 +324,56 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
+    
+    //MARK: - HELPERS
+    
+    internal func displayMessage(_ text: String) {
+        
+        self.errorMessageLabel.text = text
+        
+    }
+    
+    internal func startTimerForVerificationCode() {
+        
+        resendButton.isEnabled = false
+        resendTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        
+    }
+    
+    @objc private func updateTimer() {
+        if timerCount > 0 {
+            timerCount = timerCount - 1
+            resendButton.setTitle("Re-send verification code. (\(timerCount)s)", for: .disabled)
+        }
+        else {
+            resendTimer.invalidate()
+            resendButton.isEnabled = true
+            timerCount = 60
+            // if you want to reset the time make count = 60 and resendTime.fire()
+        }
+    }
+    
+    private func showReLogInAlert() {
+        
+        let alert = UIAlertController(title: "Please enter your password", message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.isSecureTextEntry = true
+        }
+
+        let doneAction = UIAlertAction(title: "Done", style: .default) { [unowned alert] _ in
+            let passwordTF = alert.textFields![0]
+            guard let password = passwordTF.text else { return }
+            NetworkManager.shared.reAuthenticateUser(password: password)
+            // do something interesting with "answer" here
+        }
+
+        alert.addAction(doneAction)
+
+        present(alert, animated: true)
+        
+        
+    }
+    
     //MARK: -ACTIONS
     
     @objc internal func handleButtonTapped() {
@@ -319,47 +386,53 @@ class UpdateProfileViewController: UIViewController {
             
             case .phone:
                 
-                NetworkManager.shared.verifyPhoneNumber(profileTextField.text!) { (id, error) in
-                    DispatchQueue.main.async { [self] in
-                        guard error == nil else {
-                            self.displayMessage(error!.localizedDescription)
-                            return
-                        }
-                        guard let id = id else {
-                            self.displayMessage("Unknow error.")
-                            return
-                        }
-                        
-                        APPSetting.storePhoneVerificationID(id)
-                        
-                        self.navigationController?.pushViewController(UpdateProfileViewController(field: .verification), animated: true)
-                        
-                    }
+                self.phoneNumber = profileTextField.text
+                
+                self.verifyPhoneNumber {
+                    
+                    let verificationVC = UpdateProfileViewController(field: .verification)
+                    verificationVC.phoneNumber = self.phoneNumber
+                    verificationVC.startTimerForVerificationCode()
+                    self.navigationController?.pushViewController(verificationVC, animated: true)
+                    
                 }
                 
             case .verification:
                 
-        
+                showSpinner()
                 
                 NetworkManager.shared.setAuthPhoneNumber(verificationCode: profileTextField.text!) { (error) in
-                    guard error == nil else {
-                        
-                        print(error)
-                        self.displayMessage(error!.localizedDescription)
-                        return
-                    }
                     
-                    self.navigationController?.popToRootViewController(animated: true)
+                    DispatchQueue.main.async {
+                        
+                        self.removeSpinner()
+                        
+                        guard error == nil else {
+                            self.displayMessage(error!.localizedDescription)
+                            return
+                        }
+                        
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
                 }
                 
             default:
                 
+                showSpinner()
+                
                 NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
                     
                     DispatchQueue.main.async {
+                        
+                        self.removeSpinner()
+                        
                         guard error == nil else {
                             
-                            print(error)
+                            if let err = error as? NetworkError, err == .recentLoginRequired {
+                                self.showReLogInAlert()
+                                return
+                            }
+                            
                             self.displayMessage(error!.localizedDescription)
                             return
                         }
@@ -371,7 +444,15 @@ class UpdateProfileViewController: UIViewController {
         }
     }
     
-
+    @objc private func resendCode() {
+        
+        self.verifyPhoneNumber {
+            
+            self.startTimerForVerificationCode()
+            
+        }
+    }
+    
     
     @objc internal func handleBackButton() {
         
@@ -379,13 +460,66 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
+    
+    //MARK: - NETWORKING
+    
+    internal func verifyPhoneNumber(complete: @escaping () -> Void) {
+        
+        guard let number = phoneNumber else {
+            displayMessage("Please enter a valid phone number.")
+            return
+        }
+        
+        // Creat spinner view
+        self.showSpinner()
+
+        NetworkManager.shared.verifyPhoneNumber(number) { (verificationID, error) in
+            
+            DispatchQueue.main.async {
+                
+                self.removeSpinner()
+                
+                guard error == nil else {
+                    self.displayMessage(error!.localizedDescription)
+                    return
+                }
+                
+                guard let id = verificationID else {
+                    self.displayMessage("Unknow Error.")
+                    return
+                }
+                
+                APPSetting.storePhoneVerificationID(id)
+                complete()
+                
+            }
+        }
+        
+    }
+    
+    //MARK: - SPINNER
+    internal func showSpinner() {
+        addChild(spinner)
+        spinner.view.frame = view.frame
+        view.addSubview(spinner.view)
+        spinner.didMove(toParent: self)
+    }
+    
+    internal func removeSpinner() {
+        spinner.willMove(toParent: nil)
+        spinner.view.removeFromSuperview()
+        spinner.removeFromParent()
+    }
+    
+    //MARK: KEYBOARD
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-               // if keyboard size is not available for some reason, dont do anything
-               return
-            }
-          
+            // if keyboard size is not available for some reason, dont do anything
+            return
+        }
+        
         if shouldAnimateKeyboard {
             
             UIView.animate(withDuration: 0.1) {
@@ -397,8 +531,6 @@ class UpdateProfileViewController: UIViewController {
             self.updateButtonBottomAnchorConstraint?.constant = -keyboardSize.height - 16 + self.tabBarHeight
         }
 
-        
-        
         
     }
     @objc private func keyboardWillHide(notification: NSNotification) {
@@ -415,7 +547,6 @@ class UpdateProfileViewController: UIViewController {
         
     }
     
-
 }
 
 extension UpdateProfileViewController: UITextFieldDelegate {
@@ -447,6 +578,12 @@ extension UpdateProfileViewController: UITextFieldDelegate {
         }
         
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if field == .phone && textField.text == "" {
+            textField.text = "+1"
+        }
     }
     
     

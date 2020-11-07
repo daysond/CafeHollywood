@@ -18,6 +18,7 @@ enum NetworkError: Error {
     case argumentError
     case invalidData
     case unknowError
+    case recentLoginRequired
 }
 
 
@@ -245,7 +246,9 @@ class NetworkManager {
         
         var result: Result<AuthDataResult, Error>!
         
+        let group = DispatchGroup()
         
+        group.enter()
         
         Auth.auth().createUser(withEmail: email, password: password) { (dataResult, err) in
             
@@ -259,18 +262,26 @@ class NetworkManager {
             
             result = .success(dataResult)
             
+            group.enter()
             self.updateProfileField(.name, to: name) { (err) in
+                group.leave()
                 guard err == nil else { print(err!.localizedDescription ); return }
                 print("did set name \(name)")
             }
             
-            
+            group.enter()
             self.setAuthPhoneNumber(verificationCode: code) { (err) in
+                group.leave()
                 guard err == nil else { print(err!.localizedDescription ); return }
                 print("did set phone \(code)")
             }
             
-            
+            group.leave()
+
+        }
+        
+        group.notify(queue: .main) {
+            print("notified")
             semaphore.signal()
         }
         
@@ -293,11 +304,7 @@ class NetworkManager {
     }
     
     
-    
-    
-    
-    
-    
+
     //MARK: - MENUS
     
     func getMenu(type: MenuType, completion: @escaping ([Menu]?) -> Void) {
@@ -1012,8 +1019,10 @@ class NetworkManager {
     }
     
     //MARK: - ACCOUNT
+
     
     func updateProfileField(_ field: AccountField, to newProfile: String, completion: @escaping (Error?) -> Void) {
+        
         
         let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
         
@@ -1028,7 +1037,16 @@ class NetworkManager {
         case .email:
             
             Auth.auth().currentUser?.updateEmail(to: newProfile, completion: { (error) in
-                completion(error)
+                
+                if let err = error, let errCode = AuthErrorCode(rawValue: err._code) {
+                    if errCode == .requiresRecentLogin {
+                        completion(NetworkError.recentLoginRequired)
+                    }
+                } else {
+                    completion(error)
+                }
+                
+                
             })
             
         case .password:
@@ -1059,6 +1077,24 @@ class NetworkManager {
         
         Auth.auth().currentUser?.updatePhoneNumber(credential, completion: { (error) in
             completion(error)
+        })
+        
+        
+    }
+    
+    func reAuthenticateUser(password: String) {
+        
+        guard let email = currentUser?.email else { return }
+        
+        var credential: AuthCredential
+        // Prompt the user to re-provide their sign-in credentials
+        credential =  EmailAuthProvider.credential(withEmail: email, password: password)
+        currentUser?.reauthenticate(with: credential, completion: { (result, error) in
+            
+            
+            print(result?.user)
+            print(error?.localizedDescription)
+            
         })
         
         

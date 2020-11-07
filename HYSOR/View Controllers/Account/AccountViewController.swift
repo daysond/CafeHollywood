@@ -53,12 +53,13 @@ class AccountViewController: UIViewController {
         super.viewWillAppear(animated)
         myTableView.reloadData()
         self.navigationItem.title = "Hi, \(APPSetting.customerName)"
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+
+       
     }
     
     
     private func setupView() {
-        
+        navigationBarSetup()
         view.backgroundColor = .white
         myTableView.dataSource = self
         myTableView.delegate = self
@@ -76,6 +77,21 @@ class AccountViewController: UIViewController {
         ])
         
         setupFooterView()
+        
+    }
+    
+    private func navigationBarSetup() {
+
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+        let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(handleBackButton))
+        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.tintColor = .black
+        self.navigationItem.leftBarButtonItem = backButton
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
+        
         
     }
     
@@ -97,6 +113,9 @@ class AccountViewController: UIViewController {
         
     }
     
+    @objc private func handleBackButton() {
+        navigationController?.popViewController(animated: true)
+    }
     
     @objc private func logOut() {
         do {

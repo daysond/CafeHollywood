@@ -38,11 +38,16 @@ class ManageFavouriteViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     private func setupView() {
         
         view.backgroundColor = .white
         
-        navigationController?.navigationBar.prefersLargeTitles = false
+//        self.navigationItem.largeTitleDisplayMode = .never
         navigationItem.title = "My Favourites"
         let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(back))
         navigationController?.navigationBar.tintColor = .black
@@ -80,7 +85,7 @@ class ManageFavouriteViewController: UIViewController {
     }
     
     @objc private func back() {
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.popViewController(animated: true)
     }
     

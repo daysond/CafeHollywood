@@ -21,9 +21,10 @@ class AuthViewController: UpdateProfileViewController {
     let logInMethod: AccountField
     private var email: String?
     private var name: String?
-    private var phoneNumber: String?
     private var password: String?
     private var code: String?
+    
+
     
     var delegate: AuthStatusUpdateDelegate?
     
@@ -46,7 +47,7 @@ class AuthViewController: UpdateProfileViewController {
         setButtonTitle()
     }
     
-    
+    //MARK: SET UP
     private func setButtonTitle() {
         
         switch field {
@@ -68,7 +69,7 @@ class AuthViewController: UpdateProfileViewController {
         profileFieldTitle.text = "ENTER YOUR \(field.rawValue.uppercased())"
         profileTextField.isSecureTextEntry = false
         self.passwordTFHeightConstraint?.constant = 0
-        
+        self.resendButton.isHidden = (field != .verification)
         
         switch field {
         
@@ -131,18 +132,16 @@ class AuthViewController: UpdateProfileViewController {
         }
     }
     
-    override func isPasswordSame(_ text: String) -> Bool {
-        if isLogin { return true }
-        return super.isPasswordSame(text)
-    }
-    
-    
+
+    //MARK: BUTTON TAPPED
     
     override func handleButtonTapped() {
         
         if !shouldProceed() {
             return
         }
+        
+        view.endEditing(true)
         
         switch field {
         
@@ -167,13 +166,14 @@ class AuthViewController: UpdateProfileViewController {
         case .phone:
             
             if phoneNumber != nil && phoneNumber == profileTextField.text {
+                //which means phonenumber has set, code should have been sent
                 profileTextField.text = nil
                 switchField(.verification)
                 return
             }
             // new phone number or first time
             setText()
-            verifyPhoneNumber()
+            verify()
             
         case .verification:
             setText()
@@ -182,6 +182,8 @@ class AuthViewController: UpdateProfileViewController {
         default:
             return
         }
+        
+       
         
     }
     
@@ -198,6 +200,10 @@ class AuthViewController: UpdateProfileViewController {
             switchField(isLogin ? .email : .name)
             
         case .phone:
+            if isLogin && logInMethod == .phone {
+                self.navigationController?.dismiss(animated: true, completion: nil)
+                return
+            }
             switchField(.password)
         
         case .verification:
@@ -211,52 +217,26 @@ class AuthViewController: UpdateProfileViewController {
     
     //MARK: - HELPERS
     
-    
-    private func verifyPhoneNumber() {
-        
-        guard let number = phoneNumber else {
-            displayMessage("Please enter a valid phone number.")
-            return
-            
-        }
-        
-        // Creat spinner view
-        
-        let child = SpinnerViewController()
-        addChild(child)
-        child.view.frame = view.frame
-        view.addSubview(child.view)
-        child.didMove(toParent: self)
-        
-        NetworkManager.shared.verifyPhoneNumber(number) { (verificationID, error) in
-            
-            DispatchQueue.main.async {
-                
-                guard error == nil else {
-                    self.displayMessage(error!.localizedDescription)
-                    return
-                }
-                
-                guard let id = verificationID else {
-                    self.displayMessage("Unknow Error.")
-                    return
-                }
-                
-                child.willMove(toParent: nil)
-                child.view.removeFromSuperview()
-                child.removeFromParent()
-                
-                APPSetting.storePhoneVerificationID(id)
-                self.switchField(.verification)
-            }
-        }
+    override func isPasswordSame(_ text: String) -> Bool {
+        if isLogin { return true }
+        return super.isPasswordSame(text)
     }
+    
+    
+
+    
+    
+    //MARK: - SWITCH FIELDS
     
     private func switchField(_ field: AccountField) {
         
         self.field = field
         setupDisplay()
-        profileTextField.resignFirstResponder()
+        if field == .phone {
+            profileTextField.clearButtonMode = .never
+        } else {
+            profileTextField.clearButtonMode = .always
+        }
         profileTextField.becomeFirstResponder()
     }
     
@@ -286,10 +266,25 @@ class AuthViewController: UpdateProfileViewController {
         
     }
     
+    
+    
+    //MARK: - NETWORKING
+    
+
+    
+    private func verify() {
+        
+        verifyPhoneNumber {
+     
+                self.switchField(.verification)
+                self.startTimerForVerificationCode()
+            }
+        
+    }
+    
     private func signIn() {
-
+        showSpinner()
         logInMethod == .email ? emailSignIn() : phoneSignIn()
-
     }
     
     private func emailSignIn() {
@@ -312,12 +307,16 @@ class AuthViewController: UpdateProfileViewController {
                 return
             }
             
+            DispatchQueue.main.async {
+                self.removeSpinner()
+            }
+            
+          
             self.navigationController?.dismiss(animated: true, completion: {
             
                 self.delegate?.didLogIn()
             
             })
-            
         }
     }
     
@@ -343,43 +342,47 @@ class AuthViewController: UpdateProfileViewController {
                 return
             }
             
+            DispatchQueue.main.async {
+                self.removeSpinner()
+            }
+            
+            
             self.navigationController?.dismiss(animated: true, completion: {
             
                 self.delegate?.didLogIn()
             
             })
-            
-            
         }
-        
     }
-    
     
     @objc private func signUp() {
         
-        guard let email = email, let password = password, let name = name, let phoneNumber = phoneNumber, let code = code else { return }
+        showSpinner()
+        
+        guard let email = email, let password = password, let name = name, let code = code else { return }
         
         DispatchQueue.global(qos: .background).async {
-            
-            
-            let res = NetworkManager.shared.signUpWith(email, password, name ,code)
-            
-            switch res {
-            
-            case .success:
+
+                let res = NetworkManager.shared.signUpWith(email, password, name ,code)
                 
-                DispatchQueue.main.async {
-                    self.navigationController?.dismiss(animated: true, completion: {
-                    
-                        self.delegate?.didSignUp()
-                    })
-                }
+                switch res {
                 
-            case .failure(let err):
-                DispatchQueue.main.async {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.removeSpinner()
+                        self.navigationController?.dismiss(animated: true, completion: {
+                            self.delegate?.didSignUp()
+                        })
+                    }
+
+                case .failure(let err):
+                    DispatchQueue.main.async {
+          
+                    self.removeSpinner()
                     self.displayMessage(err.localizedDescription)
+                    }
                 }
-            }
+            
         }
     }
     

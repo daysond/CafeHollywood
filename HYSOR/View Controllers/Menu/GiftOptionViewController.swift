@@ -120,25 +120,18 @@ class GiftOptionViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
-        
-        NetworkManager.shared.getGiftOptions { (options) in
-            
-            if let id = Cart.shared.selectedGiftOption?.uid, let index = options.firstIndex(where: { $0.uid == id }) {
-                var modified = options
-                modified[index].isSelected = true
-                self.selectedIndex = index
-                self.giftOptions = modified
-                
-            } else {
-                self.giftOptions = options
-            }
-        }
+        getOptionFromDB()
     }
 
+    
+    
+    //MARK: - SET UP
     
     fileprivate func setupView() {
         
@@ -225,6 +218,23 @@ class GiftOptionViewController: UIViewController {
 
     }
     
+    fileprivate func getOptionFromDB() {
+        NetworkManager.shared.getGiftOptions { (options) in
+            
+            if let id = Cart.shared.selectedGiftOption?.uid, let index = options.firstIndex(where: { $0.uid == id }) {
+                var modified = options
+                modified[index].isSelected = true
+                self.selectedIndex = index
+                self.giftOptions = modified
+                
+            } else {
+                self.giftOptions = options
+            }
+        }
+    }
+    
+    // MARK: - SELECTORS
+    
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
@@ -293,6 +303,8 @@ class GiftOptionViewController: UIViewController {
 
 }
 
+//MARK: - TEXTFIELD / TEXTVIEW DELEGATE
+
 extension GiftOptionViewController: UITextViewDelegate, UITextFieldDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -343,6 +355,8 @@ extension GiftOptionViewController: UITextViewDelegate, UITextFieldDelegate {
     
     
 }
+
+//MARK: - TABLEVIEW DELEGATE
 
 extension GiftOptionViewController: UITableViewDelegate , UITableViewDataSource {
     

@@ -39,7 +39,6 @@ class ManageReservationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.prefersLargeTitles = false
         
         setupView()
         
@@ -96,7 +95,6 @@ class ManageReservationViewController: UIViewController {
     }
     
     @objc private func back() {
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.popViewController(animated: true)
     }
     

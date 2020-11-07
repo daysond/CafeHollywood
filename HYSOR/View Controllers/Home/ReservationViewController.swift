@@ -52,7 +52,10 @@ class ReservationViewController: UIViewController {
     private func setupView() {
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .whiteSmoke
+        scrollView.backgroundColor = .offWhite
+        scrollView.layer.borderWidth = 1
+        scrollView.layer.borderColor = UIColor.lightGray.cgColor
+//        scrollView.layer.cornerRadius = 8
         
         view.addSubview(scrollView)
         
@@ -76,7 +79,7 @@ class ReservationViewController: UIViewController {
         let restaurantNameLabel = UILabel()
         restaurantNameLabel.text = "Cafe Hollywood"
         restaurantNameLabel.numberOfLines = 0
-        restaurantNameLabel.font = .systemFont(ofSize: 28, weight: .bold)
+        restaurantNameLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         restaurantNameLabel.frame = CGRect(x: 16, y: 8, width: viewWidth, height: restaurantNameLabel.intrinsicHeight(width: viewWidth))
         
         // ------------------------------------------------------------------------------------------
@@ -87,7 +90,7 @@ class ReservationViewController: UIViewController {
         let statusLabel = UILabel()
         statusLabel.text = reservation.status == .confirmed ? "Reservation Confirmed!" : "Reservation Canceled."
         statusLabel.numberOfLines = 0
-        statusLabel.font = .systemFont(ofSize: 16, weight: .regular)
+        statusLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         let statusLabelHeight = statusLabel.intrinsicHeight(width: viewWidth - 36)
         
         statusIndicator.frame = CGRect(x: 16, y: restaurantNameLabel.frame.maxY + 16, width: statusLabelHeight - 4, height: statusLabelHeight - 4)
@@ -99,7 +102,7 @@ class ReservationViewController: UIViewController {
         let paxImage = UIImageView(image: UIImage(named: "pax2"))
         
         paxLabel.text = "\(reservation.pax)"
-        paxLabel.font = .systemFont(ofSize: 18, weight: .regular)
+        paxLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
         paxImage.frame = CGRect(x: 16, y: statusIndicator.frame.maxY + 16, width: paxLabel.intrinsicContentSize.height, height: paxLabel.intrinsicContentSize.height)
         paxLabel.frame = CGRect(x: paxImage.frame.maxX + 8, y: paxImage.frame.minY, width: paxLabel.intrinsicContentSize.width, height: paxLabel.intrinsicContentSize.height)
@@ -107,7 +110,7 @@ class ReservationViewController: UIViewController {
         let calendarImage = UIImageView(image: UIImage(named: "calendar"))
 
         dateLabel.text = "\(reservation.date.dropLast(6)) at \(reservation.time)"
-        dateLabel.font = .systemFont(ofSize: 18, weight: .regular)
+        dateLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         
         calendarImage.frame = CGRect(x: paxLabel.frame.maxX + 16, y: paxImage.frame.minY, width: paxImage.frame.width, height: paxImage.frame.height)
         dateLabel.frame = CGRect(x: calendarImage.frame.maxX + 8, y: calendarImage.frame.minY, width: viewWidth - calendarImage.frame.maxX - 8, height: dateLabel.intrinsicContentSize.height)
@@ -159,7 +162,7 @@ class ReservationViewController: UIViewController {
             let restaurantNoticeLabel = UILabel()
             restaurantNoticeLabel.text = "Restaurant information"
             restaurantNoticeLabel.numberOfLines = 0
-            restaurantNoticeLabel.font = .systemFont(ofSize: 20, weight: .bold)
+            restaurantNoticeLabel.font = .systemFont(ofSize: 24, weight: .bold)
             
             
             let infoTitleLabel = makeTitleLabel(text: "Important dining information")
@@ -297,7 +300,8 @@ class ReservationViewController: UIViewController {
         
         let label =  UILabel()
         label.text = text
-        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
         return label
     }
     
@@ -313,8 +317,8 @@ class ReservationViewController: UIViewController {
     
     private func setupNavigationBar() {
         
-//        navigationItem.title = "Reservation"
-        self.navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = "Manage Reservation"
+//        self.navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
