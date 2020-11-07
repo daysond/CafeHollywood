@@ -13,14 +13,12 @@ class CustomOption {
     let mainImageNmae: String
     let mainTitle: String
     var subTitle: String
-    var subImageName: String?
     let optionType: CustomOptionType
     
-    init(mainImageNmae: String, mainTitle:String, subTitle: String, subImageName: String?, optionType: CustomOptionType) {
+    init(mainImageNmae: String, mainTitle:String, subTitle: String, optionType: CustomOptionType) {
         self.mainImageNmae = mainImageNmae
         self.mainTitle = mainTitle
         self.subTitle = subTitle
-        self.subImageName = subImageName
         self.optionType = optionType
     }
     
@@ -33,5 +31,6 @@ enum CustomOptionType {
     case payment
     case note
     case pax
+    case gift
     
 }

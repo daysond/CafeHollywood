@@ -30,6 +30,15 @@ enum ComboType: Int {
     
 }
 
+class MealCache {
+    
+    let meal: Meal
+    init(_ meal: Meal) {
+        self.meal = meal
+    }
+}
+
+
 
 struct Meal {
     

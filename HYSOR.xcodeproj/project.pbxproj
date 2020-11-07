@@ -28,6 +28,7 @@
 		ED2C14AA2500B9F100F6BEB9 /* RecepitTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */; };
 		ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */; };
 		ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */; };
+		ED365ACC2554CF0800A2A0C4 /* GiftOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED365ACB2554CF0800A2A0C4 /* GiftOptionViewController.swift */; };
 		ED3710DB24E103DE00AD6DAF /* scanner.json in Resources */ = {isa = PBXBuildFile; fileRef = ED3710DA24E103DE00AD6DAF /* scanner.json */; };
 		ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3710DC24E107C600AD6DAF /* RoundCartButton.swift */; };
 		ED3710DF24E1191200AD6DAF /* CustomOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3710DE24E1191200AD6DAF /* CustomOption.swift */; };
@@ -121,6 +122,7 @@
 		ED2C14A92500B9F100F6BEB9 /* RecepitTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecepitTableViewHeader.swift; sourceTree = "<group>"; };
 		ED2C14AB2500C4F800F6BEB9 /* UpdateProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileViewController.swift; sourceTree = "<group>"; };
 		ED2D6B3424F4E5D100CAFE78 /* MyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTableViewCell.swift; sourceTree = "<group>"; };
+		ED365ACB2554CF0800A2A0C4 /* GiftOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftOptionViewController.swift; sourceTree = "<group>"; };
 		ED3710DA24E103DE00AD6DAF /* scanner.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scanner.json; sourceTree = "<group>"; };
 		ED3710DC24E107C600AD6DAF /* RoundCartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundCartButton.swift; sourceTree = "<group>"; };
 		ED3710DE24E1191200AD6DAF /* CustomOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOption.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */,
 				ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */,
 				ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */,
+				ED365ACB2554CF0800A2A0C4 /* GiftOptionViewController.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -678,6 +681,7 @@
 				ED412E0A2420842C00EBBA4C /* Extensions.swift in Sources */,
 				ED49CCC62505E69800274155 /* MenuManaged+CoreDataProperties.swift in Sources */,
 				ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */,
+				ED365ACC2554CF0800A2A0C4 /* GiftOptionViewController.swift in Sources */,
 				ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */,
 				EDF8983F24AAD6F600488FEF /* MultiQuantityPreferenceTableViewCell.swift in Sources */,
 				ED62740F2512C93F009BDCB7 /* PreferenceItemManaged+CoreDataClass.swift in Sources */,

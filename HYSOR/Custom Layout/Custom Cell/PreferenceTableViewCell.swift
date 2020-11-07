@@ -110,6 +110,14 @@ class PreferenceTableViewCell: UITableViewCell {
         //        itemPrice = preference.price
     }
     
+    func configureCellWithGiftOption(_ option: Meal) {
+        
+        titleLabel.text = option.name
+        priceLabel.text = "$\(Money(amt: option.price).amount.stringRepresentation)"
+        isCellSelected = option.isSelected
+        
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

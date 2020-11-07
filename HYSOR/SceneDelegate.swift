@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let main = Auth.auth().currentUser == nil ? UINavigationController(rootViewController: AuthHomeViewController()) : MainTabBarViewController()
 //        let main = Auth.auth().currentUser == nil ? AuthHomeViewController()  : MainTabBarViewController()
 //        let main = AuthHomeViewController()
-        print(Auth.auth().currentUser?.email)
+//        print(Auth.auth().currentUser?.email)
         window?.rootViewController = main
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
@@ -44,26 +44,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         NetworkManager.shared.addTableListener()
-        print("tag im active")
+       
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
-        print("tag im deactive")
+      
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
-        print("tag im back")
+        
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
-        print("tag im gone")
+     
     }
     
     

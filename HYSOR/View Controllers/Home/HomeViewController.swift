@@ -18,6 +18,8 @@ class HomeViewController: UIViewController {
     
     let quickOrderButton = BlackButton()
     
+    let myAccountButton = BlackButton()
+    
     private var menuLauncher: SlideInMenuLauncher?
     
     private  var scheduelerView: SchedulerView?
@@ -49,44 +51,47 @@ class HomeViewController: UIViewController {
         
         reservationButton.configureButton(headTitleText: "Make Reservation", titleColor: .black, backgroud: .white)
         reservationButton.addTarget(self, action: #selector(reservationTapped), for: .touchUpInside)
-        reservationButton.layer.cornerRadius = 4
-        view.addSubview(reservationButton)
         
         orderNowButton.configureButton(headTitleText: "Online Order Now", titleColor: .black, backgroud: .white)
         orderNowButton.addTarget(self, action: #selector(onlineOrderTapped), for: .touchUpInside)
-        orderNowButton.layer.cornerRadius = 4
-        view.addSubview(orderNowButton)
         
         quickOrderButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
         quickOrderButton.addTarget(self, action: #selector(quickOrderButtonTapped), for: .touchUpInside)
-        quickOrderButton.layer.cornerRadius = 4
-        view.addSubview(quickOrderButton)
+        
+        myAccountButton.configureButton(headTitleText: "My Account", titleColor: .black, backgroud: .white)
+        myAccountButton.addTarget(self, action: #selector(myAccountTapped), for: .touchUpInside)
+
+        
+        [quickOrderButton, reservationButton, orderNowButton, myAccountButton].forEach { (button) in
+            button.layer.cornerRadius = 4
+            view.addSubview(button)
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            button.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        }
         
         NSLayoutConstraint.activate([
             
             
-            
-            quickOrderButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             quickOrderButton.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -48),
-            quickOrderButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
-            quickOrderButton.heightAnchor.constraint(equalToConstant: 40),
-            
-            reservationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+ 
             reservationButton.topAnchor.constraint(equalTo: quickOrderButton.bottomAnchor, constant: 16),
-            reservationButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
-            reservationButton.heightAnchor.constraint(equalToConstant: 40),
             
-            orderNowButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             orderNowButton.topAnchor.constraint(equalTo: reservationButton.bottomAnchor, constant: 16),
-            orderNowButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 2.0/5.0),
-            orderNowButton.heightAnchor.constraint(equalToConstant: 40),
             
+            myAccountButton.topAnchor.constraint(equalTo: orderNowButton.bottomAnchor, constant: 16),
+
         ])
         
         
     }
     
     //MARK: - ACTIONS
+    
+    @objc private func myAccountTapped() {
+        navigationController?.pushViewController(AccountViewController(), animated: true)
+//        navigationController?.pushViewController(GiftOptionViewController(), animated: true)
+    }
     
     @objc private func onlineOrderTapped() {
         

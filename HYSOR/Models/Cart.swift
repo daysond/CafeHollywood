@@ -31,6 +31,10 @@ class Cart {
         }
     }
     
+    var selectedGiftOption: Meal?
+    
+    var giftOptionContent: [String: String]?
+    
     var promotion: Money?
 
     var discountAmount: Money? {
@@ -62,7 +66,6 @@ class Cart {
                 
             }
         }
-        
 
         discountAmount +=  drinkCombos.count < drinkTags.count ?
                 ComboType.drink.deductionAmount * Decimal(drinkCombos.count) :
@@ -117,11 +120,18 @@ class Cart {
         
     }
     
-//    init() {
-//
-//
-//        self.orderID = UUID().uuidString
-//    }
+    func removeGiftOption() {
+        
+        guard let option = Cart.shared.selectedGiftOption else {
+            return
+        }
+        Cart.shared.selectedGiftOption = nil
+        giftOptionContent = nil
+        Cart.shared.meals.removeAll { $0.uid == option.uid }
+        
+    }
+    
+
     
 }
 
@@ -135,6 +145,7 @@ extension Cart: JSONRepresentation {
         meals.forEach { (meal) in
             mealsInfo.append(meal.representation)
         }
+        
         
         var rep: [String: Any] = [
 
@@ -172,6 +183,10 @@ extension Cart: JSONRepresentation {
         
         if self.pickupTime != nil {
             rep["pickupTime"] = pickupTime!
+        }
+        
+        if self.giftOptionContent != nil {
+            rep["giftOptionContent"] = giftOptionContent!
         }
             
 

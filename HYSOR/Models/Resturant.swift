@@ -189,7 +189,7 @@ struct Menu {
             //MARK: - NEED TO FIX THIS *****************************************************************************
             "uid": uid,
             "menuTitle": menuTitle,
-            "menuDetail": menuDetail,
+            "menuDetail": menuDetail ?? "",
             "imageURL": imageURL,
             "isSingleMealMenu": isSingleMealMenu,
             "mealsInUID": mealsInUID,

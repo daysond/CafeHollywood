@@ -85,6 +85,7 @@ class NetworkManager {
     
     // CACHE
     let preferencesCache = NSCache<NSString, PreferenceCache>()
+    let mealsCache = NSCache<NSString, MealCache>()
     
     
     
@@ -316,11 +317,12 @@ class NetworkManager {
                 let uid = doc.documentID
                 guard let imageURL = doc["imageURL"] as? String,
                       let mealsInUID = doc["mealsInUID"] as? [String],
-                      let menuDetail = doc["menuDetail"] as? String,
                       let menuTitle = doc["menuTitle"] as? String else {
                     print("cannot get menu for \(uid)")
                     return
                 }
+                
+                let menuDetail = doc["menuDetail"] as? String
                 
                 let menu = Menu(uid: uid, menuTitle: menuTitle, menuDetail: menuDetail, mealUIDs: mealsInUID, imageURL: imageURL)
                 menus.append(menu)
@@ -333,6 +335,12 @@ class NetworkManager {
     }
     
     func fetchMealWithMealUID(_ uid: String, completion: @escaping (Meal?) -> Void) {
+        
+        if let mealFromCache = mealsCache.object(forKey: uid as NSString) {
+            print("found cache")
+            completion(mealFromCache.meal)
+            return
+        }
         
         let group = DispatchGroup()
         
@@ -379,9 +387,11 @@ class NetworkManager {
                         return p1.isRequired
                     }
                     meal.preferences = tempPreferences
+                    self.mealsCache.setObject(MealCache(meal), forKey: uid as NSString)
                     completion(meal)
                 }
             } else {
+                self.mealsCache.setObject(MealCache(meal), forKey: uid as NSString)
                 completion(meal)
             }
         }
@@ -465,6 +475,48 @@ class NetworkManager {
                 completion(preference)
             }
         }
+    }
+    
+    func getGiftOptions(completion: @escaping ([Meal]) -> Void) {
+        
+        var options: [Meal] = []
+        
+        let group = DispatchGroup()
+        
+        group.enter()
+        
+        databaseRef.collection("customMenu").document("giftOptions").getDocument { (snapshot, error) in
+            
+            guard error == nil else {
+                print(error!.localizedDescription)
+                group.leave()
+                return
+            }
+            
+            if let data = snapshot?.data(), let optionIDs = data["mealsInUID"] as? [String] {
+                
+                optionIDs.forEach { (uid) in
+                    group.enter()
+                    self.fetchMealWithMealUID(uid) { (meal) in
+                        
+                        if let meal = meal {
+                            options.append(meal)
+                        }
+                        group.leave()
+                    }
+                }
+            }
+            
+            group.leave()
+
+        }
+        
+        group.notify(queue: .main) {
+            completion(options)
+        }
+        
+        
+        
     }
     
     

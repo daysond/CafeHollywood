@@ -12,7 +12,7 @@ import RxSwift
 
 class MealViewController: UIViewController {
     
-    let preferenceTableView: UITableView = {
+    private let preferenceTableView: UITableView = {
         let tb = UITableView()
         tb.separatorStyle = .singleLine
         tb.translatesAutoresizingMaskIntoConstraints = false
@@ -22,26 +22,26 @@ class MealViewController: UIViewController {
         return tb
     }()
     
-    let addToCartButton = BlackButton()
+    internal let addToCartButton = BlackButton()
     
-    let footerView = PreferenceFooterView()
-    let headerView = PreferenceHeaderView()
+    internal let footerView = PreferenceFooterView()
+    internal let headerView = PreferenceHeaderView()
     
-    let kHearderViewTitleHeight: CGFloat = 92.0
+    internal let kHearderViewTitleHeight: CGFloat = 92.0
     
-    var meal: Meal {
+    internal var meal: Meal {
         didSet {
             preferenceTableView.reloadData()
         }
     }
     
-    let isNewMeal: Bool
+    internal let isNewMeal: Bool
     
-    var mealInCartIndex: Int?
+    internal var mealInCartIndex: Int?
     
-    var navigationBarHeight: CGFloat?
+    internal var navigationBarHeight: CGFloat?
     
-    let kFooterViewHeightConstant: CGFloat = 208
+    internal let kFooterViewHeightConstant: CGFloat = 208
     
 //    private let favoriteButton = UIButton(type: .custom)
     

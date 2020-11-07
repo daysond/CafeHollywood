@@ -28,6 +28,12 @@ class CartViewController: UIViewController {
     
     private var loadingView = LoadingViewController(animationFileName: "dotsLoading")
     
+    private var cartImageView: UIImageView?
+    
+    private var emptyCartLabel: UILabel?
+    
+    private var isTableViewSetup: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,8 +52,26 @@ class CartViewController: UIViewController {
         }
 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !Cart.shared.isEmpty {
+            isTableViewSetup ? cartTableView.reloadData() : reSetUp()
+        }
+        
+        
+    }
 
     // MARK: - VIEW SET UP
+    
+    private func reSetUp() {
+        
+        cartImageView?.removeFromSuperview()
+        emptyCartLabel?.removeFromSuperview()
+        setupView()
+        
+    }
     
     private func setupEmptyCartView() {
         
@@ -64,6 +88,9 @@ class CartViewController: UIViewController {
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textColor = .black
         label.text = "Your cart is empty."
+        
+        self.cartImageView = cartImageView
+        self.emptyCartLabel = label
         
         view.addSubview(cartImageView)
         view.addSubview(label)
@@ -85,7 +112,7 @@ class CartViewController: UIViewController {
     
     
     private func setupView() {
-        
+        isTableViewSetup = true
         cartTableView.delegate = self
         cartTableView.dataSource = self
         Cart.shared.delegate = self

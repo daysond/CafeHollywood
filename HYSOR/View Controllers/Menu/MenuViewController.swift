@@ -60,18 +60,11 @@ class MenuViewController: UIViewController {
         menuCollectionView.alwaysBounceVertical = true
         view.addSubview(menuCollectionView)
         
-//        selectButton.configureTitle(title: "Online Order & Pick Up")
-//        selectButton.addTarget(self, action: #selector(setupLaunchMenu), for: .touchUpInside)
-//        view.addSubview(selectButton)
-//
         segmentControl = CustomSegmentedControl(frame: .zero, buttonTitle: ["Foods", "Drinks"])
         segmentControl.delegate = self
         view.addSubview(segmentControl)
         
-        let roundedCartButton = RoundCartButton()
-        roundedCartButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showCart)))
-        view.addSubview(roundedCartButton)
-        
+
         NSLayoutConstraint.activate([
             
             segmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -83,17 +76,7 @@ class MenuViewController: UIViewController {
             menuCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             menuCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             menuCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
-            
-//            selectButton.heightAnchor.constraint(equalToConstant: Constants.kOrderButtonHeightConstant),
-//            selectButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-//            selectButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            selectButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            roundedCartButton.widthAnchor.constraint(equalToConstant: 64),
-            roundedCartButton.heightAnchor.constraint(equalToConstant: 64),
-            roundedCartButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            roundedCartButton.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-//            roundedCartButton.bottomAnchor.constraint(equalTo: selectButton.topAnchor, constant: -16),
+ 
         ])
         
         
@@ -167,15 +150,7 @@ class MenuViewController: UIViewController {
         menuLauncher?.dismissMenu()
     }
     
-    @objc func showCart() {
-        
-        let cartVC = CartViewController()
-        let nav = UINavigationController(rootViewController: cartVC)
-        nav.modalPresentationStyle = .automatic
-        self.present(nav, animated: true, completion: nil)
-        
-        
-    }
+
     
     //MARK: - HELPERS
     

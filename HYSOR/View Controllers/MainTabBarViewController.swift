@@ -131,8 +131,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
                 userDefaults.setValue(hours, forKey: Key.businessHours)
                 userDefaults.set(version, forKey: Key.businessHoursVersion)
             }
-            
-            self.check(key: Key.businessHoursVersion)
+
         }
     }
     
@@ -168,7 +167,6 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             
             userDefaults.set(version, forKey: Key.creditAmountVersion)
             
-            self.check(key: Key.creditAmountVersion)
         }
         
     }
@@ -211,18 +209,12 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
             
             userDefaults.set(version, forKey: Key.taxRateVersion)
             
-            self.check(key: Key.taxRateVersion)
         }
         
 
     }
     
-    func check(key: String) {
-        
-        let res = userDefaults.value(forKey: key)
-        print("did get res \(res)")
-        
-    }
+
     
     
     //MARK: - SET UP
@@ -318,7 +310,6 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         
         let menuNavViewController = UINavigationController(rootViewController: MenuViewController())
-//        let menuNavViewController = MenuViewController()
         menuNavViewController.tabBarItem = UITabBarItem(title: "MENU", image: UIImage(named: "menu"), tag: 1)
         
         let actionViewController = ActionViewController()
@@ -327,14 +318,14 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         let pastOrdersViewController = OrderHistoryViewController()
         NetworkManager.shared.activeOrderListenerDelegate = pastOrdersViewController
-        pastOrdersViewController.tabBarItem = UITabBarItem(title: "ORDERS", image: UIImage(named: "invoice-1"), tag: 3)
+        pastOrdersViewController.tabBarItem = UITabBarItem(title: "ORDERS", image: UIImage(named: "invoice-1"), tag: 4)
         
-        let accountViewController = AccountViewController()
-        let accountNav = UINavigationController(rootViewController: accountViewController)
-        accountNav.tabBarItem = UITabBarItem(title: "MY", image: UIImage(named: "user-1"), tag: 4)
+        let cartViewController = CartViewController()
+        let cartNav = UINavigationController(rootViewController: cartViewController)
+        cartNav.tabBarItem = UITabBarItem(title: "MY", image: UIImage(named: "user-1"), tag: 3)
         
         
-        let tabBarList = [homeViewController, menuNavViewController, actionViewController ,pastOrdersViewController, accountNav]
+        let tabBarList = [homeViewController, menuNavViewController, actionViewController, cartNav ,pastOrdersViewController]
         viewControllers = tabBarList
     }
     
