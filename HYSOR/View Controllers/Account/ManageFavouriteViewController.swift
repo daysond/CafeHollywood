@@ -15,6 +15,7 @@ class ManageFavouriteViewController: UIViewController {
         tb.separatorStyle = .singleLine
         tb.translatesAutoresizingMaskIntoConstraints = false
         tb.backgroundColor = .white
+        tb.allowsSelection = false 
         tb.register(ManageFavouriteListTableViewCell.self, forCellReuseIdentifier: ManageFavouriteListTableViewCell.identifier)
         return tb
     }()

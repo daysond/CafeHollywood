@@ -13,8 +13,6 @@ class LoadingViewController: UIViewController {
     
     let fileName: String
     
-    
-    
     init(animationFileName: String) {
         self.fileName = animationFileName
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +24,7 @@ class LoadingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.33)
+        view.backgroundColor = UIColor(white: 0, alpha: 0)
         
         let lottieView = AnimationView (name: fileName)
         view.addSubview(lottieView)
@@ -43,10 +41,7 @@ class LoadingViewController: UIViewController {
         ])
 
     }
-    
 
-    
-    
 }
 
 

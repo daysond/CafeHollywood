@@ -53,10 +53,9 @@ class CollapsibleTableViewHeader: UITableViewHeaderFooterView {
             
             arrowIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
             arrowIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant:  -16),
-            arrowIndicator.widthAnchor.constraint(equalToConstant: 24),
-            arrowIndicator.heightAnchor.constraint(equalToConstant: 24),
+            arrowIndicator.widthAnchor.constraint(equalToConstant: 20),
+            arrowIndicator.heightAnchor.constraint(equalToConstant: 20),
             
-        
         
         ])
         

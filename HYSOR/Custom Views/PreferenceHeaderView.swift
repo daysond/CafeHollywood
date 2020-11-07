@@ -9,7 +9,7 @@
 import UIKit
 
 class PreferenceHeaderView: UIView {
-
+    
     private let headerImageView: UIImageView = {
         
         let imageview = UIImageView()
@@ -54,28 +54,28 @@ class PreferenceHeaderView: UIView {
         addSubview(titleLabel)
         addSubview(detailLabel)
         addSubview(favoriteButton)
-
+        
         favoriteButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             
             favoriteButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             favoriteButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 24),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 24),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 32),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 32),
             
             headerImageView.topAnchor.constraint(equalTo: topAnchor),
             headerImageView.heightAnchor.constraint(equalTo: heightAnchor),
             headerImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
+            
             titleLabel.bottomAnchor.constraint(equalTo: detailLabel.topAnchor, constant: -8),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
             
             detailLabel.bottomAnchor.constraint(equalTo: headerImageView.bottomAnchor, constant: -16),
             detailLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-          detailLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
+            detailLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.85),
             
         ])
     }
@@ -102,20 +102,20 @@ class PreferenceHeaderView: UIView {
         
         let heart = meal.isFavourite ? UIImage(named: "heartFilled") : UIImage(named: "heartEmpty")
         
-   
         favoriteButton.setImage(heart, for: .normal)
 
         
+        
     }
     
-
     
-     
-
+    
+    
+    
     
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

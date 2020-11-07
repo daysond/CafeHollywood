@@ -73,7 +73,7 @@ class MultiQuantityPreferenceTableViewCell: UITableViewCell {
         l.text = "99"
         l.textAlignment = .center
         l.textColor = .black
-        l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        l.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return l
     }()
     
@@ -91,6 +91,7 @@ class MultiQuantityPreferenceTableViewCell: UITableViewCell {
     
     var indexPath: IndexPath?
     
+    private let buttonHeight: CGFloat = 28
     
     var minusButtonLeadingAnchor: NSLayoutConstraint?
     var minusButtonWidthAnchor: NSLayoutConstraint?
@@ -124,18 +125,18 @@ class MultiQuantityPreferenceTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             minusButtonLeadingAnchor!,
-            minusButton.heightAnchor.constraint(equalToConstant: 24),
+            minusButton.heightAnchor.constraint(equalToConstant: buttonHeight),
             minusButtonWidthAnchor!,
             minusButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             quantityLabelLeadingAnchor!,
-            quantityLabel.heightAnchor.constraint(equalToConstant: 28),
+            quantityLabel.heightAnchor.constraint(equalToConstant: buttonHeight),
             quantityLabelWithAnchor!,
             quantityLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             addButton.leadingAnchor.constraint(equalTo: quantityLabel.trailingAnchor, constant: 8),
-            addButton.heightAnchor.constraint(equalToConstant: 24),
-            addButton.widthAnchor.constraint(equalToConstant: 24),
+            addButton.heightAnchor.constraint(equalToConstant: buttonHeight),
+            addButton.widthAnchor.constraint(equalToConstant: buttonHeight),
             addButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             titleLabel.leadingAnchor.constraint(equalTo: addButton.trailingAnchor, constant: 16),
@@ -205,9 +206,9 @@ class MultiQuantityPreferenceTableViewCell: UITableViewCell {
     
     private func openButtons() {
         self.minusButtonLeadingAnchor!.constant = 8
-        self.minusButtonWidthAnchor!.constant = 24
+        self.minusButtonWidthAnchor!.constant = buttonHeight
         self.quantityLabelLeadingAnchor!.constant = 8
-        self.quantityLabelWithAnchor!.constant = 28
+        self.quantityLabelWithAnchor!.constant = buttonHeight
     }
     
     private func closeButtons() {

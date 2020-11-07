@@ -31,7 +31,7 @@ class MealViewController: UIViewController {
     
     internal var meal: Meal {
         didSet {
-            preferenceTableView.reloadData()
+//            preferenceTableView.reloadData()
         }
     }
     
@@ -42,8 +42,6 @@ class MealViewController: UIViewController {
     internal var navigationBarHeight: CGFloat?
     
     internal let kFooterViewHeightConstant: CGFloat = 208
-    
-//    private let favoriteButton = UIButton(type: .custom)
     
     fileprivate var preferenceTableViewTopConstraint: NSLayoutConstraint?
     
@@ -345,6 +343,7 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("reloaded section ")
         if let preferences = meal.preferences {
             return preferences[section].isSectionCollapsed ? 0 : preferences[section].preferenceItems.count
         }
@@ -406,10 +405,10 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        if let preferences = meal.preferences {
-            return preferences[indexPath.section].isSectionCollapsed ? 0 : 58
-        }
+//
+//        if let preferences = meal.preferences {
+//            return preferences[indexPath.section].isSectionCollapsed ? 0 : 58
+//        }
         return 58
     }
     
@@ -506,7 +505,22 @@ extension MealViewController: CollapsibleTableViewHeaderDelegate {
         header.toggled(isCollapsed: collapsed)
         
         // Reload the whole section
-        preferenceTableView.reloadSections(NSIndexSet(index: section) as IndexSet, with: .fade)
+        func indexPathsForSection() -> [IndexPath] {
+            var indexPaths = [IndexPath]()
+            
+            for row in 0..<self.meal.preferences![section].preferenceItems.count {
+                indexPaths.append(IndexPath(row: row, section: section))
+            }
+            return indexPaths
+        }
+        
+        if collapsed {
+                // delete rows
+            preferenceTableView.deleteRows(at: indexPathsForSection(), with: .fade)
+        } else {
+            preferenceTableView.insertRows(at: indexPathsForSection(), with: .fade)
+        }
+//        preferenceTableView.reloadSections(NSIndexSet(index: section) as IndexSet, with: .fade)
         
     }
     
@@ -519,8 +533,6 @@ extension MealViewController: CollapsibleTableViewHeaderDelegate {
 // MARK: - MultiQuantityCellDelegate && FooterViewDelegate
 
 extension MealViewController: MultiQuantityCellDelegate, PreferenceFooterViewDelegate {
-    
-
     
     func didTapMinusButton(at indexPath: IndexPath) {
         

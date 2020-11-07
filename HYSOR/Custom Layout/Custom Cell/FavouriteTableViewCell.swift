@@ -55,15 +55,17 @@ class FavouriteTableViewCell: UITableViewCell {
         return v
     }()
     
-    private let customizeButton: UIButton = {
-        let b = UIButton()
-        b.setTitle("Mofidy", for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 14)
-        b.setTitleColor(.systemBlue, for: .normal)
-        b.setTitleColor(.gray, for: .highlighted)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
-    }()
+//    private let customizeButton: UIButton = {
+//        let b = UIButton()
+//        b.setTitle("Mofidy", for: .normal)
+//        b.titleLabel?.font = .systemFont(ofSize: 14)
+//        b.setTitleColor(.starYellow, for: .normal)
+//        b.setTitleColor(.gray, for: .highlighted)
+//        b.translatesAutoresizingMaskIntoConstraints = false
+//        return b
+//    }()
+    
+    let customizeButton = UIButton(type: .custom)
     
     
     var isCellSelected: Bool {
@@ -75,7 +77,7 @@ class FavouriteTableViewCell: UITableViewCell {
     var indexPath: IndexPath?
     
     
-    let modifyButtonWidth: CGFloat = 64.0
+    let modifyButtonWidth: CGFloat = 28
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         isCellSelected = false
@@ -89,6 +91,8 @@ class FavouriteTableViewCell: UITableViewCell {
         //
         //        indicatorView.layer.cornerRadius = 16
         
+        customizeButton.setImage(UIImage(named: "pencil"), for: .normal)
+        customizeButton.translatesAutoresizingMaskIntoConstraints = false
         customizeButton.addTarget(self, action: #selector(didTapModifyButton), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
@@ -111,9 +115,10 @@ class FavouriteTableViewCell: UITableViewCell {
             detailLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             detailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            customizeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            customizeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             customizeButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             customizeButton.widthAnchor.constraint(equalToConstant: modifyButtonWidth),
+            customizeButton.heightAnchor.constraint(equalTo: customizeButton.widthAnchor),
             //             customizeButton.heightAnchor.constraint(equalToConstant: 24),
             
             

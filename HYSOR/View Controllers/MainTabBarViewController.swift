@@ -322,7 +322,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         let cartViewController = CartViewController()
         let cartNav = UINavigationController(rootViewController: cartViewController)
-        cartNav.tabBarItem = UITabBarItem(title: "MY", image: UIImage(named: "user-1"), tag: 3)
+        cartNav.tabBarItem = UITabBarItem(title: "CART", image: UIImage(named: "user-1"), tag: 3)
         
         
         let tabBarList = [homeViewController, menuNavViewController, actionViewController, cartNav ,pastOrdersViewController]
@@ -396,6 +396,32 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
                 print(error!.localizedDescription)
                 return
             }
+            
+            DispatchQueue.main.async {
+
+                self.createLoadingView()
+                
+            }
+            
+        }
+    }
+    
+    
+    private func createLoadingView() {
+        
+        let child = LoadingViewController(animationFileName: "animatedCheck")
+        // add the spinner view controller
+        self.addChild(child)
+        child.view.frame = self.view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+
+        // wait two seconds to simulate some work happening
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            // then remove the spinner view controller
+            child.willMove(toParent: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParent()
         }
     }
 

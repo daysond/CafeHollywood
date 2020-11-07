@@ -66,7 +66,7 @@ class ManageFavouriteListTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             
             
-            foodImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -8),
+            foodImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             foodImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, constant: -16),
             foodImageView.widthAnchor.constraint(equalTo: foodImageView.heightAnchor),
             foodImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
