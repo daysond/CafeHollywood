@@ -47,6 +47,7 @@
 		ED437CC8241DD9DD0098E3ED /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED437CC7241DD9DD0098E3ED /* Money.swift */; };
 		ED437CCA241E0E040098E3ED /* OLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED437CC9241E0E040098E3ED /* OLImageView.swift */; };
 		ED450BBA2504233B00A9B339 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED450BB92504233B00A9B339 /* AuthViewController.swift */; };
+		ED462B7C255CF4960060D333 /* squareLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = ED462B7B255CF4960060D333 /* squareLoading.json */; };
 		ED46C73E24BFA5AD0089CF43 /* dotsLoading.json in Resources */ = {isa = PBXBuildFile; fileRef = ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */; };
 		ED46C74024BFA86A0089CF43 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */; };
 		ED46C74824BFEC900089CF43 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED46C74724BFEC900089CF43 /* HomeViewController.swift */; };
@@ -144,6 +145,7 @@
 		ED437CC7241DD9DD0098E3ED /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		ED437CC9241E0E040098E3ED /* OLImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OLImageView.swift; sourceTree = "<group>"; };
 		ED450BB92504233B00A9B339 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		ED462B7B255CF4960060D333 /* squareLoading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = squareLoading.json; sourceTree = "<group>"; };
 		ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dotsLoading.json; sourceTree = "<group>"; };
 		ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		ED46C74724BFEC900089CF43 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 			children = (
 				ED46C73D24BFA5AD0089CF43 /* dotsLoading.json */,
 				ED0130BE2556A813000AAB82 /* animatedCheck.json */,
+				ED462B7B255CF4960060D333 /* squareLoading.json */,
 				ED3710DA24E103DE00AD6DAF /* scanner.json */,
 				ED9290CE250D5A9400277881 /* GoogleService-Info.plist */,
 				ED3DD9942418B6B300A4A28E /* HYSOR */,
@@ -536,6 +539,7 @@
 				ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */,
 				ED3DD99F2418B6B400A4A28E /* Assets.xcassets in Resources */,
 				ED46C73E24BFA5AD0089CF43 /* dotsLoading.json in Resources */,
+				ED462B7C255CF4960060D333 /* squareLoading.json in Resources */,
 				ED0130BF2556A813000AAB82 /* animatedCheck.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

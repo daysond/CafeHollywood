@@ -89,6 +89,7 @@ class OrderHistoryViewController: UIViewController {
         receiptCollectionView.register(OrderHistoryCollectionViewCell.self, forCellWithReuseIdentifier: OrderHistoryCollectionViewCell.identifier)
         receiptCollectionView.alwaysBounceVertical = true
         receiptCollectionView.contentInsetAdjustmentBehavior = .never
+        receiptCollectionView.allowsSelection = false 
         
         view.addSubview(receiptCollectionView)
         

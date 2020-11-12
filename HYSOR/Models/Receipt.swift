@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 enum OrderStatus: Int {
+    
     case cancelled = 0
     case unconfirmed = 1
     case confirmed = 2
@@ -17,6 +18,7 @@ enum OrderStatus: Int {
     case completed = 4
 //    case sent = 5
     case scheduled = 6
+    case scheduledConfirmed = 7
     
     var status: String {
         switch self {
@@ -33,7 +35,10 @@ enum OrderStatus: Int {
 //        case .sent:
 //            return "Sent"
         case .scheduled:
-            return "Scheduled:"
+            return "Scheduled"
+        
+        case .scheduledConfirmed:
+            return "Scheduled Confirmed"
         
         }
     }
@@ -55,7 +60,8 @@ enum OrderStatus: Int {
 //            return UIImage(named: "comfirmed")!
         case .scheduled:
             return UIImage(named: "unconfirmed")!
-        
+        case .scheduledConfirmed:
+            return UIImage(named: "confirmed")!
         }
     }
 }
@@ -73,16 +79,16 @@ class Receipt {
     let taxes: Double
     let total:Double
     let mealsInfo: [MealInfo]
-    let restaurantName: String
     var status: OrderStatus
     let customerName: String
-    
+    var pickupTime: String?
+    var pickupDate: String?
+    var giftOptionContent: [String: String]?
     
     init?(id: String, data: [String: Any]) {
 
         guard let customerID = data["customerID"] as? String,
         
-            let restaurantName = data["restaurantName"] as? String,
             let orderTimestamp = data["orderTimestamp"] as? String,
             let orderNote = data["orderNote"] as? String,
             let discount = data["discount"] as? Double,
@@ -103,6 +109,18 @@ class Receipt {
                 mealsInfoObj.append(mealInfo)
             }
         }
+        
+        if let giftOption = data["giftOptionContent"] as? [String: String] {
+            self.giftOptionContent = giftOption
+        }
+        
+        if let pickupTime = data["pickupTime"] as? String {
+            self.pickupTime = pickupTime
+        }
+        
+        if let pickupDate = data["pickupDate"] as? String {
+            self.pickupDate = pickupDate
+        }
 
         self.orderID = id
         self.customerID = customerID
@@ -115,7 +133,6 @@ class Receipt {
         self.taxes = taxes
         self.total = total
         self.mealsInfo = mealsInfoObj
-        self.restaurantName = restaurantName
         self.customerName = customerName
         self.status = orderStatus
 

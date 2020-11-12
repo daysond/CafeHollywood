@@ -58,9 +58,9 @@ class ReceiptView: UIView {
         
         guard let receipt = self.receipt else { return }
         receiptTableView.tableHeaderView = receiptHeaderView
-        receiptHeaderView.frame.size.height = 150
+        receiptHeaderView.frame.size.height = 120 + receipt.orderNote.textHeightFor(font: .systemFont(ofSize: 20, weight: .regular), width: frame.width - 32)
         receiptHeaderView.backgroundColor = .white
-        receiptHeaderView.configureHeader(orderID: receipt.orderID, restaurantName: receipt.restaurantName, note: receipt.orderNote, timestamp: receipt.orderTimestamp)
+        receiptHeaderView.configureHeader(orderID: receipt.orderID, note: receipt.orderNote, timestamp: receipt.orderTimestamp)
         
         
     }

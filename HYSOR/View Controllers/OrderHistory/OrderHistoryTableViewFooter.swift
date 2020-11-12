@@ -13,25 +13,25 @@ class OrderHistoryTableViewFooter: UIView {
     private let totalLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        l.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         l.text = "Total: $999.99"
         l.numberOfLines = 0
         l.textColor = .black
         l.textAlignment = .left
         return l
     }()
-    
-    private let tipLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 18)
-        l.text = ""
-        l.numberOfLines = 0
-        l.textColor = .darkGray
-        l.textAlignment = .left
-        return l
-    }()
-    
+//
+//    private let tipLabel: UILabel = {
+//        let l = UILabel()
+//        l.translatesAutoresizingMaskIntoConstraints = false
+//        l.font = UIFont.systemFont(ofSize: 18)
+//        l.text = ""
+//        l.numberOfLines = 0
+//        l.textColor = .darkGray
+//        l.textAlignment = .left
+//        return l
+//    }()
+//
 
     
     
@@ -41,18 +41,18 @@ class OrderHistoryTableViewFooter: UIView {
         backgroundColor = .white
         
         addSubview(totalLabel)
-        addSubview(tipLabel)
+//        addSubview(tipLabel)
     
         
         
         
         NSLayoutConstraint.activate([
         
-            totalLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            totalLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             totalLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            
-            tipLabel.leadingAnchor.constraint(equalTo: totalLabel.trailingAnchor, constant: 16),
-            tipLabel.topAnchor.constraint(equalTo: totalLabel.topAnchor),
+//
+//            tipLabel.leadingAnchor.constraint(equalTo: totalLabel.trailingAnchor, constant: 16),
+//            tipLabel.topAnchor.constraint(equalTo: totalLabel.topAnchor),
             
 
             // height = 16 + 18 + 16 + 48 + 16 = 114
@@ -62,11 +62,10 @@ class OrderHistoryTableViewFooter: UIView {
         
     }
     
-    func configureFooter(total: String, tip: String?) {
+    func configureFooter(total: String) {
         
         totalLabel.text = "Toal: $\(total)"
-        
-        tipLabel.text = tip ?? ""
+   
         
     }
     

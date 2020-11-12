@@ -101,12 +101,12 @@ class PreferenceTableViewCell: UITableViewCell {
         
     }
     
-    func configureCellWithPreference(_ preference: PreferenceItem) {
+    func configureCellWithPreference(_ preferenceItem: PreferenceItem) {
         
-        titleLabel.text = preference.name
+        titleLabel.text = APPSetting.shared.unavailableItems.contains(preferenceItem.uid) ? "\(preferenceItem.name) - Unavailable" : preferenceItem.name
         //        detailLabel.text = preference.detail
-        priceLabel.text = (preference.price != nil) ? "$\(String(describing: preference.price!.amount.stringRepresentation))" : ""
-        isCellSelected  = preference.isSelected
+        priceLabel.text = (preferenceItem.price != nil) ? "$\(String(describing: preferenceItem.price!.amount.stringRepresentation))" : ""
+        isCellSelected  = preferenceItem.isSelected
         //        itemPrice = preference.price
     }
     

@@ -25,9 +25,9 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
     var receipt: Receipt? {
         didSet {
             if let receipt = receipt {
-                headerView.configureHeader(orderStatus: receipt.status, timestamp: receipt.orderTimestamp, orderID: receipt.orderID, restaurantName: receipt.restaurantName)
+                headerView.configureHeader(orderStatus: receipt.status, timestamp: receipt.orderTimestamp, orderID: receipt.orderID)
                 
-                footerView.configureFooter(total: Money(amt: receipt.total).amount.stringRepresentation, tip: nil)
+                footerView.configureFooter(total: Money(amt: receipt.total).amount.stringRepresentation)
                 receiptTableView.reloadData()
             }
         }
@@ -63,6 +63,8 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
     
     private func setupView() {
         
+        layer.cornerRadius = 4
+        
         receiptTableView.delegate = self
         receiptTableView.dataSource = self
         receiptTableView.alwaysBounceVertical = false
@@ -70,7 +72,8 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
         
         addSubview(receiptTableView)
         addSubview(viewReceiptButton)
-        viewReceiptButton.configureTitle(title: "View Receipt")
+        viewReceiptButton.layer.cornerRadius = 4
+        viewReceiptButton.configureTitle(title: "View Receipt Detail")
         viewReceiptButton.addTarget(self, action: #selector(viewReceipt), for: .touchUpInside)
         setupHeaderView()
         setupFooterView()
@@ -78,11 +81,11 @@ class OrderHistoryCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             
             receiptTableView.topAnchor.constraint(equalTo: topAnchor),
-            receiptTableView.bottomAnchor.constraint(equalTo: viewReceiptButton.topAnchor, constant: -16),
+            receiptTableView.bottomAnchor.constraint(equalTo: viewReceiptButton.topAnchor, constant: -8),
             receiptTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             receiptTableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            viewReceiptButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            viewReceiptButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             viewReceiptButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             viewReceiptButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             viewReceiptButton.heightAnchor.constraint(equalToConstant: 48),

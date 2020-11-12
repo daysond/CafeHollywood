@@ -19,7 +19,7 @@ enum Constants {
 
   
     static let kOrderButtonHeightConstant: CGFloat = 50.0
-    static let kReceiptHeaderHeight: CGFloat = 148
+    static let kReceiptHeaderHeight: CGFloat = 108
     static let kReceiptFooterHeight: CGFloat = 50
     static let kReceiptCellHeight: CGFloat = 35
     static let favouriteListKey: String = "favouriteList\(APPSetting.customerUID)"
@@ -78,7 +78,11 @@ class APPSetting {
         Table.shared.tableNumber != nil
     }
     
+    var unavailableMeals: [String] = []
     
+    var unavailableItems: [String] = []
+    
+    var unavailableMenus: [String] = []
     
     static var customerName: String {
         return NetworkManager.shared.currentUser?.displayName ?? ""
@@ -141,13 +145,17 @@ class APPSetting {
     }
     
     var isRestaurantOpen: Bool {
-        
-        guard openHours != nil , closedHours != nil else { return false }
-        let dow = Date().getDayOfWeek()
-        let open = openHours![Weekdays(rawValue: dow)!]!
-        let close = closedHours![Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
-        let lastCallHour = Int("\(close)")! - 1
-        return Date.currentTime() >= open && Date.currentTime() <= "\(lastCallHour):30"
+        return true
+//        guard openHours != nil , closedHours != nil else { return false }
+//        let dow = Date().getDayOfWeek()
+//        var open = openHours![Weekdays(rawValue: dow)!]!
+//        if open == "24:00" {
+//            open = "00:00"
+//        }
+//        
+//        let close = closedHours![Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
+//        let lastCallHour = Int("\(close)")! - 1
+//        return Date.currentTime() >= open && Date.currentTime() <= "\(lastCallHour):30"
     }
     
     

@@ -81,7 +81,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
-        
+        NetworkManager.shared.addunavailableMealsListener()
         NetworkManager.shared.getCurrentVersions { (error) in
             guard error == nil else {
                 self.showError(message: error!.localizedDescription)
@@ -417,7 +417,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         child.didMove(toParent: self)
 
         // wait two seconds to simulate some work happening
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             // then remove the spinner view controller
             child.willMove(toParent: nil)
             child.view.removeFromSuperview()

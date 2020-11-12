@@ -31,6 +31,8 @@ class Cart {
         }
     }
     
+    var tempMeals: [Meal] = []
+    
     var selectedGiftOption: Meal?
     
     var giftOptionContent: [String: String]?
@@ -105,7 +107,8 @@ class Cart {
     
     var pickupTime: String?
     
-    var restaurantID: String?
+    var pickupDate: String?
+    
     
     var isEmpty: Bool {
         return meals.isEmpty
@@ -117,7 +120,9 @@ class Cart {
         Cart.shared.meals.removeAll()
         Cart.shared.orderNote = ""
         Cart.shared.pickupTime = nil
-        
+        Cart.shared.selectedGiftOption = nil
+        Cart.shared.giftOptionContent = nil
+        Cart.shared.promotion = nil
     }
     
     func removeGiftOption() {
@@ -162,27 +167,19 @@ extension Cart: JSONRepresentation {
             "orderNote": orderNote,
             "orderTimestamp": orderTimestamp,
 
-            "restaurantName" :  "Cafe Hollywood",
             "status": pickupTime == nil ? OrderStatus.unconfirmed.rawValue : OrderStatus.scheduled.rawValue,
             
             "mealsInfo": mealsInfo,
             
-            /*
-             
-             case cancelled = 0
-             case unconfirmed = 1
-             case confirmed = 2
-             case ready = 3
-             case completed = 4
-             case sent = 5
-             case
-             
-             */
             
         ]
         
         if self.pickupTime != nil {
             rep["pickupTime"] = pickupTime!
+        }
+        
+        if self.pickupDate != nil {
+            rep["pickupDate"] = pickupDate!
         }
         
         if self.giftOptionContent != nil {

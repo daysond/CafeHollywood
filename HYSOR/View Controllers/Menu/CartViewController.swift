@@ -123,7 +123,7 @@ class CartViewController: UIViewController {
         checkoutButton.addTarget(self, action: #selector(checkoutButtonTapped), for: .touchUpInside)
         checkoutButton.configureTitle(title: APPSetting.shared.isDineIn ? "Send Order" : "Check Out")
         
-        if APPSetting.shared.isRestaurantOpen == false {
+         if APPSetting.shared.isRestaurantOpen == false {
             checkoutButton.isEnabled = false
             checkoutButton.backgroundColor = .lightGray
             checkoutButton.configureTitle(title: "Kitchen Closed")

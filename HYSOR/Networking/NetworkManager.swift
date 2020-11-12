@@ -60,7 +60,7 @@ class NetworkManager {
     
     private var orderStatusListener: ListenerRegistration?
     
-//    private var dineInOrderListener: ListenerRegistration?
+    private var unavailableMealsListener: ListenerRegistration?
     
     private var activeTableListener: ListenerRegistration?
     
@@ -91,6 +91,32 @@ class NetworkManager {
     
     
     // MARK: - ON START CHECKING
+    
+    func addunavailableMealsListener() {
+        
+        if unavailableMealsListener != nil {
+            unavailableMealsListener?.remove()
+        }
+        
+        unavailableMealsListener = databaseRef.collection("restaurantInfo").document("unavailableMeals").addSnapshotListener({ (snapshot, error) in
+            
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            if let data = snapshot?.data(), let unavailableMeals = data["meals"] as? [String], let unavailableItems = data["items"] as? [String], let unavailableMenus = data["menus"] as? [String] {
+                APPSetting.shared.unavailableMeals = unavailableMeals
+                APPSetting.shared.unavailableItems = unavailableItems
+                APPSetting.shared.unavailableMenus = unavailableMenus
+    
+            }
+            
+            
+        })
+        
+        
+    }
     
     func getCurrentVersions(completion: @escaping (Error?) -> Void) {
         
@@ -861,9 +887,7 @@ class NetworkManager {
                         } else {
                             self.activeOrderListenerDelegate?.didReceiveActiveOrder(receipt)
                         }
-                        
-                        
-                        
+ 
                     }
                 }
                 

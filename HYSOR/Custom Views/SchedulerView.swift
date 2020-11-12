@@ -58,7 +58,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         }
     }
     
-    var shouldOnlyShowToday: Bool = false
+//    var shouldOnlyShowToday: Bool = false
     
     init(openHours: [Weekdays : String], closeHours: [Weekdays : String]) {
         
@@ -139,7 +139,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         
         switch component {
         case 0:
-            return shouldOnlyShowToday ? 1 : dates.count
+            return dates.count
         case 1:
             return times.count
         default:
@@ -200,13 +200,15 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             let time = closedHourOfToday.split(separator: ":")
             let lastCallHour = Int(time[0])! - 1
             if currentTime > "\(lastCallHour):30" {
-                dates.removeFirst()
                 j = 14
             }
         }
         
         for i in 0...j {
             dates.append(Date.dateOfDayEEEMMddyyyy(after: i))
+        }
+        if j == 14 {
+            dates.removeFirst()
         }
     }
     
@@ -227,8 +229,9 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         for i in starHour...closeHour - 1 {
             //Generates time for each 15 mins from open - close (last call)
             let minutes = ["00", "15", "30", "45"]
+            let hour = i < 10 ? "0\(i)" : "\(i)"
             minutes.forEach { (minute) in
-                tempTimes.append("\(i):\(minute)")
+                tempTimes.append("\(hour):\(minute)")
             }
         }
         tempTimes.removeLast()

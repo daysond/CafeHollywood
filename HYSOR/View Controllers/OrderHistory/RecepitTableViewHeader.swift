@@ -13,8 +13,8 @@ class RecepitTableViewHeader: UIView {
     private let restaurantNameLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        l.text = "Order#"
+        l.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        l.text = "Cafe Hollywood"
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
@@ -26,30 +26,20 @@ class RecepitTableViewHeader: UIView {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        l.text = "Name: John Apple "
+        l.text = "ID "
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
         return l
     }()
 
-    private let noteTitleLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        l.text = ""
-        l.numberOfLines = 1
-        l.textColor = .black
-        l.textAlignment = .left
-        return l
-    }()
     
     private let noteDetailLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        l.numberOfLines = 1
-        l.textColor = .black
+        l.numberOfLines = 0
+        l.textColor = .red
         l.textAlignment = .left
         return l
     }()
@@ -70,24 +60,22 @@ class RecepitTableViewHeader: UIView {
         
         addSubview(restaurantNameLabel)
         addSubview(orderIDLabel)
-        addSubview(noteTitleLabel)
+
         addSubview(noteDetailLabel)
         addSubview(dateLabel)
         
         
         NSLayoutConstraint.activate([
             
-            restaurantNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32), //32 + 22 = 54
+            restaurantNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16), //32 + 22 = 54
             restaurantNameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
             orderIDLabel.topAnchor.constraint(equalTo: restaurantNameLabel.bottomAnchor, constant: 8), //54 + 16 + 22 = 92
             orderIDLabel.leadingAnchor.constraint(equalTo: restaurantNameLabel.leadingAnchor),
             
-            noteTitleLabel.leadingAnchor.constraint(equalTo: restaurantNameLabel.leadingAnchor), // 92 + 22 + 16 = 130
-            noteTitleLabel.topAnchor.constraint(equalTo: orderIDLabel.bottomAnchor, constant: 8),
-            
-            noteDetailLabel.leadingAnchor.constraint(equalTo: noteTitleLabel.trailingAnchor, constant: 4),
-            noteDetailLabel.centerYAnchor.constraint(equalTo: noteTitleLabel.centerYAnchor),
+            noteDetailLabel.leadingAnchor.constraint(equalTo: restaurantNameLabel.leadingAnchor),
+            noteDetailLabel.topAnchor.constraint(equalTo: orderIDLabel.bottomAnchor, constant: 8),
+            noteDetailLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.95),
             
             dateLabel.leadingAnchor.constraint(equalTo: orderIDLabel.trailingAnchor, constant: 16),
             dateLabel.centerYAnchor.constraint(equalTo: orderIDLabel.centerYAnchor), // 130 + 8
@@ -97,9 +85,8 @@ class RecepitTableViewHeader: UIView {
 
     }
     
-    func configureHeader(orderID: String, restaurantName: String, note: String, timestamp: String) {
+    func configureHeader(orderID: String, note: String, timestamp: String) {
         
-        restaurantNameLabel.text = restaurantName
         orderIDLabel.text = orderID
         noteDetailLabel.text = note
         dateLabel.text = Date.dateInYYYYMMddFromDate(Date.dateFromTimestamp(Double(timestamp)!))

@@ -64,7 +64,7 @@ class MenuViewController: UIViewController {
         segmentControl.delegate = self
         view.addSubview(segmentControl)
         
-
+        
         NSLayoutConstraint.activate([
             
             segmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -76,7 +76,7 @@ class MenuViewController: UIViewController {
             menuCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
             menuCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             menuCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8),
- 
+            
         ])
         
         
@@ -96,7 +96,7 @@ class MenuViewController: UIViewController {
             self.navigationController?.pushViewController(scanneeVC, animated: true)
             
         case 1:
-//            APPSetting.shared.isDineIn = false
+            //            APPSetting.shared.isDineIn = false
             Table.shared.tableNumber = nil
             selectButton.configureTitle(title: "Online Order & Pick Up")
         default:
@@ -150,7 +150,7 @@ class MenuViewController: UIViewController {
         menuLauncher?.dismissMenu()
     }
     
-
+    
     
     //MARK: - HELPERS
     
@@ -199,7 +199,7 @@ class MenuViewController: UIViewController {
     }
     
     private func compareCurrentVersion(with newVersion: String) {
-
+        
         func deleteAndSet() {
             DBManager.shared.deleteAllData()
             userDefaults.set(newVersion, forKey: Key.menuVersion)
@@ -230,13 +230,8 @@ class MenuViewController: UIViewController {
                     DBManager.shared.writeMenu(menu, to: .foodMenu)
                 }
                 self.foodMenu = menus
-                self.menus.accept(self.foodMenu)
                 group.leave()
             }
-            
-        } else {
-            
-             menus.accept(foodMenu)
             
         }
         
@@ -253,7 +248,16 @@ class MenuViewController: UIViewController {
         }
         
         group.notify(queue: .main) {
-            self.dismissLoadingView()
+            
+            APPSetting.shared.unavailableMenus.forEach { (uid) in
+                
+                self.foodMenu.removeAll { $0.uid == uid }
+                self.drinkMenu.removeAll { $0.uid == uid }
+                
+                self.menus.accept(self.foodMenu)
+                self.dismissLoadingView()
+            }
+            
         }
         
     }
@@ -287,7 +291,7 @@ class MenuViewController: UIViewController {
                     } else {
                         NetworkManager.shared.fetchMealWithMealUID(uid) { (meal) in
                             guard let meal = meal else { return }
-//                            print("got \(meal.uid) from FB")
+                            //                            print("got \(meal.uid) from FB")
                             DBManager.shared.writeMeal(meal)
                             DispatchQueue.main.async {
                                 self.pushMealVC(meal: meal)
@@ -341,7 +345,7 @@ extension MenuViewController: QRCodeScannerDelegate {
     
     
     func found() {
-//        Table.shared.tableNumber = tableNumber
+        //        Table.shared.tableNumber = tableNumber
     }
     
     func failedReadingQRCode() {

@@ -38,7 +38,20 @@ extension String {
     static func randomString(length: Int) -> String {
         let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
-      }
+    }
+    
+    func textHeightFor(font: UIFont, width: CGFloat) -> CGFloat {
+        
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.font = font
+        label.text = self
+        label.sizeToFit()
+        
+        return label.frame.height
+        
+    }
     
 }
 
@@ -76,14 +89,14 @@ extension Date {
         formatter.dateFormat = "YYYY-MM-dd hh:mm"
         return formatter.string(from: date)
     }
-
+    
     static func timestampInInt() -> Int64 {
-     
+        
         let ts = NSDate().timeIntervalSince1970 * 1000
-
+        
         let tsInInt = Int64(ts)
-
-       return tsInInt
+        
+        return tsInInt
         
     }
     
@@ -113,13 +126,13 @@ extension Date {
     
     
     func getDayOfWeek() -> Int {
-
+        
         let myCalendar = Calendar(identifier: .gregorian)
         let weekDay = myCalendar.component(.weekday, from: self)
         return weekDay
     }
     
-
+    
     
 }
 
@@ -139,13 +152,13 @@ extension UIColor {
         var blue:CGFloat = 0
         var alpha:CGFloat  = 0
         self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-
+        
         var red2:CGFloat = 0
         var green2:CGFloat  = 0
         var blue2:CGFloat = 0
         var alpha2:CGFloat  = 0
         color.getRed(&red2, green: &green2, blue: &blue2, alpha: &alpha2)
-
+        
         return (Int(red*255) == Int(red*255) && Int(green*255) == Int(green2*255) && Int(blue*255) == Int(blue*255) )
         
         
@@ -167,41 +180,41 @@ extension Notification.Name {
 
 
 extension UITextField {
-  
-  enum PaddingSide {
-    case left(CGFloat)
-    case right(CGFloat)
-    case both(CGFloat)
-  }
-  
-  func addPadding(_ padding: PaddingSide) {
     
-    self.leftViewMode = .always
-    self.layer.masksToBounds = true
-    
-    
-    switch padding {
-      
-    case .left(let spacing):
-      let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
-      self.leftView = paddingView
-      self.rightViewMode = .always
-      
-    case .right(let spacing):
-      let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
-      self.rightView = paddingView
-      self.rightViewMode = .always
-      
-    case .both(let spacing):
-      let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
-      // left
-      self.leftView = paddingView
-      self.leftViewMode = .always
-      // right
-      self.rightView = paddingView
-      self.rightViewMode = .always
+    enum PaddingSide {
+        case left(CGFloat)
+        case right(CGFloat)
+        case both(CGFloat)
     }
-  }
+    
+    func addPadding(_ padding: PaddingSide) {
+        
+        self.leftViewMode = .always
+        self.layer.masksToBounds = true
+        
+        
+        switch padding {
+        
+        case .left(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            self.leftView = paddingView
+            self.rightViewMode = .always
+            
+        case .right(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            self.rightView = paddingView
+            self.rightViewMode = .always
+            
+        case .both(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            // left
+            self.leftView = paddingView
+            self.leftViewMode = .always
+            // right
+            self.rightView = paddingView
+            self.rightViewMode = .always
+        }
+    }
 }
 
 extension NSManagedObjectContext {
@@ -220,15 +233,15 @@ extension NSManagedObjectContext {
 
 extension UILabel {
     
-     func intrinsicHeight(width: CGFloat) -> CGFloat{
-
+    func intrinsicHeight(width: CGFloat) -> CGFloat{
+        
         let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
         label.numberOfLines = 0
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.font = self.font
         label.text = self.text
         label.sizeToFit()
-
+        
         return label.frame.height
     }
     
@@ -239,14 +252,14 @@ extension UIViewController {
     func showError(title: String = "Error", message: String) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
+        
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
             return
         }))
         
         
         self.present(alert, animated: true)
-
+        
     }
     
     

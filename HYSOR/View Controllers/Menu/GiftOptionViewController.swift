@@ -174,7 +174,7 @@ class GiftOptionViewController: UIViewController {
             wordCountLabel.topAnchor.constraint(equalTo: messageTextView.bottomAnchor, constant: 8),
             
             giftOptionTableView.topAnchor.constraint(equalTo: wordCountLabel.bottomAnchor, constant: 16),
-            giftOptionTableView.heightAnchor.constraint(equalToConstant: 200),
+            giftOptionTableView.heightAnchor.constraint(equalToConstant: 180),
             
             errorLabel.topAnchor.constraint(equalTo: giftOptionTableView.bottomAnchor, constant: 8),
             

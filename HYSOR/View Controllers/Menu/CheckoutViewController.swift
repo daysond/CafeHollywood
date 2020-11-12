@@ -134,16 +134,32 @@ class CheckoutViewController: UIViewController {
     
     @objc func placeOrder() {
         
-        // send order && add listener to the oder status
-        print("sending order")
+        let child = LoadingViewController(animationFileName: "squareLoading")
+        self.addChild(child)
+        child.view.frame = self.view.frame
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+        Cart.shared.tempMeals = Cart.shared.meals
+
         NetworkManager.shared.placeOrder { (error) in
-            guard error == nil else { return }
-//            NetworkManager.shared.orderStatusDelegate = self
-            self.dismiss(animated: true, completion: nil)
-            Cart.resetCart()
-            self.tabBarController?.selectedIndex = 2
+            
+            DispatchQueue.main.async {
+                child.willMove(toParent: nil)
+                child.view.removeFromSuperview()
+                child.removeFromParent()
+    
+                guard error == nil else {
+                    Cart.shared.meals = Cart.shared.tempMeals
+                    Cart.shared.tempMeals = []
+                    return
+                }
+                Cart.shared.tempMeals = []
+                self.dismiss(animated: true, completion: nil)
+                self.tabBarController?.selectedIndex = 2
+            }
         }
         
+        Cart.resetCart()
         // now go to update status delegate
         
 
@@ -171,15 +187,6 @@ class CheckoutViewController: UIViewController {
         return label.frame.height - 18
     }
 
-    
-//    private func didFinishPayment() {
-//
-//            self.navigationController?.dismiss(animated: true)
-//
-//            Cart.shared.meals = []
-//
-//        //then tell the res payment is made !
-//    }
     
 
 }
@@ -212,38 +219,3 @@ extension CheckoutViewController: UITableViewDelegate, UITableViewDataSource {
     
 }
 
-
-//MARK: - UPDATE STATUS DELEGATE
-//
-//extension CheckoutViewController: OrderStatusUpdateDelegate {
-//
-//    func didUpdateStatusOf(order: String, to status: OrderStatus) {
-//
-//        // once status is confirmed , request a payment then notify the restaurant the payment status
-//        switch status {
-//
-//        case .confirmed:
-//            print("order confirmed")
-//
-//        case .cancelled:
-//
-//            return
-//
-//        case .ready:
-//
-//            return
-//
-//        default:
-//            return
-//        }
-//
-//
-//
-//    }
-//
-//
-//
-//
-//
-//
-//}

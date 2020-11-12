@@ -25,17 +25,6 @@ class OrderHistoryTableViewCell: UITableViewCell {
         return l
     }()
     
-//    let detailLabel: UILabel = {
-//        let l = UILabel()
-//        l.translatesAutoresizingMaskIntoConstraints = false
-//        l.text = ""
-//        l.numberOfLines = 0
-//        l.textAlignment = .left
-//        l.textColor = .black
-//        l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-//        return l
-//    }()
-    
     
     let quantityLabel: UILabel = {
         let l = UILabel()
@@ -44,7 +33,7 @@ class OrderHistoryTableViewCell: UITableViewCell {
         l.numberOfLines = 1
         l.textAlignment = .center
         l.textColor = .black
-        l.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         return l
     }()
 
@@ -54,22 +43,16 @@ class OrderHistoryTableViewCell: UITableViewCell {
         
         addSubview(titleLabel)
         addSubview(quantityLabel)
-//        addSubview(detailLabel)
-    
+
         contentView.backgroundColor = .clear
         
         NSLayoutConstraint.activate([
             
-            quantityLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            quantityLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            quantityLabel.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            quantityLabel.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 8),
             
             titleLabel.leadingAnchor.constraint(equalTo: quantityLabel.trailingAnchor, constant: 16),
-            titleLabel.topAnchor.constraint(equalTo: quantityLabel.topAnchor),
-            
-//            detailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant:  8),
-//            detailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-//            detailLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-//            detailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             
         ])
 

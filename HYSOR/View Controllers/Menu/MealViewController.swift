@@ -31,7 +31,7 @@ class MealViewController: UIViewController {
     
     internal var meal: Meal {
         didSet {
-//            preferenceTableView.reloadData()
+            //            preferenceTableView.reloadData()
         }
     }
     
@@ -50,7 +50,7 @@ class MealViewController: UIViewController {
         self.meal = meal
         self.isNewMeal = isNewMeal
         super.init(nibName: nil, bundle: nil)
-
+        
     }
     
     
@@ -62,7 +62,7 @@ class MealViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         self.navigationBarHeight =  self.navigationController?.navigationBar.frame.maxY
-  
+        
     }
     
     
@@ -75,7 +75,7 @@ class MealViewController: UIViewController {
         setupTableView()
         view.addSubview(addToCartButton)
         setupAddToCartButton()
-   
+        
         preferenceTableViewTopConstraint = preferenceTableView.topAnchor.constraint(equalTo: view.topAnchor)
         
         NSLayoutConstraint.activate([
@@ -93,11 +93,17 @@ class MealViewController: UIViewController {
         
         
         // Disable add to cart button when there is a require field
+        if APPSetting.shared.unavailableMeals.contains(meal.uid) {
+            addToCartButton.isEnabled = false
+            addToCartButton.configureTitle(title: "Unavailable")
+            addToCartButton.backgroundColor = .lightGray
+        } else {
         addToCartButton.isEnabled = shouldEnableAddToCartButton()
+        }
         
     }
     
-    open func setupAddToCartButton() {
+    internal func setupAddToCartButton() {
         
         let orderOrCart = APPSetting.shared.isDineIn ? "Order" : "Cart"
         
@@ -107,23 +113,23 @@ class MealViewController: UIViewController {
         let subtitle = "$\(meal.totalPrice.amount.stringRepresentation)"
         
         addToCartButton.configureButton(headTitleText: title, subtitleText: subtitle)
- 
-//        view.bringSubviewToFront(addToCartButton)
+        
+        //        view.bringSubviewToFront(addToCartButton)
     }
     
     private func setupNavigationBar() {
-   
+        
         self.navigationController?.isNavigationBarHidden = false
         let backButton = UIBarButtonItem(image: UIImage(named: "back84x84"), style: .plain, target: self, action:  #selector(backButtonTapped))
         navigationController?.navigationBar.tintColor =  meal.imageURL == nil ? .black : .white
         self.navigationItem.leftBarButtonItem = backButton
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
-    
-
+        
+        
     }
     
-
+    
     
     private func setupTableView() {
         
@@ -144,7 +150,7 @@ class MealViewController: UIViewController {
         headerView.frame.size.height = meal.imageURL != nil ? view.frame.width * 2.0/3.0 : kHearderViewTitleHeight + (navigationBarHeight ?? 88.0)
         headerView.configureHeaderViewWith(meal)
         headerView.favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
-
+        
     }
     
     private func setupFooterView() {
@@ -177,6 +183,10 @@ class MealViewController: UIViewController {
     //Enable AddToCart Button when all require fields are selected
     
     private func shouldEnableAddToCartButton() -> Bool {
+        
+        if APPSetting.shared.unavailableMeals.contains(meal.uid) {
+            return false
+        }
         
         var shouldEnableButton = false
         
@@ -226,12 +236,12 @@ class MealViewController: UIViewController {
     private func setFooterViewHeight() {
         
         if meal.instruction == nil {
-             footerView.frame.size.height = kFooterViewHeightConstant
+            footerView.frame.size.height = kFooterViewHeightConstant
         } else {
             let h = heightForInstruction(text: meal.instruction!)
             footerView.frame.size.height = kFooterViewHeightConstant - 64 + h
         }
-   
+        
     }
     
     
@@ -255,7 +265,7 @@ class MealViewController: UIViewController {
         
         preferenceTableViewTopConstraint?.constant = 0
         headerView.frame.size.height = meal.imageURL == nil ?  kHearderViewTitleHeight + (navigationBarHeight ?? 88.0) : height
-       navigationItem.title = nil
+        navigationItem.title = nil
         self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
         navigationController?.navigationBar.tintColor = meal.imageURL == nil ? .black : .white
         
@@ -268,7 +278,7 @@ class MealViewController: UIViewController {
     @objc private func addToCartButtonTapped() {
         
         switch isNewMeal {
-            
+        
         case true:
             // 1. add to cart
             Cart.shared.meals.append(meal)
@@ -289,7 +299,7 @@ class MealViewController: UIViewController {
             
             self.dismiss(animated: true, completion: nil)
         }
-
+        
         
     }
     
@@ -307,16 +317,14 @@ class MealViewController: UIViewController {
     }
     
     @objc private func backButtonTapped() {
-         
-         self.navigationController?.popViewController(animated: true)
-     }
+        
+        self.navigationController?.popViewController(animated: true)
+    }
     
     @objc func favoriteButtonTapped(sender: UIButton) {
         
-//        print("tapped \(User.shared.favouriteList)")
-        
         if meal.isFavourite {
-          
+            
             APPSetting.unfavouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartEmpty"), for: .normal)
             
@@ -325,7 +333,7 @@ class MealViewController: UIViewController {
             APPSetting.favouriteMeal(uid: meal.uid)
             sender.setImage(UIImage(named: "heartFilled"), for: .normal)
         }
-//        print("after \(User.shared.favouriteList)")
+        //        print("after \(User.shared.favouriteList)")
         
         
     }
@@ -343,7 +351,7 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("reloaded section ")
+    
         if let preferences = meal.preferences {
             return preferences[section].isSectionCollapsed ? 0 : preferences[section].preferenceItems.count
         }
@@ -405,12 +413,13 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//
-//        if let preferences = meal.preferences {
-//            return preferences[indexPath.section].isSectionCollapsed ? 0 : 58
-//        }
+        //
+        //        if let preferences = meal.preferences {
+        //            return preferences[indexPath.section].isSectionCollapsed ? 0 : 58
+        //        }
         return 58
     }
+    
     
     // MARK: DID SELECT ROW
     
@@ -420,14 +429,17 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
         
         var preference = preferences[indexPath.section]
         
-
+        if APPSetting.shared.unavailableItems.contains(preference.preferenceItems[indexPath.row].uid) {
+            tableView.cellForRow(at: indexPath)?.isSelected = false
+            return
+        }
         
         switch preference.maxPick {
-            
+        
         case 1: //MAX PICK IS 1
             
             if preference.isRequired == false && preference.preferenceItems[indexPath.row].isSelected == true {
-                 preference.preferenceItems[indexPath.row].isSelected = false
+                preference.preferenceItems[indexPath.row].isSelected = false
             } else {
                 
                 for (index,var item) in preference.preferenceItems.enumerated() {
@@ -441,10 +453,10 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
                 
             }
             
-
             
-//            tableView.cellForRow(at: indexPath)
             
+        //            tableView.cellForRow(at: indexPath)
+        
         default: // MAX PICK greater than 1
             
             switch preference.maxItemQuantity {
@@ -475,9 +487,9 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 preference.preferenceItems[indexPath.row].isSelected = !preference.preferenceItems[indexPath.row].isSelected
                 
-                //OPEN ANIMATION TODO _______________________________
-                //                let cell = tableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
-                //                cell.shouldAnimate = true
+            //OPEN ANIMATION TODO _______________________________
+            //                let cell = tableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
+            //                cell.shouldAnimate = true
             }
         }
         
@@ -515,12 +527,12 @@ extension MealViewController: CollapsibleTableViewHeaderDelegate {
         }
         
         if collapsed {
-                // delete rows
+            // delete rows
             preferenceTableView.deleteRows(at: indexPathsForSection(), with: .fade)
         } else {
             preferenceTableView.insertRows(at: indexPathsForSection(), with: .fade)
         }
-//        preferenceTableView.reloadSections(NSIndexSet(index: section) as IndexSet, with: .fade)
+        //        preferenceTableView.reloadSections(NSIndexSet(index: section) as IndexSet, with: .fade)
         
     }
     
@@ -550,7 +562,7 @@ extension MealViewController: MultiQuantityCellDelegate, PreferenceFooterViewDel
             //else: quantity - 1
             preference.preferenceItems[indexPath.row].quantity -= 1
             if preference.preferenceItems[indexPath.row].quantity < preference.maxItemQuantity {
-               let cell = preferenceTableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
+                let cell = preferenceTableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
                 cell.shouldDisableAddButton = false
             }
         }
@@ -575,7 +587,7 @@ extension MealViewController: MultiQuantityCellDelegate, PreferenceFooterViewDel
             //else: quantity + 1
             preference.preferenceItems[indexPath.row].quantity += 1
             if preference.preferenceItems[indexPath.row].quantity == preference.maxItemQuantity {
-               let cell = preferenceTableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
+                let cell = preferenceTableView.cellForRow(at: indexPath) as! MultiQuantityPreferenceTableViewCell
                 cell.shouldDisableAddButton = true
             }
         }
@@ -596,7 +608,7 @@ extension MealViewController: MultiQuantityCellDelegate, PreferenceFooterViewDel
     
 }
 
- //MARK: - InstructionInputDelegate
+//MARK: - InstructionInputDelegate
 
 extension  MealViewController: InstructionInputDelegate {
     
@@ -615,5 +627,5 @@ extension  MealViewController: InstructionInputDelegate {
         footerView.instructionTextLabel.textColor = .black
         setFooterViewHeight()
     }
-
+    
 }
