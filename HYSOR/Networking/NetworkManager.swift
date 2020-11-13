@@ -60,7 +60,7 @@ class NetworkManager {
     
     private var orderStatusListener: ListenerRegistration?
     
-    private var unavailableMealsListener: ListenerRegistration?
+    private var unavailablityListener: ListenerRegistration?
     
     private var activeTableListener: ListenerRegistration?
     
@@ -92,26 +92,25 @@ class NetworkManager {
     
     // MARK: - ON START CHECKING
     
-    func addunavailableMealsListener() {
+    func addunavailablityListener() {
         
-        if unavailableMealsListener != nil {
-            unavailableMealsListener?.remove()
+        if unavailablityListener != nil {
+            unavailablityListener?.remove()
         }
         
-        unavailableMealsListener = databaseRef.collection("restaurantInfo").document("unavailableMeals").addSnapshotListener({ (snapshot, error) in
+        unavailablityListener = databaseRef.collection("restaurantInfo").document("unavailablity").addSnapshotListener({ (snapshot, error) in
             
             guard error == nil else {
                 print(error!.localizedDescription)
                 return
             }
             
-            if let data = snapshot?.data(), let unavailableMeals = data["meals"] as? [String], let unavailableItems = data["items"] as? [String], let unavailableMenus = data["menus"] as? [String] {
+            if let data = snapshot?.data(), let unavailableMeals = data["meals"] as? [String], let unavailableItems = data["items"] as? [String], let unavailableMenus = data["menus"] as? [String], let unavailableDates = data["reservationDates"] as? [String] {
                 APPSetting.shared.unavailableMeals = unavailableMeals
                 APPSetting.shared.unavailableItems = unavailableItems
                 APPSetting.shared.unavailableMenus = unavailableMenus
-    
+                APPSetting.shared.unavailableDates = unavailableDates
             }
-            
             
         })
         
@@ -356,8 +355,8 @@ class NetworkManager {
                 }
                 
                 let menuDetail = doc["menuDetail"] as? String
-                
-                let menu = Menu(uid: uid, menuTitle: menuTitle, menuDetail: menuDetail, mealUIDs: mealsInUID, imageURL: imageURL)
+                let isTakeOutOnly = doc["isTakeOutOnly"] as? Bool
+                let menu = Menu(uid: uid, menuTitle: menuTitle, menuDetail: menuDetail, mealUIDs: mealsInUID, imageURL: imageURL, isTakeOutOnly: isTakeOutOnly ?? false)
                 menus.append(menu)
             }
             
@@ -383,7 +382,7 @@ class NetworkManager {
             
             guard error == nil, let data = documentSnapShot?.data() else {
                 print(error.debugDescription)
-                print("wrong data \(uid) \n \(documentSnapShot?.data())")
+                print("wrong data \(uid) \n \(String(describing: documentSnapShot?.data()))")
                 completion(nil)
                 return
                 
@@ -824,7 +823,7 @@ class NetworkManager {
         }
         
         
-        semaphore.wait(timeout: .distantFuture)
+        _ = semaphore.wait(timeout: .distantFuture)
         
         recepits.sort { $0.orderTimestamp > $1.orderTimestamp }
         result = .success(recepits)
@@ -1116,8 +1115,8 @@ class NetworkManager {
         currentUser?.reauthenticate(with: credential, completion: { (result, error) in
             
             
-            print(result?.user)
-            print(error?.localizedDescription)
+//            print(result?.user)
+//            print(error?.localizedDescription)
             
         })
         

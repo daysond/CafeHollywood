@@ -7,11 +7,6 @@
 //
 
 import Foundation
-import FirebaseFirestore
-//enum PreferenceType {
-//
-//    case required, nonRequired
-//}
 
 enum ComboType: Int {
  
@@ -319,31 +314,5 @@ extension Meal: JSONRepresentation {
         return rep
     }
     
-    
-//    var representation: [String : Any] {
-//
-//        var rep: [String: Any] = [
-//            "uid": uid,
-//            "name": name,
-//            "price": price,
-//            "details" : details ?? "",
-//            "imageURL" : imageURL ?? "",
-//            "orderedTimestamp": orderedTimestamp ?? "",
-//            "instruction" : instruction ?? "",
-//            "quantity" : quantity,
-//
-//        ]
-//
-//        var preferenceUID: [String] = []
-//
-//        if preferences != nil {
-//            preferences!.forEach { (preference) in
-//                preferenceUID.append(preference.uid)
-//            }
-//        }
-//        rep["preferences"] = preferenceUID
-//
-//        return rep
-//    }
 }
 

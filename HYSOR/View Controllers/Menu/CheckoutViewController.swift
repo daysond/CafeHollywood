@@ -31,14 +31,6 @@ class CheckoutViewController: UIViewController {
     
     internal weak var scheduelerView: SchedulerView?
     
-    init() {
-        
-//        self.customerContext = STPCustomerContext(keyProvider: StripeAPIClient())
-
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {fatalError("init(coder:) has not been implemented")}
     
     //MARK: - VIEW DID LOAD
     

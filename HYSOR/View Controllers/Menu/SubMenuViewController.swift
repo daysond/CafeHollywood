@@ -37,7 +37,7 @@ class SubMenuViewController: UIViewController {
     fileprivate var menuCollectionViewTopConstraint: NSLayoutConstraint?
     
     init(with menu : Menu) {
-        //        self.resturant = resturant
+    
         self.menu = menu
         super.init(nibName: nil, bundle: nil)
     }
@@ -152,7 +152,7 @@ class SubMenuViewController: UIViewController {
     
     private func updateUIAccrodingToContentOffsetY(_ yTransition: CGFloat) {
         
-        let height: CGFloat = view.frame.width * 2.0/3.0
+        let height: CGFloat = view.frame.width * 9.0/16.0
         if yTransition > height - 44 - 44 - 32 {
             headerView?.frame.size.height = 0
             menuCollectionViewTopConstraint?.constant = -44
@@ -327,7 +327,7 @@ extension SubMenuViewController: UICollectionViewDelegateFlowLayout, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return .init(width: view.frame.width, height: view.frame.width * 2.0/3.0)
+        return .init(width: view.frame.width, height: view.frame.width * 9.0/16.0)
     }
     
     

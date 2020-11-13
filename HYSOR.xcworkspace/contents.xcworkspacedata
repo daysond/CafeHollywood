@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/daysondong/Desktop/Cafe Hollywood/HYSOR/CoreData/Model/MenuManaged+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:HYSOR.xcodeproj">
    </FileRef>
    <FileRef

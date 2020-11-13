@@ -134,11 +134,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         let url = code.prefix(69)
         
         guard defaultURL == url, num.count == 2 else {
-            let alert = UIAlertController(title: "Error", message: "Unrecognizable QR Code.", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
-            self.present(alert, animated: true)
+            self.delegate?.failedReadingQRCode()
             return
         }
         

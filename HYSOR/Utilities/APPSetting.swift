@@ -84,6 +84,8 @@ class APPSetting {
     
     var unavailableMenus: [String] = []
     
+    var unavailableDates: [String] = []
+    
     static var customerName: String {
         return NetworkManager.shared.currentUser?.displayName ?? ""
     }

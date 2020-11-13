@@ -26,7 +26,6 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     private var dates: [String] = []
     private var times: [String] = []
 
-    
     private let timeFormatter = DateFormatter()
     
     private let dayOfTheWeek = Date().getDayOfWeek()
@@ -34,7 +33,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     private let openTimes: [Weekdays : String]
     private let closeTimes: [Weekdays: String]
     
-    
+    private var shouldCheckDateAvailablity: Bool
     
     private var currentTime:String {
         get {
@@ -60,10 +59,11 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     
 //    var shouldOnlyShowToday: Bool = false
     
-    init(openHours: [Weekdays : String], closeHours: [Weekdays : String]) {
+    init(openHours: [Weekdays : String], closeHours: [Weekdays : String], shouldCheckDateAvailablity: Bool = true) {
         
         self.openTimes = openHours
         self.closeTimes = closeHours
+        self.shouldCheckDateAvailablity = shouldCheckDateAvailablity
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         
         timeFormatter.setLocalizedDateFormatFromTemplate("HH mm")
@@ -71,7 +71,7 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         let day = Date().getDayOfWeek()
         generateTime(of: Weekdays(rawValue: day)!)
         setupView()
-        
+      
     }
     
 //    override init(frame: CGRect) {
@@ -126,6 +126,11 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
             
         ])
         
+        if shouldCheckDateAvailablity {
+            donebutton.isEnabled = !APPSetting.shared.unavailableDates.contains(selectedDate)
+            donebutton.backgroundColor = donebutton.isEnabled ? .black : .lightGray
+        }
+
     }
     
     
@@ -148,18 +153,33 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
+  
         if component != 0 { return }
         
-        let date =  Date.dateOfStringEEEMMddyyyy(dates[row])
+  
+        donebutton.isEnabled = true
         
-        guard let day = date?.getDayOfWeek(), let weekday = Weekdays(rawValue: day) else {
-            return
+        if shouldCheckDateAvailablity && APPSetting.shared.unavailableDates.contains(dates[row]) {
+            times = ["Unavailable"]
+            donebutton.isEnabled = false
+        } else {
+            //else , get the selected date
+            let date =  Date.dateOfStringEEEMMddyyyy(dates[row])
+            
+            //safe unwrap day of the week and find out the times accroding to the day of the week.
+            guard let day = date?.getDayOfWeek(), let weekday = Weekdays(rawValue: day) else {
+                return
+            }
+            
+            generateTime(of: weekday)
+            
+            // if the first date aka today is selected, only show the coimg times.
+            if  row == 0 { filterTimesOfToday() }
+            
         }
-        
-        generateTime(of: weekday)
-        
-        if  row == 0 { filterTimesOfToday() }
+
+        donebutton.backgroundColor = donebutton.isEnabled ? .black : .lightGray
+  
         
         pickerView.reloadComponent(1)
         
@@ -171,11 +191,13 @@ class SchedulerView: UIView, UIPickerViewDataSource, UIPickerViewDelegate {
         case 0:
             if row == 0 {
                 if dates[row] == Date.dateOfDayEEEMMddyyyy() {
-                    filterTimesOfToday()
+                    
+                    APPSetting.shared.unavailableDates.contains(dates[row]) && shouldCheckDateAvailablity ?
+                        times = ["Unavailable"] :
+                        filterTimesOfToday()
                     return "Today"
                 }
             }
-            
             
             return String(dates[row].dropLast(6))
             

@@ -17,7 +17,6 @@
 		ED12936124BAE01A0084EC09 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED12936024BAE01A0084EC09 /* SignUpViewController.swift */; };
 		ED14A5E825019E8400263ADD /* ManageReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */; };
 		ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */; };
-		ED1946A4241A00AB00F75CE7 /* Resturant.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A3241A00AB00F75CE7 /* Resturant.swift */; };
 		ED1946A6241A02FE00F75CE7 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A5241A02FE00F75CE7 /* Meal.swift */; };
 		ED1946AA241A0AC300F75CE7 /* SubMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */; };
 		ED1946AC241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1946AB241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift */; };
@@ -56,12 +55,10 @@
 		ED47D58424BC41840044C116 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED47D58324BC41840044C116 /* LoginViewController.swift */; };
 		ED48E8AB24FF4AE3004979A2 /* AuthHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED48E8AA24FF4AE3004979A2 /* AuthHomeViewController.swift */; };
 		ED49CCC52505E69800274155 /* MenuManaged+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED49CCC32505E69800274155 /* MenuManaged+CoreDataClass.swift */; };
-		ED49CCC62505E69800274155 /* MenuManaged+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED49CCC42505E69800274155 /* MenuManaged+CoreDataProperties.swift */; };
 		ED4A8B2324BCF2EA008FAB28 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */; };
 		ED4A8B2524BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */; };
 		ED4A8B2724BD3D27008FAB28 /* CheckoutViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */; };
 		ED4A8B2924BD4972008FAB28 /* SlideInMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4A8B2824BD4972008FAB28 /* SlideInMenuLauncher.swift */; };
-		ED4EA3B62510947C00EA05C5 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4EA3B52510947C00EA05C5 /* MenuButton.swift */; };
 		ED58384524E5C71B00E007CD /* FavouriteMealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED58384424E5C71B00E007CD /* FavouriteMealViewController.swift */; };
 		ED5A9B0D25109417006B56C9 /* TableOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5A9B0C25109417006B56C9 /* TableOrderView.swift */; };
 		ED5AA84324E3691D007387A5 /* FavouriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5AA84224E3691D007387A5 /* FavouriteView.swift */; };
@@ -74,8 +71,13 @@
 		ED7D6CAD24C00AA300D3583D /* OrderHistoryTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CAC24C00AA300D3583D /* OrderHistoryTableViewHeader.swift */; };
 		ED7D6CAF24C00AB200D3583D /* OrderHistoryTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CAE24C00AB200D3583D /* OrderHistoryTableViewFooter.swift */; };
 		ED7D6CB124C00F8200D3583D /* OrderHistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7D6CB024C00F8200D3583D /* OrderHistoryCollectionViewCell.swift */; };
+		ED7F5A9B255DF2E10065C14F /* MenuManaged+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7F5A9A255DF2E10065C14F /* MenuManaged+CoreDataProperties.swift */; };
 		ED86F6E424B7ACFB00895262 /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */; };
 		ED8E8B2824A9D7D200C00FCA /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */; };
+		ED8F8448255E87E400FA2798 /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8F8447255E87E400FA2798 /* Table.swift */; };
+		ED8F844B255E881900FA2798 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8F844A255E881900FA2798 /* Menu.swift */; };
+		ED8F844F255E886A00FA2798 /* MealInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8F844E255E886A00FA2798 /* MealInfo.swift */; };
+		ED8F8454255E897A00FA2798 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8F8453255E897A00FA2798 /* MenuButton.swift */; };
 		ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED9290CE250D5A9400277881 /* GoogleService-Info.plist */; };
 		EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */; };
 		EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416EF24BD8F9600501F0E /* AccountViewController.swift */; };
@@ -113,7 +115,6 @@
 		ED12936024BAE01A0084EC09 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageReservationViewController.swift; sourceTree = "<group>"; };
 		ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationListTableViewCell.swift; sourceTree = "<group>"; };
-		ED1946A3241A00AB00F75CE7 /* Resturant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resturant.swift; sourceTree = "<group>"; };
 		ED1946A5241A02FE00F75CE7 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		ED1946A9241A0AC300F75CE7 /* SubMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuViewController.swift; sourceTree = "<group>"; };
 		ED1946AB241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubMenuCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -155,12 +156,10 @@
 		ED47D58324BC41840044C116 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		ED48E8AA24FF4AE3004979A2 /* AuthHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHomeViewController.swift; sourceTree = "<group>"; };
 		ED49CCC32505E69800274155 /* MenuManaged+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MenuManaged+CoreDataClass.swift"; path = "../../../MenuManaged+CoreDataClass.swift"; sourceTree = "<group>"; };
-		ED49CCC42505E69800274155 /* MenuManaged+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MenuManaged+CoreDataProperties.swift"; path = "../../../MenuManaged+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		ED4A8B2424BD1C7B008FAB28 /* CheckoutOptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutOptionsTableViewCell.swift; sourceTree = "<group>"; };
 		ED4A8B2624BD3D27008FAB28 /* CheckoutViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewControllerExt.swift; sourceTree = "<group>"; };
 		ED4A8B2824BD4972008FAB28 /* SlideInMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideInMenuLauncher.swift; sourceTree = "<group>"; };
-		ED4EA3B52510947C00EA05C5 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuButton.swift; path = "HYSOR/View Controllers/ActionButton/MenuButton.swift"; sourceTree = SOURCE_ROOT; };
 		ED58384424E5C71B00E007CD /* FavouriteMealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteMealViewController.swift; sourceTree = "<group>"; };
 		ED5A9B0C25109417006B56C9 /* TableOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableOrderView.swift; sourceTree = "<group>"; };
 		ED5AA84224E3691D007387A5 /* FavouriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteView.swift; sourceTree = "<group>"; };
@@ -173,8 +172,13 @@
 		ED7D6CAC24C00AA300D3583D /* OrderHistoryTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryTableViewHeader.swift; sourceTree = "<group>"; };
 		ED7D6CAE24C00AB200D3583D /* OrderHistoryTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryTableViewFooter.swift; sourceTree = "<group>"; };
 		ED7D6CB024C00F8200D3583D /* OrderHistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		ED7F5A9A255DF2E10065C14F /* MenuManaged+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MenuManaged+CoreDataProperties.swift"; path = "/Users/daysondong/Desktop/Cafe Hollywood/HYSOR/CoreData/Model/MenuManaged+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		ED86F6E324B7ACFB00895262 /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
 		ED8E8B2724A9D7D200C00FCA /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		ED8F8447255E87E400FA2798 /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
+		ED8F844A255E881900FA2798 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		ED8F844E255E886A00FA2798 /* MealInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealInfo.swift; sourceTree = "<group>"; };
+		ED8F8453255E897A00FA2798 /* MenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		ED9290CE250D5A9400277881 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		EDA416EF24BD8F9600501F0E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -295,23 +299,17 @@
 			children = (
 				ED437CC7241DD9DD0098E3ED /* Money.swift */,
 				ED412E0B2420856400EBBA4C /* Cart.swift */,
-				ED1946A3241A00AB00F75CE7 /* Resturant.swift */,
 				ED1946A5241A02FE00F75CE7 /* Meal.swift */,
 				ED117C0C24B4439600994068 /* Preference.swift */,
 				ED4A8B2224BCF2EA008FAB28 /* Reservation.swift */,
 				EDB1751C24C0347B0054618C /* Receipt.swift */,
 				ED3710DE24E1191200AD6DAF /* CustomOption.swift */,
 				EDF0120A254BE47B00D22B57 /* Key.swift */,
+				ED8F8447255E87E400FA2798 /* Table.swift */,
+				ED8F844A255E881900FA2798 /* Menu.swift */,
+				ED8F844E255E886A00FA2798 /* MealInfo.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		ED46C74124BFA8720089CF43 /* AnimationVC */ = {
-			isa = PBXGroup;
-			children = (
-				ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */,
-			);
-			path = AnimationVC;
 			sourceTree = "<group>";
 		};
 		ED46C74224BFADAB0089CF43 /* Networking */ = {
@@ -346,13 +344,14 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
-		ED46C74524BFEC3C0089CF43 /* Modal */ = {
+		ED46C74524BFEC3C0089CF43 /* Modal Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				EDB8EA5C24B2CECF009DB3CF /* InstructionsInputViewController.swift */,
 				ED1946AF241A15B600F75CE7 /* ScannerViewController.swift */,
+				ED46C73F24BFA86A0089CF43 /* LoadingViewController.swift */,
 			);
-			path = Modal;
+			path = "Modal Controllers";
 			sourceTree = "<group>";
 		};
 		ED46C74624BFEC5D0089CF43 /* Account */ = {
@@ -373,12 +372,12 @@
 		ED531C3E24EA64C8009CD2C0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				ED62740C2512C93F009BDCB7 /* MealManaged+CoreDataClass.swift */,
 				ED49CCC32505E69800274155 /* MenuManaged+CoreDataClass.swift */,
-				ED49CCC42505E69800274155 /* MenuManaged+CoreDataProperties.swift */,
-				ED62740B2512C93F009BDCB7 /* PreferenceItemManaged+CoreDataClass.swift */,
+				ED7F5A9A255DF2E10065C14F /* MenuManaged+CoreDataProperties.swift */,
+				ED62740C2512C93F009BDCB7 /* MealManaged+CoreDataClass.swift */,
 				ED6274092512C93E009BDCB7 /* MealManaged+CoreDataProperties.swift */,
 				ED62740A2512C93E009BDCB7 /* PreferenceItemManaged+CoreDataProperties.swift */,
+				ED62740B2512C93F009BDCB7 /* PreferenceItemManaged+CoreDataClass.swift */,
 				EDB9C36924EB97D500A328EA /* PreferenceManaged+CoreDataClass.swift */,
 				EDB9C36624EB97D400A328EA /* PreferenceManaged+CoreDataProperties.swift */,
 			);
@@ -388,7 +387,7 @@
 		ED5A9B0B251093F9006B56C9 /* ActionButton */ = {
 			isa = PBXGroup;
 			children = (
-				ED4EA3B52510947C00EA05C5 /* MenuButton.swift */,
+				ED8F8453255E897A00FA2798 /* MenuButton.swift */,
 				ED5A9B0C25109417006B56C9 /* TableOrderView.swift */,
 			);
 			path = ActionButton;
@@ -408,17 +407,24 @@
 			path = OrderHistory;
 			sourceTree = "<group>";
 		};
-		EDB3944F24B104A300DDC725 /* View Controllers */ = {
+		ED8F8451255E88F500FA2798 /* Main Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
 				EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */,
 				ED5A9B0B251093F9006B56C9 /* ActionButton */,
+			);
+			path = "Main Tab Bar";
+			sourceTree = "<group>";
+		};
+		EDB3944F24B104A300DDC725 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				ED8F8451255E88F500FA2798 /* Main Tab Bar */,
 				EDE038EB24E2693000189264 /* Home */,
 				ED46C74424BFEC1F0089CF43 /* Menu */,
 				ED7D6CA724C00A2700D3583D /* OrderHistory */,
 				ED46C74624BFEC5D0089CF43 /* Account */,
-				ED46C74524BFEC3C0089CF43 /* Modal */,
-				ED46C74124BFA8720089CF43 /* AnimationVC */,
+				ED46C74524BFEC3C0089CF43 /* Modal Controllers */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -616,6 +622,7 @@
 				ED7D6CAD24C00AA300D3583D /* OrderHistoryTableViewHeader.swift in Sources */,
 				ED41FA4224F4D2650068E316 /* AccountTableViewCell.swift in Sources */,
 				ED412E0F24208CB000EBBA4C /* BlackButton.swift in Sources */,
+				ED7F5A9B255DF2E10065C14F /* MenuManaged+CoreDataProperties.swift in Sources */,
 				ED1989C724F6DA7000E574C4 /* ManageFavouriteListTableViewCell.swift in Sources */,
 				ED7D6CAF24C00AB200D3583D /* OrderHistoryTableViewFooter.swift in Sources */,
 				ED7D6CAB24C00A7300D3583D /* OrderHistoryTableViewCell.swift in Sources */,
@@ -624,7 +631,6 @@
 				EDB1751F24C03D240054618C /* DimmedImageView.swift in Sources */,
 				ED47D58424BC41840044C116 /* LoginViewController.swift in Sources */,
 				ED48E8AB24FF4AE3004979A2 /* AuthHomeViewController.swift in Sources */,
-				ED4EA3B62510947C00EA05C5 /* MenuButton.swift in Sources */,
 				ED2D6B3524F4E5D100CAFE78 /* MyTableViewCell.swift in Sources */,
 				EDEA350124B6ABBB00F3AB21 /* CartFooterView.swift in Sources */,
 				ED1946AC241A0C6100F75CE7 /* SubMenuCollectionViewCell.swift in Sources */,
@@ -640,10 +646,10 @@
 				ED2C14AC2500C4F800F6BEB9 /* UpdateProfileViewController.swift in Sources */,
 				EDEA350324B6D9FD00F3AB21 /* CustomBarButtonItem.swift in Sources */,
 				ED5AA84324E3691D007387A5 /* FavouriteView.swift in Sources */,
-				ED1946A4241A00AB00F75CE7 /* Resturant.swift in Sources */,
 				EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */,
 				ED117C0D24B4439600994068 /* Preference.swift in Sources */,
 				EDB8EA5D24B2CECF009DB3CF /* InstructionsInputViewController.swift in Sources */,
+				ED8F8454255E897A00FA2798 /* MenuButton.swift in Sources */,
 				ED3DD9962418B6B300A4A28E /* AppDelegate.swift in Sources */,
 				EDE038EF24E26D9C00189264 /* PaxView.swift in Sources */,
 				ED437CC8241DD9DD0098E3ED /* Money.swift in Sources */,
@@ -666,6 +672,7 @@
 				EDB3944E24B1047B00DDC725 /* CartTableViewCell.swift in Sources */,
 				ED6274102512C93F009BDCB7 /* MealManaged+CoreDataClass.swift in Sources */,
 				EDE038ED24E2695700189264 /* ReservationViewController.swift in Sources */,
+				ED8F844F255E886A00FA2798 /* MealInfo.swift in Sources */,
 				ED3710DF24E1191200AD6DAF /* CustomOption.swift in Sources */,
 				EDD31BD324F59C9700010DC2 /* ManageFavouriteViewController.swift in Sources */,
 				ED46C74824BFEC900089CF43 /* HomeViewController.swift in Sources */,
@@ -673,6 +680,7 @@
 				ED4A8B2324BCF2EA008FAB28 /* Reservation.swift in Sources */,
 				ED2C14A82500B57800F6BEB9 /* ReceiptView.swift in Sources */,
 				ED62740E2512C93F009BDCB7 /* PreferenceItemManaged+CoreDataProperties.swift in Sources */,
+				ED8F844B255E881900FA2798 /* Menu.swift in Sources */,
 				ED3DD9982418B6B300A4A28E /* SceneDelegate.swift in Sources */,
 				ED5AA84524E36C89007387A5 /* FavouriteTableViewCell.swift in Sources */,
 				ED46C74024BFA86A0089CF43 /* LoadingViewController.swift in Sources */,
@@ -687,7 +695,7 @@
 				EDE038F124E2738F00189264 /* PaxSizeCollectionViewCell.swift in Sources */,
 				ED1946B0241A15B600F75CE7 /* ScannerViewController.swift in Sources */,
 				ED412E0A2420842C00EBBA4C /* Extensions.swift in Sources */,
-				ED49CCC62505E69800274155 /* MenuManaged+CoreDataProperties.swift in Sources */,
+				ED8F8448255E87E400FA2798 /* Table.swift in Sources */,
 				ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */,
 				ED365ACC2554CF0800A2A0C4 /* GiftOptionViewController.swift in Sources */,
 				ED3710DD24E107C600AD6DAF /* RoundCartButton.swift in Sources */,

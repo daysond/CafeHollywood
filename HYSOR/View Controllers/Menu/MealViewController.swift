@@ -408,17 +408,9 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 48
-    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 48 }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //
-        //        if let preferences = meal.preferences {
-        //            return preferences[indexPath.section].isSectionCollapsed ? 0 : 58
-        //        }
-        return 58
-    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 58 }
     
     
     // MARK: DID SELECT ROW
@@ -453,9 +445,6 @@ extension MealViewController: UITableViewDelegate, UITableViewDataSource {
                 
             }
             
-            
-            
-        //            tableView.cellForRow(at: indexPath)
         
         default: // MAX PICK greater than 1
             
@@ -532,8 +521,7 @@ extension MealViewController: CollapsibleTableViewHeaderDelegate {
         } else {
             preferenceTableView.insertRows(at: indexPathsForSection(), with: .fade)
         }
-        //        preferenceTableView.reloadSections(NSIndexSet(index: section) as IndexSet, with: .fade)
-        
+     
     }
     
     

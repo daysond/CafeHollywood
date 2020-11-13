@@ -29,23 +29,39 @@ class MenuViewController: UIViewController {
     private var foodMenu = [Menu]()
     private var drinkMenu = [Menu]()
     
+    private var availableFoodMenu: [Menu] {
+        return foodMenu.filter { !APPSetting.shared.unavailableMenus.contains($0.uid) }
+    }
+    
+    private var availableDrinkMenu: [Menu] {
+        return drinkMenu.filter { !APPSetting.shared.unavailableMenus.contains($0.uid) }
+    }
+    
     private let loadingView = LoadingViewController(animationFileName: "dotsLoading")
+    
+    private var shouldHideTakeOutMenus: Bool = false {
+        didSet{
+            populateMenus()
+        }
+    }
+    
+    private var selectedIndex: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //PAUSE SCREEN WHILE GETTING MENU
+    
         setupView()
         setupCollectionView()
         setupCellSelectedHandling ()
         checkUpdateAndGetData()
-        
+
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
+        shouldHideTakeOutMenus = Table.shared.tableNumber != nil
     }
     
     
@@ -146,11 +162,20 @@ class MenuViewController: UIViewController {
         
     }
     
-    @objc func dismissMenu() {
+    @objc private func dismissMenu() {
         menuLauncher?.dismissMenu()
     }
     
-    
+    private func populateMenus() {
+        
+        switch selectedIndex {
+        case 0:
+            menus.accept(shouldHideTakeOutMenus ? availableFoodMenu.filter({ $0.isTakeOutOnly == false }) : availableFoodMenu)
+        default:
+            menus.accept(shouldHideTakeOutMenus ? availableDrinkMenu.filter({ $0.isTakeOutOnly == false }) : availableDrinkMenu)
+        }
+        
+    }
     
     //MARK: - HELPERS
     
@@ -249,14 +274,9 @@ class MenuViewController: UIViewController {
         
         group.notify(queue: .main) {
             
-            APPSetting.shared.unavailableMenus.forEach { (uid) in
-                
-                self.foodMenu.removeAll { $0.uid == uid }
-                self.drinkMenu.removeAll { $0.uid == uid }
-                
-                self.menus.accept(self.foodMenu)
-                self.dismissLoadingView()
-            }
+            self.menus.accept(self.availableFoodMenu)
+            self.dismissLoadingView()
+            
             
         }
         
@@ -345,13 +365,11 @@ extension MenuViewController: QRCodeScannerDelegate {
     
     
     func found() {
-        //        Table.shared.tableNumber = tableNumber
+        
     }
     
     func failedReadingQRCode() {
-        
-        //TODO: show alert
-        print("failed")
+        self.showError(message: "Failed reading QRCode.")
     }
     
     
@@ -361,15 +379,8 @@ extension MenuViewController: CustomSegmentedControlDelegate {
     
     func changeToIndex(index: Int) {
         
-        switch index {
-        case 0:
-            menus.accept(foodMenu)
-        case 1:
-            menus.accept(drinkMenu)
-        default:
-            return
-        }
-        
+        selectedIndex = index
+        populateMenus()
         
     }
     

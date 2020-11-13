@@ -73,7 +73,7 @@ class CollapsibleTableViewHeader: UITableViewHeaderFooterView {
     func toggled(isCollapsed: Bool) {
         UIView.animate(withDuration: 0.2) {
             
-            self.arrowIndicator.transform = CGAffineTransform(rotationAngle: CGFloat(isCollapsed ? 0.0 : M_PI_4))
+            self.arrowIndicator.transform = CGAffineTransform(rotationAngle: CGFloat(isCollapsed ? 0.0 : Double.pi / 4.0))
 
         }
         

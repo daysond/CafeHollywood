@@ -116,7 +116,7 @@ class SubMenuHeaderView: UICollectionReusableView {
         
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black85.cgColor]
-        gradientLayer.locations = [0.2,1]
+        gradientLayer.locations = [0.1,1]
         
         let gradientContainerView = UIView()
         gradientContainerView.translatesAutoresizingMaskIntoConstraints = false 

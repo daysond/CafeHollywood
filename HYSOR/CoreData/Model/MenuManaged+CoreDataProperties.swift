@@ -2,7 +2,7 @@
 //  MenuManaged+CoreDataProperties.swift
 //  
 //
-//  Created by Dayson Dong on 2020-08-24.
+//  Created by Dayson Dong on 2020-11-12.
 //
 //
 
@@ -22,5 +22,6 @@ extension MenuManaged {
     @NSManaged public var menuTitle: String?
     @NSManaged public var menuType: String?
     @NSManaged public var uid: String?
+    @NSManaged public var isTakeOutOnly: Bool
 
 }

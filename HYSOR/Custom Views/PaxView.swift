@@ -126,7 +126,7 @@ extension PaxView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let size = paxSizes[indexPath.item]
+//        let size = paxSizes[indexPath.item]
         collectionView.cellForItem(at: indexPath)?.contentView.backgroundColor = .black
     }
     

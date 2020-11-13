@@ -52,7 +52,7 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
             showError(message: "Network Error. Can not fetch business hour information.")
             return
         }
-        let schedulerView = SchedulerView(openHours: openHours, closeHours: closeHours)
+        let schedulerView = SchedulerView(openHours: openHours, closeHours: closeHours, shouldCheckDateAvailablity: false)
         self.scheduelerView = schedulerView
 //        scheduelerView?.shouldOnlyShowToday = true
         schedulerView.donebutton.addTarget(self, action: #selector(schedulerViewDismiss), for: .touchUpInside)

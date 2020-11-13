@@ -163,39 +163,14 @@ class AuthHomeViewController: UIViewController {
         let authVC = AuthViewController(field: field, isLogin: isLogin)
         authVC.delegate = self
         
-//        self.navigationController?.pushViewController(authVC, animated: true)
         let navc = UINavigationController(rootViewController: authVC)
         navc.modalPresentationStyle = .popover
         present(navc, animated: true, completion: nil)
 
         
-        
     }
     
-//    @objc private func handleLogin() {
-//        
-//        let authUI = FUIAuth.defaultAuthUI()
-//        
-//        guard authUI != nil else {
-//            
-//            //log error
-//            
-//            return
-//        }
-//        
-//        authUI?.delegate = self
-//
-//        let providers: [FUIAuthProvider] = [FUIEmailAuth(), FUIPhoneAuth(authUI: FUIAuth.defaultAuthUI()!)]
-//        authUI?.providers = providers
-////
-//        let authVC = authUI!.authViewController()
-//   
-//        present(authVC, animated: true, completion: nil)
-//        
-//        
-//        
-//        
-//    }
+
     
     private func presentMainViewController() {
         
@@ -207,21 +182,18 @@ class AuthHomeViewController: UIViewController {
 
     }
     
-    
-
-
 
 }
 
 extension AuthHomeViewController: AuthStatusUpdateDelegate {
     
     func didLogIn() {
-        print(NetworkManager.shared.currentUser?.email)
+//        print(NetworkManager.shared.currentUser?.email)
         presentMainViewController()
     }
     
     func didSignUp() {
-        print(NetworkManager.shared.currentUser?.email)
+//        print(NetworkManager.shared.currentUser?.email)
         presentMainViewController()
     }
     

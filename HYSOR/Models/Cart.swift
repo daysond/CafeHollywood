@@ -157,20 +157,15 @@ extension Cart: JSONRepresentation {
             "customerID": APPSetting.customerUID,
             "customerName": APPSetting.customerName,
             "customerPhoneNumber": APPSetting.customerPhoneNumber,
-            
             "subtotal": cartSubtotal.amount,
             "total": cartTotal.amount,
             "taxes": cartTaxes.amount,
             "discount": discountAmount?.amount ?? 0,
             "promotion": promotion?.amount ?? 0,
-            
             "orderNote": orderNote,
             "orderTimestamp": orderTimestamp,
-
             "status": pickupTime == nil ? OrderStatus.unconfirmed.rawValue : OrderStatus.scheduled.rawValue,
-            
             "mealsInfo": mealsInfo,
-            
             
         ]
         
@@ -193,7 +188,6 @@ extension Cart: JSONRepresentation {
     
     var dineInRepresentation: [String : Any] {
         
-        //TODO: how to restore drink combo..
         
         var mealsInfo: [[String: Any]] = []
         
@@ -202,30 +196,13 @@ extension Cart: JSONRepresentation {
         }
         
         let rep: [String: Any] = [
-
             "customerID": APPSetting.customerUID,
             "customerName": APPSetting.customerName,
             "customerPhoneNumber": APPSetting.customerPhoneNumber,
-
             "orderTimestamp": orderTimestamp,
-
             "status": OrderStatus.unconfirmed.rawValue,
-            
             "mealsInfo": mealsInfo,
-            
             "table": Table.shared.tableNumber ?? "Error Table"
-            /*
-             
-             case cancelled = 0
-             case unconfirmed = 1
-             case confirmed = 2
-             case ready = 3
-             case completed = 4
-             case sent = 5
-             case
-             
-             */
-            
         ]
         
 

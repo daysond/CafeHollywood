@@ -78,6 +78,7 @@ class DBManager {
         menuManaged.imageURL = menu.imageURL
         menuManaged.menuType = type.rawValue
         menuManaged.mealsInUID = menu.mealsInUID.joined(separator: ",")
+        menuManaged.isTakeOutOnly = menu.isTakeOutOnly
         
         print("did saved menu")
         
@@ -165,9 +166,6 @@ class DBManager {
             let items = try context.fetch(request)
             
             if let managedItem = items.first {
-                if uid == "H01" {
-                    print(managedItem.comboType)
-                }
                 return Meal(managedObject: managedItem)
             } else {
                 return nil

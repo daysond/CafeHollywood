@@ -17,8 +17,6 @@ class Key {
     static let drinkCredit = "drinkCredit"
     static let wingCredit = "wingCredit"
     static let miniPurchase = "miniPurchase"
-    static let adminPassword = "adminPassword"
-    static let reservationUnavailableDays = "reservationUnavailableDays"
     static let businessHoursVersion = "businessHoursVersion"
     static let businessHours = "businessHours"
     static let creditAmountVersion = "creditAmountVersion"

@@ -292,6 +292,10 @@ class AuthViewController: UpdateProfileViewController {
         guard let email = email, let password = password else { return }
         
         NetworkManager.shared.signInWith(email, password) { (authResult, error) in
+            
+            DispatchQueue.main.async {
+                self.removeSpinner()
+            }
 
             guard error ==  nil else {
                 DispatchQueue.main.async {
@@ -305,10 +309,6 @@ class AuthViewController: UpdateProfileViewController {
                     self.displayMessage("Unknow error.")
                 }
                 return
-            }
-            
-            DispatchQueue.main.async {
-                self.removeSpinner()
             }
             
           
@@ -328,6 +328,10 @@ class AuthViewController: UpdateProfileViewController {
         
         NetworkManager.shared.signInWithPhoneNumber(verificationCode: code) { (authResult, error) in
             
+            DispatchQueue.main.async {
+                self.removeSpinner()
+            }
+            
             guard error ==  nil else {
                 DispatchQueue.main.async {
                     self.displayMessage(error!.localizedDescription)
@@ -342,9 +346,7 @@ class AuthViewController: UpdateProfileViewController {
                 return
             }
             
-            DispatchQueue.main.async {
-                self.removeSpinner()
-            }
+
             
             
             self.navigationController?.dismiss(animated: true, completion: {
