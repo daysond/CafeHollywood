@@ -18,7 +18,8 @@ extension CheckoutViewController: CheckoutOptionCellDelegate, InstructionInputDe
         switch option.optionType {
             
         case .utensil:
-            option.subTitle =  option.subTitle == "Yes please!" ? "No thanks!" : "Yes please!"
+            Cart.shared.needsUtensil = !Cart.shared.needsUtensil
+            option.subTitle = Cart.shared.needsUtensil ?  "Yes please!" : "No thanks!"
 
         case .scheduler:
             handleScheduler()

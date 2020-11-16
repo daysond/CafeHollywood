@@ -48,7 +48,7 @@ class CheckoutViewController: UIViewController {
     
     private func setupOptions() {
         
-        let cutlery = CustomOption(mainImageNmae: "cutlery", mainTitle: "UTENSILS, STRAWS, ETC", subTitle: "No, thank you.", optionType: .utensil)
+        let cutlery = CustomOption(mainImageNmae: "cutlery", mainTitle: "UTENSILS, STRAWS, ETC", subTitle:  Cart.shared.needsUtensil ?  "Yes please!" : "No thanks!", optionType: .utensil)
         let pickupTime = CustomOption(mainImageNmae: "clock", mainTitle: "PICK UP TIME", subTitle: "Now", optionType: .scheduler)
 //        let paymentMethod = CustomOption(mainImageNmae: "creditCard", mainTitle: "PAYMENT METHOD", subTitle: "Visa", subImageName: nil, optionType: .payment)
         let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: Constants.checkoutNoteHolder ,optionType: .note)

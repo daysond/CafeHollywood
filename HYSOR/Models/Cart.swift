@@ -109,6 +109,7 @@ class Cart {
     
     var pickupDate: String?
     
+    var needsUtensil: Bool = true
     
     var isEmpty: Bool {
         return meals.isEmpty
@@ -123,6 +124,7 @@ class Cart {
         Cart.shared.selectedGiftOption = nil
         Cart.shared.giftOptionContent = nil
         Cart.shared.promotion = nil
+        Cart.shared.needsUtensil = true
     }
     
     func removeGiftOption() {
@@ -166,6 +168,7 @@ extension Cart: JSONRepresentation {
             "orderTimestamp": orderTimestamp,
             "status": pickupTime == nil ? OrderStatus.unconfirmed.rawValue : OrderStatus.scheduled.rawValue,
             "mealsInfo": mealsInfo,
+            "needsUtensil": needsUtensil,
             
         ]
         
