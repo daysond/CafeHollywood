@@ -1105,21 +1105,26 @@ class NetworkManager {
         
     }
     
-    func reAuthenticateUser(password: String) {
+    func reAuthenticateUser(password: String, onComplete: @escaping (String?, Error?) -> Void) {
         
         guard let email = currentUser?.email else { return }
         
         var credential: AuthCredential
         // Prompt the user to re-provide their sign-in credentials
         credential =  EmailAuthProvider.credential(withEmail: email, password: password)
+        
         currentUser?.reauthenticate(with: credential, completion: { (result, error) in
             
-            
-//            print(result?.user)
-//            print(error?.localizedDescription)
+            guard error == nil else {
+                print(error!.localizedDescription)
+                onComplete(nil, error)
+                return
+            }
+            result != nil ?
+                onComplete(result!.user.uid, nil) :
+                onComplete(nil, nil)
             
         })
-        
         
     }
     

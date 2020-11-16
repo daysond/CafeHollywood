@@ -353,9 +353,10 @@ class UpdateProfileViewController: UIViewController {
         }
     }
     
-    private func showReLogInAlert() {
+    private func showReLogInAlert(completion: @escaping () -> Void) {
         
         let alert = UIAlertController(title: "Please enter your password", message: nil, preferredStyle: .alert)
+    
         alert.addTextField { (textField) in
             textField.isSecureTextEntry = true
         }
@@ -363,8 +364,24 @@ class UpdateProfileViewController: UIViewController {
         let doneAction = UIAlertAction(title: "Done", style: .default) { [unowned alert] _ in
             let passwordTF = alert.textFields![0]
             guard let password = passwordTF.text else { return }
-            NetworkManager.shared.reAuthenticateUser(password: password)
-            // do something interesting with "answer" here
+            NetworkManager.shared.reAuthenticateUser(password: password) { (uid, error) in
+                
+                DispatchQueue.main.async {
+                    guard error == nil else {
+                        self.showError(message: error!.localizedDescription)
+                        self.removeSpinner()
+                        return
+                    }
+                    
+                    guard uid != nil else {
+                        self.showError(message: "Unknow error")
+                        self.removeSpinner()
+                        return
+                    }
+                    
+                    completion()
+                }
+            }
         }
 
         alert.addAction(doneAction)
@@ -375,6 +392,25 @@ class UpdateProfileViewController: UIViewController {
     }
     
     //MARK: -ACTIONS
+    
+    fileprivate func updateUserInfo() {
+        showSpinner()
+        
+        NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
+            
+            DispatchQueue.main.async {
+                
+                self.removeSpinner()
+                
+                guard error == nil else {
+                    self.displayMessage(error!.localizedDescription)
+                    return
+                }
+                
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
     
     @objc internal func handleButtonTapped() {
         
@@ -416,30 +452,20 @@ class UpdateProfileViewController: UIViewController {
                     }
                 }
                 
-            default:
+            case .name:
                 
-                showSpinner()
+                updateUserInfo()
                 
-                NetworkManager.shared.updateProfileField(field, to: profileTextField.text!) { (error) in
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.removeSpinner()
-                        
-                        guard error == nil else {
-                            
-                            if let err = error as? NetworkError, err == .recentLoginRequired {
-                                self.showReLogInAlert()
-                                return
-                            }
-                            
-                            self.displayMessage(error!.localizedDescription)
-                            return
-                        }
-                        
-                        self.navigationController?.popViewController(animated: true)
-                    }
+             default:
+                
+                //1. reauth user
+                showReLogInAlert {
+                    //2.update
+                    self.updateUserInfo()
                 }
+                    
+                
+                
             }
         }
     }
