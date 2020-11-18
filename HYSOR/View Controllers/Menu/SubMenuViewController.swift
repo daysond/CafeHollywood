@@ -313,12 +313,23 @@ extension SubMenuViewController: UICollectionViewDelegateFlowLayout, UICollectio
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SubMenuHeaderView.identifier, for: indexPath) as? SubMenuHeaderView
-        if let image = UIImage(named: menu.headerImageURL) {
-            headerView!.image = image
-        } else {
-            headerView!.image = UIImage(named: "cafe")
-        }
         
+        
+        LocalFileManager.shared.fetchImage(imageURL: menu.headerImageURL) { (image) in
+            DispatchQueue.main.async {
+                guard let image = image else {
+                    print("can not fetch header for menu \(self.menu.uid)")
+                    self.headerView!.image = UIImage(named: "cafe")
+                    return
+                }
+
+                self.headerView!.image = image
+            }
+            
+        }
+    
+    
+    
         headerView!.titleLabel.text = menu.menuTitle.capitalized
         headerView!.detailLabel.text = menu.menuDetail == nil ? "" : menu.menuDetail!
         

@@ -89,15 +89,15 @@ class PreferenceHeaderView: UIView {
         
         if let imageURL = meal.imageURL {
             
-            headerImageView.image = UIImage(named: imageURL)
-            titleLabel.textColor = .white
-            detailLabel.textColor = .white
-            let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = self.bounds
-            gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black85.cgColor]
-            gradientLayer.locations = [0,1]
-            headerImageView.layer.insertSublayer(gradientLayer, at: 0)
-            
+            LocalFileManager.shared.fetchImage(imageURL: imageURL) { (image) in
+               
+                if let image = image {
+   
+                    DispatchQueue.main.async {
+                        self.setupHeaderWithImage(image)
+                    }
+                }
+            }
         }
         
         let heart = meal.isFavourite ? UIImage(named: "heartFilled") : UIImage(named: "heartEmpty")
@@ -105,6 +105,19 @@ class PreferenceHeaderView: UIView {
         favoriteButton.setImage(heart, for: .normal)
 
         
+        
+    }
+    
+    private func setupHeaderWithImage(_ image: UIImage) {
+        
+        headerImageView.image = image
+        titleLabel.textColor = .white
+        detailLabel.textColor = .white
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.bounds
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black85.cgColor]
+        gradientLayer.locations = [0,1]
+        headerImageView.layer.insertSublayer(gradientLayer, at: 0)
         
     }
     

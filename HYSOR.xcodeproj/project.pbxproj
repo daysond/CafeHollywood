@@ -81,6 +81,7 @@
 		ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = ED9290CE250D5A9400277881 /* GoogleService-Info.plist */; };
 		EDA416EE24BD8E4200501F0E /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */; };
 		EDA416F024BD8F9600501F0E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA416EF24BD8F9600501F0E /* AccountViewController.swift */; };
+		EDA84373256513E6006E8446 /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA84372256513E6006E8446 /* LocalFileManager.swift */; };
 		EDA857C124E11D3B00D15B88 /* SchedulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA857C024E11D3B00D15B88 /* SchedulerView.swift */; };
 		EDB1751D24C0347B0054618C /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB1751C24C0347B0054618C /* Receipt.swift */; };
 		EDB1751F24C03D240054618C /* DimmedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB1751E24C03D240054618C /* DimmedImageView.swift */; };
@@ -182,6 +183,7 @@
 		ED9290CE250D5A9400277881 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EDA416ED24BD8E4200501F0E /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		EDA416EF24BD8F9600501F0E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		EDA84372256513E6006E8446 /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		EDA857C024E11D3B00D15B88 /* SchedulerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerView.swift; sourceTree = "<group>"; };
 		EDB1751C24C0347B0054618C /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
 		EDB1751E24C03D240054618C /* DimmedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimmedImageView.swift; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				ED3DD9CD2418BB4E00A4A28E /* NetworkManager.swift */,
+				EDA84372256513E6006E8446 /* LocalFileManager.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				ED49CCC52505E69800274155 /* MenuManaged+CoreDataClass.swift in Sources */,
 				EDB8B718242491220049A14E /* MealViewController.swift in Sources */,
 				ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */,
+				EDA84373256513E6006E8446 /* LocalFileManager.swift in Sources */,
 				EDA857C124E11D3B00D15B88 /* SchedulerView.swift in Sources */,
 				ED58384524E5C71B00E007CD /* FavouriteMealViewController.swift in Sources */,
 				ED3983BC24EA4CBB00DAC1C4 /* HYSOR.xcdatamodeld in Sources */,

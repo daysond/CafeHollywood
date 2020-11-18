@@ -39,7 +39,19 @@ class MenuCollectionViewCell: UICollectionViewCell {
     
     func configureCellWith(imageURL: String) {
         
-        menuImageView.image = UIImage(named: imageURL)
+        LocalFileManager.shared.fetchImage(imageURL: imageURL) { (image) in
+            
+            guard let image = image else {
+                print("can not fetch image \(imageURL)")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.menuImageView.image = image
+            }
+            
+            
+        }
 
     }
     

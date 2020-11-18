@@ -10,6 +10,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseFirestore
+import FirebaseStorage
 
 enum NetworkError: Error {
     case badURL
@@ -18,7 +19,7 @@ enum NetworkError: Error {
     case argumentError
     case invalidData
     case unknowError
-    case recentLoginRequired
+    
 }
 
 
@@ -37,6 +38,8 @@ class NetworkManager {
     static let shared = NetworkManager()
     
     private let databaseRef = Firestore.firestore()
+    
+    private let storage = Storage.storage()
     
     private var onlineOrdersRef: CollectionReference  {
         let db = Firestore.firestore()
@@ -1061,13 +1064,7 @@ class NetworkManager {
             
             Auth.auth().currentUser?.updateEmail(to: newProfile, completion: { (error) in
                 
-                if let err = error, let errCode = AuthErrorCode(rawValue: err._code) {
-                    if errCode == .requiresRecentLogin {
-                        completion(NetworkError.recentLoginRequired)
-                    }
-                } else {
-                    completion(error)
-                }
+                completion(error)
                 
                 
             })
@@ -1125,6 +1122,42 @@ class NetworkManager {
                 onComplete(nil, nil)
             
         })
+        
+    }
+    
+    //MARK: - DOWNLOAD IMAGE
+    
+
+    
+    func downloadImge(named imageName: String, completion: @escaping (UIImage?) -> Void ) {
+        
+//        let httpsReference = storage.reference(forURL: url)
+        let pathReference = storage.reference().child("image/\(imageName)")
+        
+        pathReference.getData(maxSize: 1 * 1924 * 1024) { (data, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                completion(nil)
+            } else {
+                
+                if let data = data, let image = UIImage(data: data) {
+                    completion(image)
+                } else {
+                    completion(nil)
+                }
+            
+            }
+            
+            
+        }
+        
+//        let task = httpsReference.write(toFile: <#T##URL#>) { (<#URL?#>, <#Error?#>) in
+//            <#code#>
+//        }
+//
+        
+        
         
     }
     

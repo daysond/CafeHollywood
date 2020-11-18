@@ -136,8 +136,24 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
         }
         
         if let imageURL = meal.imageURL {
-            foodImageView.image = UIImage(named: imageURL)
+//            foodImageView.image = UIImage(named: imageURL)
+            LocalFileManager.shared.fetchImage(imageURL: imageURL) { (image) in
+                
+                guard let image = image else {
+                    print("can not fetch \(imageURL) for meal \(meal.uid)")
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.foodImageView.image = image
+                }
+                
+            }
         }
+        
+        
+        
+       
         
     }
     
