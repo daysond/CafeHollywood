@@ -16,7 +16,8 @@ enum AccountField: String {
     case password = "Password"
     case reservation = "My Reservation"
     case favourite = "My Favourite"
-    case about = "About"
+    case about = "Visit Our Website"
+    case instagram = "Like us on Instagram"
     case verification = "Verification Code"
     
 }
@@ -39,6 +40,8 @@ class AccountViewController: UIViewController {
     let accountTitles: [AccountField] = [.name, .phone, .email, .password]
     
     let myTitles: [AccountField]  = [.favourite, .reservation]
+    
+    let abouts: [AccountField] = [.about, .instagram]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -152,7 +155,25 @@ class AccountViewController: UIViewController {
   
         case .about:
             
-            return
+            if let url = URL(string: "http://hollywood.cafe") {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            
+        case .instagram:
+            
+            let appURL = URL(string: "instagram://user?username=markhamcafehollywood")!
+            let application = UIApplication.shared
+            
+            if application.canOpenURL(appURL)
+            {
+                application.open(appURL)
+            }
+            else
+            {
+                let webURL = URL(string: "https://instagram.com/markhamcafehollywood")!
+                application.open(webURL)
+            }
+//
             
         default:
             
@@ -187,7 +208,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             return myTitles.count
         case 2:
-            return 1
+            return abouts.count
         default:
             return 0
         }
@@ -208,7 +229,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: MyTableViewCell.identifier, for: indexPath) as! MyTableViewCell
-            cell.configureCellForField(.about)
+            cell.configureCellForField(abouts[indexPath.row])
             return cell
         default:
             return UITableViewCell()
@@ -267,7 +288,7 @@ extension AccountViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             handleSelectionForField(myTitles[index])
         case 2:
-            handleSelectionForField(.about)
+            handleSelectionForField(abouts[index])
         default:
             return
         }
