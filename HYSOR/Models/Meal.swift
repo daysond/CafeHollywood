@@ -189,7 +189,7 @@ struct Meal {
         self.comboMealTag = managedObject.comboMealTag?.intValue
         self.mealDescription = mealDescription
         if let type = managedObject.comboType {
-            self.comboType = ComboType(rawValue: Int(type))
+            self.comboType = ComboType(rawValue: type.intValue)
         }
        
         
