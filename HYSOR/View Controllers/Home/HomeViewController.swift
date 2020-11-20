@@ -18,7 +18,7 @@ class HomeViewController: UIViewController {
     
     let quickOrderButton = BlackButton()
     
-    let myAccountButton = BlackButton()
+//    let myAccountButton = BlackButton()
     
     private var menuLauncher: SlideInMenuLauncher?
     
@@ -36,7 +36,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.tintColor =  .white
     }
     //MARK: - SET UP
     
@@ -58,11 +58,11 @@ class HomeViewController: UIViewController {
         quickOrderButton.configureButton(headTitleText: "Quick Order", titleColor: .black, backgroud: .white)
         quickOrderButton.addTarget(self, action: #selector(quickOrderButtonTapped), for: .touchUpInside)
         
-        myAccountButton.configureButton(headTitleText: "My Account", titleColor: .black, backgroud: .white)
-        myAccountButton.addTarget(self, action: #selector(myAccountTapped), for: .touchUpInside)
+//        myAccountButton.configureButton(headTitleText: "My Account", titleColor: .black, backgroud: .white)
+//        myAccountButton.addTarget(self, action: #selector(myAccountTapped), for: .touchUpInside)
 
         
-        [quickOrderButton, reservationButton, orderNowButton, myAccountButton].forEach { (button) in
+        [quickOrderButton, reservationButton, orderNowButton].forEach { (button) in
             button.layer.cornerRadius = 4
             view.addSubview(button)
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -79,14 +79,28 @@ class HomeViewController: UIViewController {
             
             orderNowButton.topAnchor.constraint(equalTo: reservationButton.bottomAnchor, constant: 16),
             
-            myAccountButton.topAnchor.constraint(equalTo: orderNowButton.bottomAnchor, constant: 16),
+//            myAccountButton.topAnchor.constraint(equalTo: orderNowButton.bottomAnchor, constant: 16),
 
         ])
+        
+        setupNavigationBar()
+        
+    }
+    
+    private func setupNavigationBar() {
+        
+        self.navigationController?.isNavigationBarHidden = false
+        let openMenuButton = UIBarButtonItem(image: UIImage(named: "openMenu"), style: .plain, target: self, action:  #selector(myAccountTapped))
+        navigationController?.navigationBar.tintColor =  .white
+        self.navigationItem.rightBarButtonItem = openMenuButton
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
         
         
     }
     
     //MARK: - ACTIONS
+    
     
     @objc private func myAccountTapped() {
         navigationController?.pushViewController(AccountViewController(), animated: true)
@@ -95,7 +109,12 @@ class HomeViewController: UIViewController {
     
     @objc private func onlineOrderTapped() {
         
-        self.tabBarController?.selectedIndex = 1
+        for family in UIFont.familyNames.sorted() {
+            let names = UIFont.fontNames(forFamilyName: family)
+            print("Family: \(family) Font names: \(names)")
+        }
+        
+//        self.tabBarController?.selectedIndex = 1
         
     }
     
@@ -227,41 +246,6 @@ class HomeViewController: UIViewController {
         
     }
     
-    //MARK: - SHOW ALERT
-    
-    
-//    private func showAlert(alertTitile: String, message: String?, actionTitle: String, action: @escaping () -> Void ) {
-//
-//        let alert = UIAlertController(title: alertTitile, message: message, preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//        alert.addAction(UIAlertAction(title: actionTitle, style: .cancel, handler: { (_) in
-//            action()
-//        }))
-//
-//
-//        self.present(alert, animated: true)
-//
-//    }
-//
-    
-    private func showCart() {
-        
-        let cartVC = CartViewController()
-        let nav = UINavigationController(rootViewController: cartVC)
-        nav.modalPresentationStyle = .automatic
-        self.present(nav, animated: true, completion: nil)
-
-    }
-    
-    private func showReservation() {
-        
-        print("developing ")
-        
-    }
-    
-    
-    //MARK: - HELPER METHODS
     
     private func launchMenu(view: UIView, height: CGFloat) {
         

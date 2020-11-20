@@ -22,4 +22,6 @@ class Key {
     static let creditAmountVersion = "creditAmountVersion"
     static let taxRateVersion = "taxRateVersion"
     static let menuVersion = "menuVersion"
+    static let nexaFontName = "NexaRustSlab-BlackShadow01"
+//    Nexa Rust Slab Font names: ["NexaRustSlab-BlackShadow01"]
 }

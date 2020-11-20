@@ -14,6 +14,7 @@
 		ED117C0924B3B3D700994068 /* StretchyHeaderLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117C0824B3B3D700994068 /* StretchyHeaderLayout.swift */; };
 		ED117C0B24B4025B00994068 /* PreferenceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117C0A24B4025B00994068 /* PreferenceHeaderView.swift */; };
 		ED117C0D24B4439600994068 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED117C0C24B4439600994068 /* Preference.swift */; };
+		ED11D05E25663000006CDFD8 /* NexaRustSlab-BlackShadow01.otf in Resources */ = {isa = PBXBuildFile; fileRef = ED11D05D25662FF4006CDFD8 /* NexaRustSlab-BlackShadow01.otf */; };
 		ED12936124BAE01A0084EC09 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED12936024BAE01A0084EC09 /* SignUpViewController.swift */; };
 		ED14A5E825019E8400263ADD /* ManageReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */; };
 		ED14A5EA2501A37200263ADD /* ReservationListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */; };
@@ -113,6 +114,7 @@
 		ED117C0824B3B3D700994068 /* StretchyHeaderLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeaderLayout.swift; sourceTree = "<group>"; };
 		ED117C0A24B4025B00994068 /* PreferenceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceHeaderView.swift; sourceTree = "<group>"; };
 		ED117C0C24B4439600994068 /* Preference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
+		ED11D05D25662FF4006CDFD8 /* NexaRustSlab-BlackShadow01.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NexaRustSlab-BlackShadow01.otf"; sourceTree = "<group>"; };
 		ED12936024BAE01A0084EC09 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		ED14A5E725019E8400263ADD /* ManageReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageReservationViewController.swift; sourceTree = "<group>"; };
 		ED14A5E92501A37200263ADD /* ReservationListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationListTableViewCell.swift; sourceTree = "<group>"; };
@@ -243,6 +245,14 @@
 			path = "Custom Layout";
 			sourceTree = "<group>";
 		};
+		ED11D05C25662FD6006CDFD8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				ED11D05D25662FF4006CDFD8 /* NexaRustSlab-BlackShadow01.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		ED3983BF24EA5AF000DAC1C4 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,6 +289,7 @@
 		ED3DD9942418B6B300A4A28E /* HYSOR */ = {
 			isa = PBXGroup;
 			children = (
+				ED11D05C25662FD6006CDFD8 /* Fonts */,
 				ED4717FD2504BF0000C29CAD /* HYSOR.entitlements */,
 				ED3DD9952418B6B300A4A28E /* AppDelegate.swift */,
 				ED3DD9972418B6B300A4A28E /* SceneDelegate.swift */,
@@ -545,6 +556,7 @@
 			files = (
 				ED3DD9A22418B6B400A4A28E /* LaunchScreen.storyboard in Resources */,
 				ED3710DB24E103DE00AD6DAF /* scanner.json in Resources */,
+				ED11D05E25663000006CDFD8 /* NexaRustSlab-BlackShadow01.otf in Resources */,
 				ED9290CF250D5A9400277881 /* GoogleService-Info.plist in Resources */,
 				ED3DD99F2418B6B400A4A28E /* Assets.xcassets in Resources */,
 				ED46C73E24BFA5AD0089CF43 /* dotsLoading.json in Resources */,
@@ -846,7 +858,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -869,7 +881,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

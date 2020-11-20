@@ -86,6 +86,10 @@ class APPSetting {
     
     var unavailableDates: [String] = []
     
+    var reservationIDs: [String] = []
+    
+    var reservations: [Reservation] = []
+    
     static var customerName: String {
         return NetworkManager.shared.currentUser?.displayName ?? ""
     }
@@ -98,7 +102,6 @@ class APPSetting {
     static var customerUID: String {
         return NetworkManager.shared.currentUser?.uid ?? ""
     }
-    
     
     static var customerPhoneNumber: String {
         return NetworkManager.shared.currentUser?.phoneNumber ?? ""

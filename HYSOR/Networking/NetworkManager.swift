@@ -67,6 +67,8 @@ class NetworkManager {
     
     private var activeTableListener: ListenerRegistration?
     
+    private var reservationlistener: ListenerRegistration?
+    
     
     var isAuth: Bool {
         get{
@@ -136,6 +138,51 @@ class NetworkManager {
                 completion(NetworkError.unknowError)
             }
         }
+    }
+    
+    func addReservationListener() {
+        
+        if reservationlistener != nil {
+            reservationlistener?.remove()
+        }
+        
+        guard let myID = currentUserUid else { return }
+        
+        reservationlistener = databaseRef.collection("customers").document(myID).collection("reservations").addSnapshotListener({ (snapshot, error) in
+            
+            if let error = error {
+                print("cant not add listener, error \(error.localizedDescription)")
+            }
+   
+            snapshot?.documentChanges.forEach({ (change) in
+                
+                switch change.type {
+                    
+                case .added:
+                    
+                    APPSetting.shared.reservationIDs.append(change.document.documentID)
+                    return
+                    
+                case .modified:
+                    return
+                    
+                case .removed:
+                    APPSetting.shared.reservationIDs.removeAll { $0 == change.document.documentID  }
+                    APPSetting.shared.reservations.removeAll {$0.uid == change.document.documentID }
+                    return
+                
+                }
+                
+                
+            })
+            
+            if let docs = snapshot?.documents {
+                APPSetting.shared.reservationIDs = docs.map { $0.documentID }
+            }
+        })
+        
+        
+        
     }
     
 
@@ -953,7 +1000,7 @@ class NetworkManager {
                 return
             }
             
-            customerReservation.document(reservation.uid).setData(["status": reservation.status.rawValue])
+            customerReservation.document(reservation.uid).setData([:])
             
             completion(err)
             
@@ -970,80 +1017,70 @@ class NetworkManager {
         
     }
     
-    func updateReservation(_ reservation: Reservation) {
+    func updateReservation(_ reservation: Reservation, completion: @escaping (Error?) -> Void) {
         
         let reservationRef = databaseRef.collection("reservations").document(reservation.uid)
         
-        reservationRef.updateData(["pax": reservation.pax, "date" : reservation.date, "time" : reservation.time ])
+        reservationRef.updateData(["pax": reservation.pax, "date" : reservation.date, "time" : reservation.time ]) { error in
+           completion(error)
+        }
    
         
     }
     
-    func cancelReservation(_ reservation: Reservation) {
+    func cancelReservation(_ reservation: Reservation, completion: @escaping (Error?) -> Void) {
         
         let reservationRef = databaseRef.collection("reservations")
         let customerReservation = databaseRef.collection("customers").document(APPSetting.customerUID).collection("reservations")
         reservationRef.document(reservation.uid).updateData(["status": reservation.status.rawValue])
-        customerReservation.document(reservation.uid).delete()
+        customerReservation.document(reservation.uid).delete() { error in
+            completion(error)
+        }
         
     }
     
     func getMyReservations(completion:@escaping ([Reservation]) -> Void ) {
         
-        guard let myID = currentUserUid else { return }
         
         let group = DispatchGroup()
         
         var reservations = [Reservation]()
         
-        let customerReservationRef = databaseRef.collection("customers").document(myID).collection("reservations")
-        
         let reservationRef = databaseRef.collection("reservations")
         
-        group.enter()
+        let currentIDs = APPSetting.shared.reservations.map { $0.uid }
         
-        customerReservationRef.getDocuments { (snapshot, error) in
+        APPSetting.shared.reservationIDs.forEach { (id) in
             
-            guard error == nil else {
-                group.leave()
-                return
-            }
-            
-            if let snapshot = snapshot {
+            if !currentIDs.contains(id) {
                 
-                snapshot.documents.forEach { (doc) in
-                    group.enter()
-                    reservationRef.document(doc.documentID).getDocument { (document, error) in
-                        guard error == nil else {
-                            group.leave()
-                            return
-                        }
+                group.enter()
+                
+                reservationRef.document(id).getDocument { (document, error) in
+                    guard error == nil else {
+                        group.leave()
+                        return
+                    }
+                    
+                    if let document = document, let data = document.data(), let reservation = Reservation(id: document.documentID, data: data)  {
                         
-                        if let document = document, let data = document.data(), let reservation = Reservation(id: document.documentID, data: data)  {
-                            
-                            reservations.append(reservation)
-                            group.leave()
-                            
-                        } else {
-                            group.leave()
-                        }
+                        reservations.append(reservation)
+                        group.leave()
                         
+                    } else {
+                        group.leave()
                     }
                     
                 }
-                
             }
-            group.leave()
-            
-            
         }
-        
+
         group.notify(queue: .main) {
             completion(reservations)
         }
         
     }
-    
+
     //MARK: - ACCOUNT
 
     
@@ -1151,14 +1188,7 @@ class NetworkManager {
             
             
         }
-        
-//        let task = httpsReference.write(toFile: <#T##URL#>) { (<#URL?#>, <#Error?#>) in
-//            <#code#>
-//        }
-//
-        
-        
-        
+
     }
     
     

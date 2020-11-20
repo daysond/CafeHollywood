@@ -42,7 +42,7 @@ class ReservationListTableViewCell: UITableViewCell {
     
     private let paxLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 16, weight: .regular)
+        l.font = .systemFont(ofSize: 18, weight: .regular)
         l.textColor = .black
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
@@ -51,12 +51,25 @@ class ReservationListTableViewCell: UITableViewCell {
     
     private let dateLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 16, weight: .regular)
+        l.font = .systemFont(ofSize: 18, weight: .regular)
         l.textColor = .black
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
         
     }()
+    
+    private let timeLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.text = "12:30"
+        l.numberOfLines = 1
+        l.textColor = .black
+        l.textAlignment = .left
+        l.font = .systemFont(ofSize: 18, weight: .regular)
+        return l
+    }()
+    
+    
     
     static var identifier: String {
         return String(describing: self)
@@ -66,8 +79,8 @@ class ReservationListTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        paxLabel.font = .systemFont(ofSize: 18, weight: .regular)
-        dateLabel.font = .systemFont(ofSize: 18, weight: .regular)
+//        paxLabel.font = .systemFont(ofSize: 18, weight: .regular)
+//        dateLabel.font = .systemFont(ofSize: 18, weight: .regular)
         
         let containerview = UIView()
         containerview.backgroundColor = .offWhite
@@ -85,7 +98,8 @@ class ReservationListTableViewCell: UITableViewCell {
         containerview.addSubview(paxImageView)
         containerview.addSubview(dateLabel)
         containerview.addSubview(calendarImage)
-        
+        containerview.addSubview(timeLabel)
+
         let size: CGFloat = 18
         
         NSLayoutConstraint.activate([
@@ -102,6 +116,9 @@ class ReservationListTableViewCell: UITableViewCell {
             paxImageView.widthAnchor.constraint(equalToConstant: size),
             paxImageView.heightAnchor.constraint(equalToConstant: size),
             paxImageView.centerYAnchor.constraint(equalTo: paxLabel.centerYAnchor),
+
+            timeLabel.leadingAnchor.constraint(equalTo: dateLabel.trailingAnchor, constant: 8),
+            timeLabel.centerYAnchor.constraint(equalTo: calendarImage.centerYAnchor),
             
             dateLabel.topAnchor.constraint(equalTo: paxImageView.bottomAnchor, constant: 8),
             dateLabel.leadingAnchor.constraint(equalTo: paxLabel.leadingAnchor),
@@ -131,6 +148,7 @@ class ReservationListTableViewCell: UITableViewCell {
         statusLabel.text = reservation.status == .confirmed ? "Reservation Confirmed!" : "Reservation Canceled."
         paxLabel.text = "\(reservation.pax)"
         dateLabel.text = reservation.date
+        timeLabel.text = reservation.time
     }
     
     required init?(coder: NSCoder) {

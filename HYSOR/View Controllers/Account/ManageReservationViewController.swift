@@ -30,32 +30,37 @@ class ManageReservationViewController: UIViewController {
         return l
     }()
     
-    var reservations: [Reservation] = [] {
-        didSet {
-            setupTableView()
-            reservationListTableView.reloadData()
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         
-        NetworkManager.shared.getMyReservations { (reservations) in
-            self.reservations = reservations
+        if  APPSetting.shared.reservationIDs.count == 0 || APPSetting.shared.reservationIDs.count == APPSetting.shared.reservations.count  {
+            setupTableView()
+            return
         }
+        
+        NetworkManager.shared.getMyReservations { (reservations) in
+            APPSetting.shared.reservations = reservations
+            DispatchQueue.main.async {
+                self.setupTableView()
+                self.reservationListTableView.reloadData()
+            }
+        }
+        
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-//        navigationController?.navigationBar.prefersLargeTitles = true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reservationListTableView.reloadData()
     }
+    
     
  
     private func setupTableView() {
         
-        if reservations.isEmpty {
+        if APPSetting.shared.reservations.isEmpty {
             
             view.addSubview(hintLabel)
             
@@ -104,13 +109,13 @@ class ManageReservationViewController: UIViewController {
 extension ManageReservationViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        reservations.count
+        APPSetting.shared.reservations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ReservationListTableViewCell.identifier, for: indexPath) as! ReservationListTableViewCell
-        cell.configureCellWith(reservations[indexPath.row])
+        cell.configureCellWith(APPSetting.shared.reservations[indexPath.row])
         return cell
     }
     
@@ -121,7 +126,7 @@ extension ManageReservationViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let rvc = ReservationViewController(reservation: reservations[indexPath.row])
+        let rvc = ReservationViewController(reservation: APPSetting.shared.reservations[indexPath.row])
         tableView.cellForRow(at: indexPath)?.isSelected = false
 //        self.navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationController?.pushViewController(rvc, animated: true)

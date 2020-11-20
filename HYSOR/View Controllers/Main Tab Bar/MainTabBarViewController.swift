@@ -82,6 +82,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
         NetworkManager.shared.addunavailablityListener()
+        NetworkManager.shared.addReservationListener()
         NetworkManager.shared.getCurrentVersions { (error) in
             guard error == nil else {
                 self.showError(message: error!.localizedDescription)
@@ -322,7 +323,7 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
         
         let cartViewController = CartViewController()
         let cartNav = UINavigationController(rootViewController: cartViewController)
-        cartNav.tabBarItem = UITabBarItem(title: "CART", image: UIImage(named: "user-1"), tag: 3)
+        cartNav.tabBarItem = UITabBarItem(title: "CART", image: UIImage(named: "cartIcon"), tag: 3)
         
         
         let tabBarList = [homeViewController, menuNavViewController, actionViewController, cartNav ,pastOrdersViewController]

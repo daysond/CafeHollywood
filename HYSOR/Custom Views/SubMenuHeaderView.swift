@@ -26,7 +26,8 @@ class SubMenuHeaderView: UICollectionReusableView {
     let titleLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+//        l.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+        l.font = UIFont(name: Key.nexaFontName, size: 24)
         l.text = "BIG TITLE"
         l.numberOfLines = 1
         l.textColor = .white

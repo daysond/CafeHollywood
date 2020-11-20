@@ -411,7 +411,12 @@ class ReservationViewController: UIViewController {
     @objc private func cancelReservation() {
         
         reservation.status = .cancelled
-        NetworkManager.shared.cancelReservation(reservation)
+        NetworkManager.shared.cancelReservation(reservation) { error in
+            guard error == nil else {
+                self.showError(message: error!.localizedDescription)
+                return
+            }
+        }
         resetScrollView()
         
     }
@@ -429,7 +434,14 @@ class ReservationViewController: UIViewController {
         reservation.date = date
         reservation.pax = pax
         reservation.time = time
-        NetworkManager.shared.updateReservation(reservation)
+        NetworkManager.shared.updateReservation(reservation) { error in
+            
+            guard error == nil else {
+                self.showError(message: error!.localizedDescription)
+                return
+            }
+            
+        }
         paxLabel.text = "\(reservation.pax)"
         dateLabel.text =  "\(reservation.date.dropLast(6)) at \(reservation.time)"
         menuLauncher?.dismissMenu()
