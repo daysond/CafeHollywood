@@ -110,11 +110,12 @@ class NetworkManager {
                 return
             }
             
-            if let data = snapshot?.data(), let unavailableMeals = data["meals"] as? [String], let unavailableItems = data["items"] as? [String], let unavailableMenus = data["menus"] as? [String], let unavailableDates = data["reservationDates"] as? [String] {
+            if let data = snapshot?.data(), let unavailableMeals = data["meals"] as? [String], let unavailableItems = data["items"] as? [String], let unavailableMenus = data["menus"] as? [String], let unavailableDates = data["reservationDates"] as? [String], let isTakingReservation = data["isTakingReservation"] as? Bool {
                 APPSetting.shared.unavailableMeals = unavailableMeals
                 APPSetting.shared.unavailableItems = unavailableItems
                 APPSetting.shared.unavailableMenus = unavailableMenus
                 APPSetting.shared.unavailableDates = unavailableDates
+                APPSetting.shared.isTakingReservation = isTakingReservation
             }
             
         })
@@ -452,6 +453,10 @@ class NetworkManager {
                 meal.comboType = type
             }
             
+            if let isBOGO = data["isBOGO"] as? Bool {
+                meal.isBOGO = isBOGO
+            }
+            
             if let preferenceUIDs = data["preferences"] as? [String] {
                 for uid in preferenceUIDs {
                     
@@ -526,7 +531,7 @@ class NetworkManager {
         databaseRef.collection("preferences").document(uid).getDocument { (snapshot, error) in
             guard error == nil, let data = snapshot?.data() else {
                 print(error.debugDescription)
-                print("wrong preference data")
+                print("wrong preference data: \(uid)")
                 return
             }
             
@@ -1189,6 +1194,38 @@ class NetworkManager {
             
         }
 
+    }
+    
+    //MARK: SET DATABASE
+    
+    func uploadMealUIDs(uids: [String]) {
+        
+        let ref = databaseRef.collection("foodMenu").document("onlineCombo")
+        
+        ref.updateData(["mealsInUID" : uids]) { (error) in
+            
+            guard error == nil else {
+                print(error.debugDescription)
+                return
+            }
+            
+        }
+        
+    }
+    
+    func uploadMeal(uid: String, data: [String: Any]) {
+        
+        databaseRef.collection("meals").document(uid).setData(data) { (error) in
+            guard error == nil else {
+                debugPrint(error.debugDescription)
+                return
+            }
+            
+            print("Finsih uploading meal \(uid)")
+        }
+        
+  
+        
     }
     
     

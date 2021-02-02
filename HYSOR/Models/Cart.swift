@@ -37,7 +37,29 @@ class Cart {
     
     var giftOptionContent: [String: String]?
     
-    var promotion: Money?
+    var promotion: Money {
+        
+        var promoAmt = Decimal(0)
+        
+        meals.forEach { (meal) in
+            
+            if meal.isBOGO && meal.quantity > 1 {
+                
+                switch meal.quantity % 2 {
+                case 0:
+                    promoAmt = promoAmt + Decimal(meal.quantity/2) * meal.price
+                default:
+                    promoAmt = promoAmt + Decimal((meal.quantity-1)/2) * meal.price
+                }
+                
+                
+            }
+            
+        }
+        
+        return Money(amt: promoAmt)
+        
+    }
 
     var discountAmount: Money? {
         
@@ -87,7 +109,7 @@ class Cart {
              runningTotal + meal.totalPrice
         }
 
-        return total - (discountAmount ?? Money(amt: 0.0))
+        return total - (discountAmount ?? Money(amt: 0.0)) - promotion
     }
     
     var cartTaxes: Money {
@@ -123,7 +145,6 @@ class Cart {
         Cart.shared.pickupTime = nil
         Cart.shared.selectedGiftOption = nil
         Cart.shared.giftOptionContent = nil
-        Cart.shared.promotion = nil
         Cart.shared.needsUtensil = true
     }
     
@@ -163,7 +184,7 @@ extension Cart: JSONRepresentation {
             "total": cartTotal.amount,
             "taxes": cartTaxes.amount,
             "discount": discountAmount?.amount ?? 0,
-            "promotion": promotion?.amount ?? 0,
+            "promotion": promotion.amount,
             "orderNote": orderNote,
             "orderTimestamp": orderTimestamp,
             "status": pickupTime == nil ? OrderStatus.unconfirmed.rawValue : OrderStatus.scheduled.rawValue,

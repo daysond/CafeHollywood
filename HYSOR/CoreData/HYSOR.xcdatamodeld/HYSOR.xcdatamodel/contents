@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="MealManaged" representedClassName="MealManaged" syncable="YES">
         <attribute name="comboMealTag" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="comboType" optional="YES" attributeType="Integer 64" usesScalarValueType="NO"/>
         <attribute name="detail" attributeType="String"/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <attribute name="isBOGO" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="mealDescription" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="price" attributeType="Decimal" defaultValueString="0.0"/>
@@ -38,7 +39,7 @@
         <relationship name="preferenceItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PreferenceItemManaged" inverseName="preference" inverseEntity="PreferenceItemManaged"/>
     </entity>
     <elements>
-        <element name="MealManaged" positionX="-537.296875" positionY="-402.609375" width="128" height="178"/>
+        <element name="MealManaged" positionX="-537.296875" positionY="-402.609375" width="128" height="193"/>
         <element name="MenuManaged" positionX="-333" positionY="-333" width="128" height="148"/>
         <element name="PreferenceItemManaged" positionX="121.55859375" positionY="-365.27734375" width="139.03125" height="133"/>
         <element name="PreferenceManaged" positionX="-227.83984375" positionY="-395.9921875" width="128" height="148"/>

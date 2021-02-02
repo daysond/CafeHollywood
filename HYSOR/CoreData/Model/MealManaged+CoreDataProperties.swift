@@ -25,6 +25,7 @@ extension MealManaged {
     @NSManaged public var uid: String?
     @NSManaged public var mealDescription: String?
     @NSManaged public var preferences: NSSet?
+    @NSManaged public var isBOGO: Bool
 
 }
 

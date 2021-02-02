@@ -129,7 +129,7 @@ class DBManager {
         mealManaged.imageURL = meal.imageURL
         mealManaged.price = NSDecimalNumber(decimal: meal.price)
         mealManaged.mealDescription = meal.mealDescription
-        
+        mealManaged.isBOGO = meal.isBOGO
         if let tag = meal.comboTag {
             mealManaged.comboMealTag = NSNumber(value: tag)
 //            print(" TAG \(mealManaged.comboMealTag)")

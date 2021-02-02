@@ -25,7 +25,7 @@ class CartFooterView: UIView {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        l.text = "Subtotal"
+        l.text = "Subtotal(Discounted)"
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
@@ -36,7 +36,7 @@ class CartFooterView: UIView {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        l.text = "Discount"
+        l.text = "Promotion"
         l.numberOfLines = 1
         l.textColor = .black
         l.textAlignment = .left
@@ -169,7 +169,7 @@ class CartFooterView: UIView {
         subTotalAmountLabel.text = "$" + Cart.shared.cartSubtotal.amount.stringRepresentation
         taxesAmountLabel.text = "$" + Cart.shared.cartTaxes.amount.stringRepresentation
         totalAmountLabel.text = "$" + Cart.shared.cartTotal.amount.stringRepresentation
-        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + (Cart.shared.promotion?.amount.stringRepresentation)!
+        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + (Cart.shared.promotion.amount.stringRepresentation)
         
         discountAmountLabel.text = Cart.shared.discountAmount == nil ? "-$0.00" : "-$" +  Cart.shared.discountAmount!.amount.stringRepresentation
     
@@ -180,7 +180,7 @@ class CartFooterView: UIView {
         subTotalAmountLabel.text = "$" + Money(amt:receipt.subtotal).amount.stringRepresentation
         taxesAmountLabel.text = "$" + Money(amt:receipt.taxes).amount.stringRepresentation
         totalAmountLabel.text = "$" + Money(amt:receipt.total).amount.stringRepresentation
-        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "$" + Money(amt:receipt.promotion).amount.stringRepresentation
+        promitionAmountLabel.text = Cart.shared.promotion == nil ? "$0.00" : "-$" + Money(amt:receipt.promotion).amount.stringRepresentation
         
         discountAmountLabel.text = Cart.shared.discountAmount == nil ? "-$0.00" : "-$" +  Money(amt:receipt.discount).amount.stringRepresentation
         

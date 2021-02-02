@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SubMenuCollectionViewCell: UICollectionViewCell {
+class  SubMenuCollectionViewCell: UICollectionViewCell {
     
     static var identifier: String {
         return String(describing: self)
@@ -77,7 +77,7 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             
             
-            foodImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            foodImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 0),
             foodImageView.heightAnchor.constraint(equalToConstant: 96),
             foodImageView.widthAnchor.constraint(equalTo: foodImageView.heightAnchor),
             foodImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
@@ -91,14 +91,14 @@ class SubMenuCollectionViewCell: UICollectionViewCell {
             detailLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             detailLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 8),
             
-            priceLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 16),
+            priceLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 8),
             //            priceLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.25),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
 //            priceLabel.trailingAnchor.constraint(equalTo: foodImageView.leadingAnchor, constant: 8),
             
             seperator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             seperator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            seperator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            seperator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
             seperator.heightAnchor.constraint(equalToConstant: 2),
             
             

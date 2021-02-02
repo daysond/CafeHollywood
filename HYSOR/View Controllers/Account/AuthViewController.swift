@@ -119,7 +119,7 @@ class AuthViewController: UpdateProfileViewController {
             
             
         case .verification:
-            
+            profileTextField.text = ""
             profileTextField.placeholder = "6-DIGIT VERIFICATION CODE"
             profileTextField.keyboardType = .numberPad
             if code != nil {

@@ -109,17 +109,54 @@ class HomeViewController: UIViewController {
     
     @objc private func onlineOrderTapped() {
         
-        for family in UIFont.familyNames.sorted() {
-            let names = UIFont.fontNames(forFamilyName: family)
-            print("Family: \(family) Font names: \(names)")
-        }
+//        for family in UIFont.familyNames.sorted() {
+//            let names = UIFont.fontNames(forFamilyName: family)
+//            print("Family: \(family) Font names: \(names)")
+//        }
         
 //        self.tabBarController?.selectedIndex = 1
+        var uids: [String] = []
+        for i in 1...7 {
+            uids.append("UE0\(i)")
+        }
+        
+        let names:[String] = ["焗肉醬意粉", "焗葡國雞", "焗茄汁豬扒", "咖喱牛肉", "咖喱雞", "焗白汁石斑", "韓式牛肉石鍋拌飯"]
+        let imageURL: [String] = ["H23","H24", "H14","","","H19", ""]
+        let price = 11.50
+        let detail:[String] = ["Spaghttie Bologness", "Baked Portuguess Style Chicken", "Pork Chop Casserole", "Curry Beef", "Curry Chicken", "Garoupa Casserole", "Korean Beef Bibimbap"]
+        let preferences: [String] = ["mainSideForBaked", "onlineSoftDrinks"]
+//        let sbp: [String] = ["mainSideForbaked", "addBacon"]
+        
+        for (index, uid) in uids.enumerated() {
+            
+            let data: [String : Any] = ["name": names[index],
+                        "imageURL": imageURL[index],
+                        "description": names[index],
+                        "preferences": preferences,
+                        "price": price,
+                        "uid": uid,
+                        "detail": detail[index]
+            ]
+            
+            NetworkManager.shared.uploadMeal(uid: uid, data: data)
+            
+            
+        }
         
     }
     
     @objc
     private func reservationTapped() {
+        
+        guard let isTakingReservation = APPSetting.shared.isTakingReservation else {
+            showError(message: "Network Error. Please try again later.")
+            return
+        }
+        
+        if isTakingReservation == false {
+            showError(title: "Sorry!", message: "We are currently not accepting reservations.")
+            return
+        }
         
         guard let openHours = APPSetting.shared.openHours, let closeHours = APPSetting.shared.closedHours else {
             showError(message: "Network Error. Can not fetch business hour information.")

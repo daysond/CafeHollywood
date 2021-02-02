@@ -54,7 +54,8 @@ class CheckoutViewController: UIViewController {
         let note = CustomOption(mainImageNmae: "notes", mainTitle: "NOTE", subTitle: Constants.checkoutNoteHolder ,optionType: .note)
         let gift = CustomOption(mainImageNmae: "gift", mainTitle: "GIFT OPTIONS", subTitle: "None", optionType: .gift)
         
-        options = [cutlery, pickupTime, note, gift]
+//        options = [cutlery, pickupTime, note, gift]
+        options = [cutlery, pickupTime, note]
    
     }
     

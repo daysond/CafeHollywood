@@ -37,21 +37,23 @@ class MealCache {
 
 struct Meal {
     
-    var uid: String
-    var name: String
-    var price: Decimal
-    var details: String?
-    var imageURL: String?
+    let uid: String
+    let name: String
+    let price: Decimal
+    let details: String?
+    let imageURL: String?
     var preferences: [Preference]?
     var quantity: Int
     var instruction: String?
-    var mealDescription: String
+    let mealDescription: String
     
     var isFavourite: Bool {
         return APPSetting.favouriteList.contains(uid)
     }
     
     var isSelected: Bool = false
+    
+    var isBOGO: Bool = false
     
     var comboType: ComboType?
     
@@ -118,7 +120,14 @@ struct Meal {
        }
     
     var totalPrice: Money {
-           return (addonPirce + Money(amt: price)) * Float(quantity)
+        switch isBOGO {
+        case false:
+            return (addonPirce + Money(amt: price)) * Float(quantity)
+        default:
+            let q = quantity % 2 == 0 ? quantity / 2 : (quantity/2) + 1
+            return (addonPirce + Money(amt: price)) * Float(q)
+        }
+          
        }
     
     var addOnInfo: String {
@@ -208,6 +217,8 @@ struct Meal {
         self.preferences = preferences
         
         self.quantity = 1
+        
+        self.isBOGO = managedObject.isBOGO
         
     }
     

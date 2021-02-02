@@ -150,20 +150,20 @@ class APPSetting {
     }
     
     var isRestaurantOpen: Bool {
-        return true
-//        guard openHours != nil , closedHours != nil else { return false }
-//        let dow = Date().getDayOfWeek()
-//        var open = openHours![Weekdays(rawValue: dow)!]!
-//        if open == "24:00" {
-//            open = "00:00"
-//        }
-//        
-//        let close = closedHours![Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
-//        let lastCallHour = Int("\(close)")! - 1
-//        return Date.currentTime() >= open && Date.currentTime() <= "\(lastCallHour):30"
+//        return true
+        guard openHours != nil , closedHours != nil else { return false }
+        let dow = Date().getDayOfWeek()
+        var open = openHours![Weekdays(rawValue: dow)!]!
+        if open == "24:00" {
+            open = "00:00"
+        }
+        
+        let close = closedHours![Weekdays(rawValue: dow)!]!.split(separator: ":")[0]
+        let lastCallHour = Int("\(close)")! - 1
+        return Date.currentTime() >= open && Date.currentTime() <= "\(lastCallHour):30"
     }
     
-    
+    var isTakingReservation: Bool?
 
     
     static func unfavouriteMeal(uid: String) {
