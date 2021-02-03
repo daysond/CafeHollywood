@@ -835,6 +835,15 @@ class NetworkManager {
     
     func fetchCloseOrders() -> Result<[Receipt], Error> {
         
+        var result: Result<[Receipt], Error>!
+        
+        var recepits: [Receipt] = []
+        
+        if currentUser == nil {
+            result = .success(recepits)
+            return result
+        }
+        
         let customerOrdersRef = databaseRef.collection("customers").document(APPSetting.customerUID).collection("orders").order(by: "timestamp", descending: true).limit(to: 10)
         //        customerOrdersRef.limit(to: 5)
         
@@ -842,9 +851,7 @@ class NetworkManager {
         
         let group = DispatchGroup()
         
-        var result: Result<[Receipt], Error>!
-        
-        var recepits: [Receipt] = []
+
         
         group.enter()
         
@@ -913,6 +920,10 @@ class NetworkManager {
     
     
     func addActiveOrderListener() {
+        
+        if currentUser == nil {
+            return
+        }
         
         if activeOrderListener != nil {
             activeOrderListener?.remove()

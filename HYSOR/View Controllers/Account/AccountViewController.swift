@@ -125,12 +125,15 @@ class AccountViewController: UIViewController {
             try NetworkManager.shared.signOut()
             print(NetworkManager.shared.isAuth)
 //            let nav = UINavigationController(rootViewController: LoginViewController())
-            let nav = UINavigationController(rootViewController: AuthHomeViewController())
-//            let authVC = AuthHomeViewController()
-            nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true) {
-                NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": false])
-            }
+//            let nav = UINavigationController(rootViewController: AuthHomeViewController())
+////            let authVC = AuthHomeViewController()
+//            nav.modalPresentationStyle = .fullScreen
+//            present(nav, animated: true) {
+//                NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": false])
+//            }
+            
+            NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": false])
+            self.navigationController?.popViewController(animated: true)
         } catch let error as NSError {
             print(error.localizedDescription)
         }

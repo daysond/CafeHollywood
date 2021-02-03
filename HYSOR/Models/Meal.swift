@@ -120,13 +120,16 @@ struct Meal {
        }
     
     var totalPrice: Money {
-        switch isBOGO {
-        case false:
-            return (addonPirce + Money(amt: price)) * Float(quantity)
-        default:
-            let q = quantity % 2 == 0 ? quantity / 2 : (quantity/2) + 1
-            return (addonPirce + Money(amt: price)) * Float(q)
-        }
+        
+        return (addonPirce + Money(amt: price)) * Float(quantity)
+        
+//        switch isBOGO {
+//        case false:
+//            return (addonPirce + Money(amt: price)) * Float(quantity)
+//        default:
+//            let q = quantity % 2 == 0 ? quantity / 2 : (quantity/2) + 1
+//            return (addonPirce + Money(amt: price)) * Float(q)
+//        }
           
        }
     

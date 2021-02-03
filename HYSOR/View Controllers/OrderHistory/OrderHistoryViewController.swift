@@ -38,6 +38,7 @@ class OrderHistoryViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(OrderHistoryViewController.updateOrderStatus(_:)), name: .didUpdateOrderStatus, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAuthChange), name: .authStateDidChange, object: nil)
         
     }
     
@@ -200,6 +201,18 @@ class OrderHistoryViewController: UIViewController {
             }
         }
 
+        
+    }
+    
+    @objc private func handleAuthChange() {
+        
+        if !NetworkManager.shared.isAuth {
+            activeReceipts = []
+            closedReceipts = []
+            receiptsModel.accept([])
+            Table.shared.tableNumber = nil
+        }
+    
         
     }
     

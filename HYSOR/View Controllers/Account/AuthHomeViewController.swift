@@ -174,11 +174,15 @@ class AuthHomeViewController: UIViewController {
     
     private func presentMainViewController() {
         
-        let mainVC = MainTabBarViewController()
-        mainVC.modalPresentationStyle = .fullScreen
-        self.present(mainVC, animated: true) {
-            NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": true])
+        self.dismiss(animated: true) {
+            NotificationCenter.default.post(name: .didAuthUser, object: nil)
         }
+        
+//        let mainVC = MainTabBarViewController()
+//        mainVC.modalPresentationStyle = .fullScreen
+//        self.present(mainVC, animated: true) {
+//            NotificationCenter.default.post(name: .authStateDidChange, object: nil, userInfo: ["isAuth": true])
+//        }
 
     }
     

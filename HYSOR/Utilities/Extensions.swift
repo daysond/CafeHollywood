@@ -176,6 +176,7 @@ extension Notification.Name {
     static let didCloseTable = Notification.Name("didCloseTable")
     static let didUpdateDineInOrderStatus = Notification.Name("didUpdateDineInOrderStatus")
     static let didScanTableQRCode = Notification.Name("didScanTableQRCode")
+    static let didAuthUser = Notification.Name("didAuthUser")
     
 }
 

@@ -78,11 +78,11 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     //MARK: NETWORKING
     
     private func networkSetup() {
-        
+        NetworkManager.shared.addReservationListener()
         NetworkManager.shared.checkActiveTable()
         NetworkManager.shared.addActiveOrderListener()
+        
         NetworkManager.shared.addunavailablityListener()
-        NetworkManager.shared.addReservationListener()
         NetworkManager.shared.getCurrentVersions { (error) in
             guard error == nil else {
                 self.showError(message: error!.localizedDescription)

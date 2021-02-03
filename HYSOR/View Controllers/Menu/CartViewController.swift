@@ -183,8 +183,27 @@ class CartViewController: UIViewController {
 
     
     // MARK: - ACTIONS
+    
+    @objc func didAuthBeforeCheckout() {
+        NetworkManager.shared.addReservationListener()
+        NetworkManager.shared.checkActiveTable()
+        NetworkManager.shared.addActiveOrderListener()
+        APPSetting.shared.isDineIn ? dineInSendOrder() : onlineOrderCheckout()
+    }
 
     @objc func checkoutButtonTapped() {
+        
+        if !NetworkManager.shared.isAuth {
+            let authHome = AuthHomeViewController()
+            authHome.modalPresentationStyle = .automatic
+            self.present(authHome, animated: true) {
+                
+            }
+            NotificationCenter.default.addObserver(self, selector: #selector(didAuthBeforeCheckout), name: .didAuthUser, object: nil)
+//            self.navigationController?.pushViewController(AuthHomeViewController(), animated: true)
+            
+            return 
+        }
         APPSetting.shared.isDineIn ? dineInSendOrder() : onlineOrderCheckout()
     }
     
