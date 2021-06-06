@@ -94,6 +94,7 @@
 		EDB9C36C24EB97D500A328EA /* PreferenceManaged+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9C36624EB97D400A328EA /* PreferenceManaged+CoreDataProperties.swift */; };
 		EDB9C36F24EB97D500A328EA /* PreferenceManaged+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB9C36924EB97D500A328EA /* PreferenceManaged+CoreDataClass.swift */; };
 		EDD31BD324F59C9700010DC2 /* ManageFavouriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD31BD224F59C9700010DC2 /* ManageFavouriteViewController.swift */; };
+		EDDB70F8266B28CB00B619C0 /* ChatBotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDB70F7266B28CA00B619C0 /* ChatBotViewController.swift */; };
 		EDE038ED24E2695700189264 /* ReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE038EC24E2695700189264 /* ReservationViewController.swift */; };
 		EDE038EF24E26D9C00189264 /* PaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE038EE24E26D9C00189264 /* PaxView.swift */; };
 		EDE038F124E2738F00189264 /* PaxSizeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE038F024E2738F00189264 /* PaxSizeCollectionViewCell.swift */; };
@@ -197,6 +198,7 @@
 		EDB9C36624EB97D400A328EA /* PreferenceManaged+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PreferenceManaged+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		EDB9C36924EB97D500A328EA /* PreferenceManaged+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PreferenceManaged+CoreDataClass.swift"; sourceTree = "<group>"; };
 		EDD31BD224F59C9700010DC2 /* ManageFavouriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFavouriteViewController.swift; sourceTree = "<group>"; };
+		EDDB70F7266B28CA00B619C0 /* ChatBotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBotViewController.swift; sourceTree = "<group>"; };
 		EDE038EC24E2695700189264 /* ReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationViewController.swift; sourceTree = "<group>"; };
 		EDE038EE24E26D9C00189264 /* PaxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxView.swift; sourceTree = "<group>"; };
 		EDE038F024E2738F00189264 /* PaxSizeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaxSizeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				ED46C74724BFEC900089CF43 /* HomeViewController.swift */,
 				EDE038EC24E2695700189264 /* ReservationViewController.swift */,
 				ED58384424E5C71B00E007CD /* FavouriteMealViewController.swift */,
+				EDDB70F7266B28CA00B619C0 /* ChatBotViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -661,6 +664,7 @@
 				EDB8B718242491220049A14E /* MealViewController.swift in Sources */,
 				ED1FD80824B517F50016EBD2 /* MenuCollectionViewCell.swift in Sources */,
 				EDA84373256513E6006E8446 /* LocalFileManager.swift in Sources */,
+				EDDB70F8266B28CB00B619C0 /* ChatBotViewController.swift in Sources */,
 				EDA857C124E11D3B00D15B88 /* SchedulerView.swift in Sources */,
 				ED58384524E5C71B00E007CD /* FavouriteMealViewController.swift in Sources */,
 				ED3983BC24EA4CBB00DAC1C4 /* HYSOR.xcdatamodeld in Sources */,
@@ -840,6 +844,7 @@
 				CODE_SIGN_ENTITLEMENTS = HYSOR/HYSOR.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -847,6 +852,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dsn.cafehollywood;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -863,6 +869,7 @@
 				CODE_SIGN_ENTITLEMENTS = HYSOR/HYSOR.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = D2VZ8N8LJC;
 				INFOPLIST_FILE = HYSOR/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -870,6 +877,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dsn.cafehollywood;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

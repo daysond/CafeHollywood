@@ -702,7 +702,7 @@ class NetworkManager {
                     if let status = OrderStatus(rawValue: value) {
                         // if status changed, update status
                         Table.shared.tableOrders.filter{$0.orderID == key && $0.status != status }.first?.status = status
-                        NotificationCenter.default.post(name: .didUpdateDineInOrderStatus, object: nil)
+                        NotificationCenter.default.post(name: .`didUpdateDineInOrderStatus`, object: nil)
                     }
                     
                 }
@@ -786,10 +786,6 @@ class NetworkManager {
         let customerActiveOrderRef = databaseRef.collection("customers").document(customerID).collection("activeOrders").document(orderID)
         
         group.enter()
-        
-        //        databaseRef.collection("orders").order(by: "timestamp").limit(to: 5)
-        
-        
         
         ordersRef.setData(Cart.shared.representation) { (error) in
             guard error == nil else {

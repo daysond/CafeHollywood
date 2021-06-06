@@ -17,8 +17,14 @@ enum ComboType: Int {
         
         switch self {
         case .drink:
+            if let dcr = userDefaults.value(forKey: Key.drinkCredit) as? Int {
+                return Decimal(dcr/100)
+            }
             return Decimal(1.5)
         case .wing:
+            if let wcr = userDefaults.value(forKey: Key.wingCredit) as? Int {
+                return Decimal(wcr/100)
+            }
             return Decimal(9.96)
         }
     }

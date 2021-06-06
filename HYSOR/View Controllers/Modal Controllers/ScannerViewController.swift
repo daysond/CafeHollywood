@@ -167,26 +167,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             }
 
         })
-        
-
-        
-//        NetworkManager.shared.addTableOrderListener { error in
-//            
-//            DispatchQueue.main.async {
-//                
-//                error == nil ? self.delegate?.found() : self.delegate?.failedReadingQRCode()
-//               
-//                if error != nil {
-//                    Table.shared.tableNumber = nil
-//                }
-//                
-//                self.navigationController?.dismiss(animated: true, completion: nil)
-//            }
-//
-//            
-//        }
  
-
     }
 
 //    func found(code: String) {

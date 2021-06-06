@@ -79,8 +79,8 @@ class MainTabBarViewController: UITabBarController, UITabBarControllerDelegate {
     
     private func networkSetup() {
         NetworkManager.shared.addReservationListener()
-        NetworkManager.shared.checkActiveTable()
-        NetworkManager.shared.addActiveOrderListener()
+        NetworkManager.shared.checkActiveTable() // done in flutter
+        NetworkManager.shared.addActiveOrderListener() // done? in fl..
         
         NetworkManager.shared.addunavailablityListener()
         NetworkManager.shared.getCurrentVersions { (error) in

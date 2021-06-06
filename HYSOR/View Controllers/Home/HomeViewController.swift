@@ -127,7 +127,13 @@ class HomeViewController: UIViewController {
     @objc private func onlineOrderTapped() {
         
 
-        self.tabBarController?.selectedIndex = 1
+//        self.tabBarController?.selectedIndex = 1
+        
+        // test code
+        let chatBotVC = ChatBotViewController()
+        chatBotVC.modalPresentationStyle = .automatic
+        
+        present(chatBotVC, animated: true)
 
         
     }
